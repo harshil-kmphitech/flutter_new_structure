@@ -1,9 +1,16 @@
-import 'package:flutter_new_structure/app/utils/constants/json_keys.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'auth_model.g.dart';
+
+AuthModel deserializeAuthModel(Map<String, dynamic> json) => AuthModel.fromJson(json);
+
+@JsonSerializable()
 class AuthModel {
+  @JsonKey(name: '_id')
   final String? id;
   final String? name;
   final String? email;
+  @JsonKey(fromJson: _convertToEncrypted)
   final String? password;
   final String? phoneNumber;
   final String? profileImage;
@@ -18,26 +25,13 @@ class AuthModel {
   });
 
   // Factory method to create an AuthModel from JSON
-  factory AuthModel.fromJson(Map<String, dynamic> json) {
-    return AuthModel(
-      id: json[JsonKeys.id],
-      name: json[JsonKeys.name],
-      email: json[JsonKeys.email],
-      password: json[JsonKeys.password],
-      phoneNumber: json[JsonKeys.phoneNumber],
-      profileImage: json[JsonKeys.profileImage],
-    );
-  }
+  factory AuthModel.fromJson(Map<String, dynamic> json) => _$AuthModelFromJson(json);
 
   // Method to convert an AuthModel instance to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      JsonKeys.id: id,
-      JsonKeys.name: name,
-      JsonKeys.email: email,
-      JsonKeys.password: password,
-      JsonKeys.phoneNumber: phoneNumber,
-      JsonKeys.profileImage: profileImage,
-    };
+  Map<String, dynamic> toJson() => _$AuthModelToJson(this);
+
+  static String _convertToEncrypted(String value) {
+    // Write logic here to customize Json response here.
+    return value;
   }
 }

@@ -39,25 +39,6 @@ To install [FlutterFire CLI](https://firebase.flutter.dev/docs/overview), run th
 dart pub global activate flutterfire_cli
 ```
 
-## Local development setup
-
-To set up and use this CLI repo locally for the purposes of contributing, clone it and run the following commands from the root of the repository:
-
-```bash
-# Activate CLI from path:
-dart pub global activate --source="path" . --executable="flutterfire" --overwrite
-
-# Confirm you now using a local development version:
-flutterfire --help
-# You should now see a banner printed at the top of the help output similar to:
-# ------------------------------------------------------------------
-# | You are running a local development version of FlutterFire CLI. |
-# ------------------------------------------------------------------
-```
-**important**: You may need to delete the cached snapshot of the FlutterFire CLI with each update to code
-(and subsequent `dart pub global activate --source="path" . --executable="flutterfire" --overwrite`). You can delete the cached snapshot
-on this path: `.dart_tool/pub/bin/flutterfire_cli_monorepo/*.snapshot`. This will ensure your code changes are reflected when developing.
-
 ## Usage
 
 FlutterFire can be initialized from Dart on all platforms using Firebase.initializeApp, however the options for different platforms can vary. The FlutterFire CLI can help, by generating a file (by default called firebase_options.dart) which can be used when calling the initialization method.
