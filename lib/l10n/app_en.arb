@@ -5,7 +5,7 @@
     "welcome": "Welcome {name}",
     "@welcome": {
         "placeholders": {
-            "value": {
+            "name": {
                 "type": "String"
             }
         }
