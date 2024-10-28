@@ -51,8 +51,11 @@ Future<void> configuration({required void Function() runApp}) async {
 }
 ```
 **lazySingleton:** It's a lazy singleton, which means the instance won't be created until it's first needed. This helps optimize performance by avoiding unnecessary object creation.
+
 **singleton:** Meaning only one instance of it will exist throughout the application's lifecycle
+
 **injectable:** Indicating that it can be injected into other classes using the Injectable framework
+
 **factoryMethod:**
 ```dart
 @i.lazySingleton
@@ -64,6 +67,7 @@ abstract class AuthRetro {
 ```
 
 This is the actual use of factoryMethod. and make sure that this method need Dio as arguments so use must have to use @singleton for Dio. check out in module example.
+
 **module:**
 ```dart
 @module
@@ -80,6 +84,7 @@ abstract class RegisterModule {
       );
 }
 ```
+
 **Named:** Used for define same Type of Object with different name.
 ```dart
 @module
