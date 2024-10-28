@@ -20,7 +20,7 @@ flutter:
   generate: true
 ```
 
-and check out the files [app_en.dart](https://github.com/harshil-kmphitech/flutter_new_structure/blob/Jay-Padsala/lib/l10n/app_en.dart) and [app_hi.dart](https://github.com/harshil-kmphitech/flutter_new_structure/blob/Jay-Padsala/lib/l10n/app_hi.dart)
+and check out the files [app_en.dart](https://github.com/harshil-kmphitech/flutter_new_structure/blob/Jay-Padsala/lib/l10n/app_en.arb) and [app_hi.dart](https://github.com/harshil-kmphitech/flutter_new_structure/blob/Jay-Padsala/lib/l10n/app_hi.arb)
 
 run command for generate localizations.
 ```
