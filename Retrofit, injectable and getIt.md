@@ -16,13 +16,19 @@ flutter pub add retrofit_generator build_runner json_serializable injectable_gen
 
 After all dependencies implemented check the dependencies in pubspec.yaml
 
+For generate all the generative code run the following command in the project terminal:
+
+```
+flutter pub run build_runner build
+```
+
 ## Get_it with Injectable:
 
 Get_it is an resource locator that helps you to manage different module and easy to access anywhere. and the [Injectable](https://pub.dev/packages/injectable) helps to boost the [Get_it](https://pub.dev/packages/get_it) initialization.
 
 ## Injectable:
 #### Method:
-**InjectableInit:** Must declare this method. and use FileName.config.dart for auto generate the initialization code.
+**InjectableInit:** Must declare this method. and use `FileName.config.dart` [Check here](https://github.com/harshil-kmphitech/flutter_new_structure/blob/Jay-Padsala/lib/app/utils/helpers/injectable/injectable.dart) for auto generate the initialization code.
 
 Must use configuration function in main function and pass runApp in parameter.
 
@@ -179,16 +185,10 @@ class AuthModel {
 }
 ```
 
-For generate all the generative code run the following command in the project terminal:
-
-```
-flutter pub run build_runner build
-```
-
 For more info about packages head to [Pub.dev](https://pub.dev/):
-[Retrofit](https://pub.dev/packages/retrofit)
-[Injectable](https://pub.dev/packages/injectable)
-[Get_it](https://pub.dev/packages/get_it)
-[Json Serialization](https://pub.dev/packages/json_serializable)
+[Retrofit](https://pub.dev/packages/retrofit), 
+[Injectable](https://pub.dev/packages/injectable), 
+[Get_it](https://pub.dev/packages/get_it), 
+[Json Serialization](https://pub.dev/packages/json_serializable), 
 
 For more help: contact to Jay Padsala
