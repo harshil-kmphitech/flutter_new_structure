@@ -1,0 +1,13 @@
+{
+    "@@locale": "en",
+    "title": "Hello World",
+    "description": "Hello World in description",
+    "welcome": "Welcome {name}",
+    "@welcome": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    }
+}
