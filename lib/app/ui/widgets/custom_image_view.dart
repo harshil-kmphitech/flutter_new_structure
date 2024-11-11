@@ -1,6 +1,11 @@
 // ignore_for_file: must_be_immutable, deprecated_member_use
 
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomImageView extends StatelessWidget {
   ///[imagePath] is required parameter for showing image
@@ -115,8 +120,8 @@ class CustomImageView extends StatelessWidget {
                       backgroundColor: Colors.grey.shade100,
                     ),
                   ),
-              errorWidget: (context, url, error) =>
-                  Assets.images.png.imageNotFound.image(
+              errorWidget: (context, url, error) => Image.asset(
+                    "assets/images/png/image_not_found.png",
                     height: height,
                     width: width,
                     fit: fit ?? BoxFit.cover,
