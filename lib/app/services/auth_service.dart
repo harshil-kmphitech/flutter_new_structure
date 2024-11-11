@@ -4,7 +4,7 @@ import '../utils/constants/app_messages.dart';
 import 'package:get/get.dart';
 
 class AuthService {
-  final AuthRepository _authRepository = Get.find<AuthRepository>();
+  final AuthRepository _authRepository = Get.put(AuthRepository());
 
   // Login function
   Future<AuthModel?> login(String email, String password) async {

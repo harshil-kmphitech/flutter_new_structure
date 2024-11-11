@@ -4,7 +4,7 @@ import '../services/auth_service.dart';
 import '../utils/constants/app_messages.dart';
 
 class AuthController extends GetxController {
-  final AuthService _authService = Get.find<AuthService>();
+  final AuthService _authService = Get.put(AuthService());
 
   // Observable variables for user input
   var email = ''.obs;
@@ -13,7 +13,7 @@ class AuthController extends GetxController {
   var name = ''.obs;
   var phoneNumber = ''.obs;
   var verificationCode = ''.obs;
-  
+
   // State variables for loading and model
   var isLoading = false.obs;
   var authModel = Rxn<AuthModel>();
