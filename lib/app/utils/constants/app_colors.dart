@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
+//
 class AppColors {
-  static const Color primary = Color(0xFF00A651); // Main green color used in the app
-  static const Color secondary = Color(0xFF00796B); // Secondary color (if needed)
-  static const Color accent = Color(0xFF00C853); // Accent color for highlights
-  static const Color background = Color(0xFFF8F8F8); // Background color for screens
-  static const Color text = Color(0xFF000000); // Default text color
-  static const Color textLight = Color(0xFF757575); // Light text color (for placeholders, etc.)
-  static const Color inputFieldBackground = Color(0xFFFFFFFF); // Background for input fields
-  static const Color error = Color(0xFFB00020); // Error color for form validation
+  static const Color transparent = Colors.transparent;
+  static const Color red = Color(0xffFF7B7B);
+  static const Color black = Color(0xff01070A);
+  static const Color white = Colors.white;
+  static const Color blackColor = Colors.black;
+
+  ///app colors
+  static const Color primaryColor = Color(0xff01AFB4);
+  static Color secondaryColor = const Color(0xff0F3D4D);
+  static Color greyTextColor = const Color(0xff696E71);
+  static Color bgOneColor = const Color(0xffE8EAEB);
+  static Color bgTwoColor = const Color(0xffF8F9FA);
 }

@@ -6,6 +6,8 @@ import '../utils/constants/app_messages.dart';
 class AuthController extends GetxController {
   final AuthService _authService = Get.put(AuthService());
 
+  var isDarkTheme = false.obs;
+
   // Observable variables for user input
   var email = ''.obs;
   var password = ''.obs;
