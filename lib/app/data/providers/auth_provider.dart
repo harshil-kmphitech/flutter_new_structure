@@ -1,12 +1,16 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_new_structure/app/global/app_config.dart';
 import 'package:flutter_new_structure/app/routes/app_routes.dart';
+import 'package:flutter_new_structure/app/services/exeption.dart';
 import 'package:flutter_new_structure/app/utils/helpers/http_status_codes.dart';
 import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import '../models/auth_model.dart';
+
 import '../../utils/constants/app_messages.dart';
 import '../../utils/constants/json_keys.dart';
+import '../models/auth_model.dart';
 
 class AuthProvider {
   final String baseUrl = AppConfig.baseUrl;
@@ -47,10 +51,12 @@ class AuthProvider {
     Logger.log('Making POST request to: $url with user data: ${authModel.toJson()}');
 
     try {
-      final response = await http.post(
-        url,
-        body: authModel.toJson(),
-      ).timeout(const Duration(milliseconds: AppConfig.timeoutDuration));
+      final response = await http
+          .post(
+            url,
+            body: authModel.toJson(),
+          )
+          .timeout(const Duration(milliseconds: AppConfig.timeoutDuration));
 
       Logger.log('Response status: ${response.statusCode}');
       Logger.log('Response body: ${response.body}');
@@ -142,3 +148,31 @@ class AuthProvider {
     }
   }
 }
+
+class APIFunction {
+  Future<dynamic> apiCall({
+    required Future<dynamic> Function() request,
+    bool isShowSnackbar = true,
+  }) async {
+    try {
+      return await request();
+    } on DioException catch (err) {
+      if (isShowSnackbar) {
+        err.error;
+        // showSnackBar(message: err.type.toUserFriendlyError().description);
+      }
+      return null;
+    }
+  }
+}
+
+sealed class ApiState {}
+
+class LoadingState extends ApiState {}
+
+class FailedState extends ApiState {
+  final UserFriendlyError error;
+  FailedState(this.error);
+}
+
+class SuccessState extends ApiState {}

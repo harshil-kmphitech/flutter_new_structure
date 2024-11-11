@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
 import 'app/utils/themes/app_theme.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
           title: 'FLUTTER STRUCTURE',
           getPages: AppPages.routes,
           scrollBehavior: CustomScrollBehavior(),
-          initialRoute: AppRoutes.theme,
+          initialRoute: AppRoutes.login,
 
           ///Default Theme
           themeMode: ThemeMode.light,
