@@ -1,5 +1,6 @@
-
 // ignore_for_file: avoid_print
+
+import 'dart:developer' as dev;
 
 import 'package:flutter_new_structure/app/global/app_config.dart';
 
@@ -18,5 +19,22 @@ class Logger {
       if (error != null) print('[$time] ERROR Details: $error');
       if (stackTrace != null) print('[$time] StackTrace: $stackTrace');
     }
+  }
+}
+
+extension LoggerExtension<T> on T {
+  T get log {
+    dev.log(toString());
+    return this;
+  }
+
+  T get logWithRuntimeType {
+    dev.log(toString(), name: runtimeType.toString());
+    return this;
+  }
+
+  T logWithName(String name) {
+    dev.log(toString(), name: name);
+    return this;
   }
 }
