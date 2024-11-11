@@ -4,7 +4,7 @@ import '../../controllers/auth_controller.dart';
 import '../../utils/constants/app_messages.dart';
 
 class VerifyCodePage extends StatelessWidget {
-  final AuthController _authController = Get.find<AuthController>();
+  final AuthController _authController = Get.put(AuthController());
 
   VerifyCodePage({super.key});
 
