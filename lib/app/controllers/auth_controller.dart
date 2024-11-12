@@ -48,7 +48,6 @@ class AuthController extends GetxController {
 
   // Login method
   Future<void> login(BuildContext context) async {
-    throw Exception('test exception');
     if (!Form.of(context).validate()) return;
 
     _authService.login(emailController.text, passController.text).handler(loginState).whenComplete(

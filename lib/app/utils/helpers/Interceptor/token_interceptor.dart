@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:dio_smart_retry/src/retry_not_supported_exception.dart';
@@ -38,7 +36,6 @@ class TokenInterceptor implements Interceptor {
       getIt<SharedPreferences>().setToken = null;
 
       // TODO: add Refresh Token Api here
-
       var requestOptions = response.requestOptions;
       if (requestOptions.data is FormData) {
         try {
@@ -80,13 +77,5 @@ class TokenInterceptor implements Interceptor {
       }
     }
     return options.copyWith(data: newFormData);
-  }
-
-  String encoder(dynamic value) {
-    try {
-      return JsonEncoder.withIndent(" " * 4).convert(value);
-    } catch (e) {
-      return value;
-    }
   }
 }
