@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_new_structure/app/global/app_config.dart';
 import 'package:injectable/injectable.dart' as i;
 import 'package:retrofit/retrofit.dart';
 
@@ -7,17 +8,17 @@ import '../../routes/app_routes.dart';
 import '../../utils/constants/json_keys.dart';
 import '../models/auth_model.dart';
 
-part 'auth_retro.g.dart';
+part 'generated/auth_service.g.dart';
 
 Map<String, dynamic> deserializedynamic(Map<String, dynamic> value) => value;
 
 /// Add base Url here..
-@RestApi(parser: Parser.FlutterCompute, baseUrl: '')
+@RestApi(parser: Parser.FlutterCompute, baseUrl: AppConfig.baseUrl)
 @i.lazySingleton
 @i.injectable
-abstract class AuthRetro {
+abstract class AuthService {
   @i.factoryMethod
-  factory AuthRetro(Dio dio) = _AuthRetro;
+  factory AuthService(Dio dio) = _AuthService;
 
   @POST(AppRoutes.login)
   Future<AuthModel?> login(
@@ -36,6 +37,7 @@ abstract class AuthRetro {
   Future<Map<String, dynamic>> resetPassword(
     @Query(JsonKeys.email) String email,
     @Query(JsonKeys.newPassword) String newPassword,
+    @DioOptions() Options options,
   );
 
   @POST(AppRoutes.verifyCode)

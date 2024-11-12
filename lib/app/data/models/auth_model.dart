@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'auth_model.g.dart';
+part 'generated/auth_model.g.dart';
 
 AuthModel deserializeAuthModel(Map<String, dynamic> json) => AuthModel.fromJson(json);
 

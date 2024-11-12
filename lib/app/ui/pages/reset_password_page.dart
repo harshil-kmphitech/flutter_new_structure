@@ -1,40 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
 import 'package:get/get.dart';
+
 import '../../controllers/auth_controller.dart';
 import '../../utils/constants/app_messages.dart';
+import '../../utils/helpers/exeption/exeption.dart';
+import '../../utils/helpers/injectable/injectable.dart';
 
 class ResetPasswordPage extends StatelessWidget {
-  final AuthController _authController = Get.put(AuthController());
+  final AuthController _authController = getIt<AuthController>();
 
   ResetPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(AppMessages.resetPasswordPageTitle),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              onChanged: (value) => _authController.password.value = value,
-              decoration: const InputDecoration(labelText: AppMessages.newPasswordLabel),
-              obscureText: true,
-            ),
-            TextField(
-              onChanged: (value) => _authController.confirmPassword.value = value,
-              decoration: const InputDecoration(labelText: AppMessages.confirmPasswordLabel),
-              obscureText: true,
-            ),
-            Obx(() => _authController.isLoading.value
-                ? const CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: _authController.resetPassword,
-                    child: const Text(AppMessages.resetPasswordButton),
-                  )),
-          ],
+    return Form(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(AppMessages.resetPasswordPageTitle),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(labelText: AppMessages.newPasswordLabel),
+                obscureText: true,
+                controller: _authController.resetPassController,
+                validator: AppValidations.passwordValidation,
+              ),
+              TextFormField(
+                controller: _authController.confirmPassController,
+                validator: (value) => AppValidations.confirmPasswordValidation(value, _authController.passController.text),
+                decoration: const InputDecoration(labelText: AppMessages.confirmPasswordLabel),
+                obscureText: true,
+              ),
+              Obx(
+                () => _authController.resetPassState.isLoading
+                    ? const CircularProgressIndicator()
+                    : Builder(builder: (context) {
+                        return ElevatedButton(
+                          onPressed: () => _authController.resetPassword(context),
+                          child: const Text(AppMessages.resetPasswordButton),
+                        );
+                      }),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,43 +1,51 @@
 class AppMessages {
+  AppMessages._();
   // Page Titles
-  static const String loginPageTitle = 'Login';
-  static const String registerPageTitle = 'Register';
-  static const String forgotPasswordPageTitle = 'Forgot Password';
-  static const String verifyCodePageTitle = 'Verify Code';
-  static const String resetPasswordPageTitle = 'Reset Password';
+  static const loginPageTitle = 'Login';
+  static const registerPageTitle = 'Register';
+  static const forgotPasswordPageTitle = 'Forgot Password';
+  static const verifyCodePageTitle = 'Verify Code';
+  static const resetPasswordPageTitle = 'Reset Password';
 
   // Form Labels
-  static const String emailLabel = 'Email';
-  static const String passwordLabel = 'Password';
-  static const String confirmPasswordLabel = 'Confirm Password';
-  static const String nameLabel = 'Name';
-  static const String phoneNumberLabel = 'Phone Number';
-  static const String newPasswordLabel = 'New Password';
-  static const String codeLabel = 'Verification Code';
+  static const emailLabel = 'Email';
+  static const passwordLabel = 'Password';
+  static const confirmPasswordLabel = 'Confirm Password';
+  static const nameLabel = 'Name';
+  static const phoneNumberLabel = 'Phone Number';
+  static const newPasswordLabel = 'New Password';
+  static const codeLabel = 'Verification Code';
 
   // Button Texts
-  static const String loginButton = 'Login';
-  static const String registerButton = 'Register';
-  static const String sendResetLinkButton = 'Send Reset Link';
-  static const String verifyButton = 'Verify Code';
-  static const String resetPasswordButton = 'Reset Password';
+  static const loginButton = 'Login';
+  static const registerButton = 'Register';
+  static const sendResetLinkButton = 'Send Reset Link';
+  static const verifyButton = 'Verify Code';
+  static const resetPasswordButton = 'Reset Password';
 
   // Redirect Texts
-  static const String registerRedirect = 'Don\'t have an account? Register';
-  static const String forgotPasswordRedirect = 'Forgot your password?';
+  static const registerRedirect = 'Don\'t have an account? Register';
+  static const forgotPasswordRedirect = 'Forgot your password?';
 
   // Validation and Error Messages
-  static const String loginSuccess = 'Login successful';
-  static const String loginFailed = 'Login failed. Please try again';
-  static const String registerSuccess = 'Registration successful';
-  static const String registerFailed = 'Registration failed. Please try again';
-  static const String passwordResetEmailSent = 'Password reset email sent';
-  static const String passwordResetFailed = 'Failed to send reset email';
-  static const String passwordResetSuccess = 'Password reset successful';
-  static const String passwordMismatch = 'Passwords do not match';
-  static const String codeVerificationSuccess = 'Code verification successful';
-  static const String codeVerificationFailed = 'Code verification failed';
-  static const String invalidEmail = 'Please enter a valid email address';
+  static const loginSuccess = 'Login successful';
+  static const loginFailed = 'Login failed. Please try again';
+  static const registerSuccess = 'Registration successful';
+  static const registerFailed = 'Registration failed. Please try again';
+  static const passwordResetEmailSent = 'Password reset email sent';
+  static const passwordResetFailed = 'Failed to send reset email';
+  static const passwordResetSuccess = 'Password reset successful';
+  static const passwordMismatch = 'Passwords do not match';
+  static const codeVerificationSuccess = 'Code verification successful';
+  static const codeVerificationFailed = 'Code verification failed';
+  static const emptyEmail = 'Please enter a email address';
+  static const invalidEmail = 'Please enter a valid email address';
+  static const emptyPassword = 'Please enter password';
+  static const emptyName = 'Name should not be empty';
+  static const emptyPhoneNumber = 'Please enter phone number';
+  static const emptyConfirmPassword = 'Please enter confirm password';
+  static const emptyVerificationCode = 'Please enter verification code';
 
   static const apiError = 'An error occurred. Please try again later';
+  static const apiErrorDescription = 'Oops! Something went wrong. Please try again later.';
 }

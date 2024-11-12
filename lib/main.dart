@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -8,7 +9,11 @@ import 'app/routes/app_routes.dart';
 import 'app/utils/themes/app_theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  configuration(
+    runApp: () => runApp(
+      const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

@@ -1,23 +1,39 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_new_structure/app/data/models/auth_model.dart';
-import 'package:get/get.dart';
-import '../services/auth_service.dart';
-import '../utils/constants/app_messages.dart';
+import 'package:flutter_new_structure/app/data/services/auth_service.dart';
+import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
+import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
+import 'package:injectable/injectable.dart' as i;
 
+import '../utils/constants/app_messages.dart';
+import '../utils/helpers/exeption/exeption.dart';
+
+@i.lazySingleton
+@i.injectable
 class AuthController extends GetxController {
-  final AuthService _authService = Get.put(AuthService());
+  final AuthService _authService = getIt<AuthService>();
 
   var isDarkTheme = false.obs;
 
   // Observable variables for user input
-  var email = ''.obs;
-  var password = ''.obs;
-  var confirmPassword = ''.obs;
-  var name = ''.obs;
-  var phoneNumber = ''.obs;
-  var verificationCode = ''.obs;
+  var emailController = TextEditingController();
+  var forgotEmailController = TextEditingController();
+  var registerEmailController = TextEditingController();
+  var passController = TextEditingController();
+  var registerPassController = TextEditingController();
+  var resetPassController = TextEditingController();
+  var confirmPassController = TextEditingController();
+  var nameController = TextEditingController();
+  var phoneNumberController = TextEditingController();
+  var verificationCode = TextEditingController();
+
+  final loginState = ApiState.initial().obs;
+  final forgotState = ApiState.initial().obs;
+  final resetPassState = ApiState.initial().obs;
+  final registerState = ApiState.initial().obs;
+  final verificationState = ApiState.initial().obs;
 
   // State variables for loading and model
-  var isLoading = false.obs;
   var authModel = Rxn<AuthModel>();
 
   // Helper method to display success messages
@@ -31,84 +47,138 @@ class AuthController extends GetxController {
   }
 
   // Login method
-  Future<void> login() async {
-    isLoading.value = true;
-    try {
-      authModel.value = await _authService.login(email.value, password.value);
-      if (authModel.value != null) {
-        showSuccess(AppMessages.loginSuccess);
-      }
-    } catch (e) {
-      // Display generic error message for login failure
-      showError(AppMessages.loginFailed);
-    } finally {
-      isLoading.value = false;
-    }
+  Future<void> login(BuildContext context) async {
+    throw Exception('test exception');
+    if (!Form.of(context).validate()) return;
+
+    _authService.login(emailController.text, passController.text).handler(loginState).whenComplete(
+      () {
+        switch (loginState.value) {
+          case SuccessState e:
+            if (e.value != null) {
+              authModel.value = e.value;
+              showSuccess(AppMessages.loginSuccess);
+              break;
+            }
+          case FailedState e:
+            if (e.isRetirable) {
+              showError(e.error.description);
+              break;
+            }
+          default:
+            showError(AppMessages.loginFailed);
+        }
+      },
+    );
   }
 
   // Registration method
-  Future<void> register() async {
-    isLoading.value = true;
-    try {
-      // Create a new AuthModel instance with user input
-      AuthModel newUser = AuthModel(
-        name: name.value,
-        email: email.value,
-        password: password.value,
-        phoneNumber: phoneNumber.value,
-      );
-      authModel.value = await _authService.register(newUser);
-      showSuccess(AppMessages.registerSuccess);
-    } catch (e) {
-      // Display generic error message for registration failure
-      showError(AppMessages.registerFailed);
-    } finally {
-      isLoading.value = false;
-    }
+  Future<void> register(BuildContext context) async {
+    if (!Form.of(context).validate()) return;
+    AuthModel newUser = AuthModel(
+      name: nameController.text,
+      email: registerEmailController.text,
+      password: passController.text,
+      phoneNumber: phoneNumberController.text,
+    );
+    _authService.register(newUser).handler(registerState).whenComplete(
+      () {
+        switch (loginState.value) {
+          case SuccessState e:
+            if (e.value != null) {
+              authModel.value = e.value;
+              showSuccess(AppMessages.registerSuccess);
+              break;
+            }
+          case FailedState e:
+            if (e.isRetirable) {
+              showError(e.error.description);
+              break;
+            }
+          default:
+            showError(AppMessages.registerFailed);
+        }
+      },
+    );
   }
 
   // Forgot password method
-  Future<void> forgotPassword() async {
-    isLoading.value = true;
-    try {
-      await _authService.forgotPassword(email.value);
-      showSuccess(AppMessages.passwordResetEmailSent);
-    } catch (e) {
-      // Display generic error message for forgot password failure
-      showError(AppMessages.passwordResetFailed);
-    } finally {
-      isLoading.value = false;
-    }
+  Future<void> forgotPassword(BuildContext context) async {
+    if (!Form.of(context).validate()) return;
+
+    _authService.forgotPassword(forgotEmailController.text).handler(forgotState).whenComplete(
+      () {
+        switch (loginState.value) {
+          case SuccessState e:
+            if (e.value != null) {
+              authModel.value = e.value;
+              showSuccess(AppMessages.passwordResetEmailSent);
+              break;
+            }
+          case FailedState e:
+            if (e.isRetirable) {
+              showError(e.error.description);
+              break;
+            }
+          default:
+            showError(AppMessages.passwordResetFailed);
+        }
+      },
+    );
   }
 
   // Reset password method with password match validation
-  Future<void> resetPassword() async {
-    isLoading.value = true;
-    try {
-      if (password.value == confirmPassword.value) {
-        await _authService.resetPassword(email.value, password.value);
-        showSuccess(AppMessages.passwordResetSuccess);
-      } else {
-        // Display error if passwords do not match
-        showError(AppMessages.passwordMismatch);
+  Future<void> resetPassword(BuildContext context) async {
+    if (!Form.of(context).validate()) return;
+    _authService
+        .resetPassword(
+          forgotEmailController.text,
+          resetPassController.text,
+          Options(
+            sendTimeout: const Duration(minutes: 2),
+          ),
+        )
+        .handler(resetPassState)
+        .whenComplete(() {
+      switch (loginState.value) {
+        case SuccessState e:
+          if (e.value != null) {
+            authModel.value = e.value;
+            showSuccess(AppMessages.passwordResetSuccess);
+            break;
+          }
+        case FailedState e:
+          if (e.isRetirable) {
+            showError(e.error.description);
+            break;
+          }
+        default:
+          showError(AppMessages.passwordResetFailed);
       }
-    } catch (e) {
-      showError(AppMessages.passwordResetFailed);
-    } finally {
-      isLoading.value = false;
-    }
+    });
   }
 
   // Verify code method
-  Future<void> verifyCode() async {
-    isLoading.value = true;
-    try {
-      await _authService.verifyCode(email.value, verificationCode.value);
-      showSuccess(AppMessages.codeVerificationSuccess);
-    } catch (e) {
-      showError(AppMessages.codeVerificationFailed);
-    } finally {
-      isLoading.value = false;
-    }
+  Future<void> verifyCode(BuildContext context) async {
+    if (!Form.of(context).validate()) return;
+    _authService.verifyCode(forgotEmailController.text, verificationCode.text).handler(verificationState).whenComplete(
+      () {
+        switch (loginState.value) {
+          case SuccessState e:
+            if (e.value != null) {
+              authModel.value = e.value;
+              showSuccess(AppMessages.codeVerificationSuccess);
+              break;
+            }
+          case FailedState e:
+            if (e.isRetirable) {
+              showError(e.error.description);
+              break;
+            }
+          default:
+            showError(AppMessages.codeVerificationFailed);
+        }
+      },
+    );
   }
 }

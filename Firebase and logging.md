@@ -51,4 +51,48 @@ In the root of your application, run the `configure` command:
 flutterfire configure
 ```
 
-select your project, after that select platforms
+By running this command, you will get your projects list. Manage project selection using the arrow keys `up` or `down`.
+
+```
+mac@192 flutter_fire_cli % flutterfire configure
+i Found 5 Firebase projects.
+? Select a Firebase project to configure your Flutter application with >
+❯ alamus-ebccf (ALAMUS)        
+  flient-app (Flient app)
+  know-your-c35e4 (know your pet)
+  shurinc-9d0eb (Shurinc)
+  transporthub-f314d (Transporthub)      
+  <create a new project>
+```
+
+If you need to create a new project, move your selection to create a new project.
+
+After going through create a new project, you will have some options. Now enter your new project ID.
+
+**Important:** Ensure your project ID contains only lowercase letters and dashes.
+
+
+```
+✔ Select a Firebase project to configure your Flutter application with <create a new project>
+? Enter a project id for your new Firebase project (e.g. my-cool-project) › 
+```
+
+After you select or create a project, you will see your project's platform. To manage project selection, use the up and down arrow keys. To select or unselect a platform, press the `space bar`.
+
+```
+i New Firebase project flutterfire-23423 created successfully.
+? Which platforms should your configuration support (use arrow keys & space to select)? ›     
+✔ android
+✔ ios
+✔ macos
+✔ web
+✔ windows   
+```
+
+Mandatory Step: If you have not already changed your Android package name or iOS bundle ID, enter a custom one here.
+
+```
+? Which Android application id (or package name) do you want to use for this configuration, e.g. 'com.example.app'? ›
+```
+
+That's it! You have now initialized Firebase for your project on all selected platforms.

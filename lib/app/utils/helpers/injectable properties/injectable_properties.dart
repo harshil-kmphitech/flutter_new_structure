@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class DefaultPath {
   Directory getTemporaryDirectory();
@@ -24,6 +25,9 @@ class AppDirectory implements DefaultPath {
 abstract class RegisterModule {
   @singleton
   Dio dio() => Dio();
+
+  @preResolve
+  Future<SharedPreferences> pref() => SharedPreferences.getInstance();
 
   @preResolve
   Future<Directory> temporaryDirectory() => getTemporaryDirectory();
