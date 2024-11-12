@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 extension SharedPreferencesX on SharedPreferences {
@@ -12,4 +15,8 @@ extension SharedPreferencesX on SharedPreferences {
       setString('token', value);
     }
   }
+}
+
+extension StringX on String {
+  String get convertMd5 => md5.convert(utf8.encode(this)).toString();
 }

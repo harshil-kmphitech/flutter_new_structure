@@ -1,18 +1,17 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_new_structure/app/data/models/auth_model.dart';
-import 'package:flutter_new_structure/app/data/services/auth_service.dart';
+import 'package:flutter_new_structure/app/data/models/authModel/auth_model.dart';
+import 'package:flutter_new_structure/app/data/services/authService/auth_service.dart';
+import 'package:flutter_new_structure/app/routes/app_routes.dart';
 import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
+import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:injectable/injectable.dart' as i;
 
 import '../utils/constants/app_messages.dart';
-import '../utils/helpers/exeption/exeption.dart';
+import '../utils/helpers/exception/exception.dart';
 
 @i.lazySingleton
 @i.injectable
 class AuthController extends GetxController {
-  final AuthService _authService = getIt<AuthService>();
-
   var isDarkTheme = false.obs;
 
   // Observable variables for user input
@@ -50,53 +49,73 @@ class AuthController extends GetxController {
   Future<void> login(BuildContext context) async {
     if (!Form.of(context).validate()) return;
 
-    _authService.login(emailController.text, passController.text).handler(loginState).whenComplete(
-      () {
-        switch (loginState.value) {
-          case SuccessState e:
-            if (e.value != null) {
-              authModel.value = e.value;
-              showSuccess(AppMessages.loginSuccess);
-              break;
-            }
-          case FailedState e:
-            if (e.isRetirable) {
-              showError(e.error.description);
-              break;
-            }
-          default:
-            showError(AppMessages.loginFailed);
+    getIt<AuthService>().login(emailController.text, passController.text.convertMd5).handler(
+      loginState,
+      onSuccess: (value) {
+        if (value != null) {
+          authModel.value = value;
+          showSuccess(authModel.value!.ResponseMsg);
         }
+      },
+      onFailed: (value) {
+        // If the onFailed is called that means your ApiState has FailedState value
+        showError(value.error.description);
+      },
+    );
+  }
+
+  void sendOtp(BuildContext context) {
+    getIt<AuthService>()
+        .sendOTP(
+      registerEmailController.text,
+      nameController.text,
+    )
+        .handler(
+      registerState,
+      onSuccess: (value) {
+        if (value.data is Map) {
+          if (value.data['ResponseCode'] == 1) {
+            showSuccess(value.data['ResponseMsg']);
+            verificationCode.clear();
+            Get.toNamed(AppRoutes.verifyCode);
+          } else {
+            showError(AppMessages.registerFailed);
+          }
+        }
+      },
+      onFailed: (value) {
+        showError(AppMessages.registerFailed);
       },
     );
   }
 
   // Registration method
-  Future<void> register(BuildContext context) async {
+  void register(BuildContext context) {
     if (!Form.of(context).validate()) return;
-    AuthModel newUser = AuthModel(
-      name: nameController.text,
+
+    getIt<AuthService>()
+        .register(
       email: registerEmailController.text,
-      password: passController.text,
-      phoneNumber: phoneNumberController.text,
-    );
-    _authService.register(newUser).handler(registerState).whenComplete(
-      () {
-        switch (loginState.value) {
-          case SuccessState e:
-            if (e.value != null) {
-              authModel.value = e.value;
-              showSuccess(AppMessages.registerSuccess);
-              break;
-            }
-          case FailedState e:
-            if (e.isRetirable) {
-              showError(e.error.description);
-              break;
-            }
-          default:
-            showError(AppMessages.registerFailed);
+      pass: registerPassController.text.convertMd5,
+      phone: phoneNumberController.text,
+      name: nameController.text,
+      ccode: '+91',
+      role: 'Student',
+      otp: verificationCode.text,
+    )
+        .handler(
+      registerState,
+      onSuccess: (value) {
+        if (value?.ResponseCode == 1) {
+          authModel.value = value;
+          showSuccess(AppMessages.registerSuccess);
+          Get.offAllNamed(AppRoutes.theme);
+        } else {
+          showError(value?.ResponseMsg ?? AppMessages.registerFailed);
         }
+      },
+      onFailed: (value) {
+        showError(value.error.description);
       },
     );
   }
@@ -105,23 +124,21 @@ class AuthController extends GetxController {
   Future<void> forgotPassword(BuildContext context) async {
     if (!Form.of(context).validate()) return;
 
-    _authService.forgotPassword(forgotEmailController.text).handler(forgotState).whenComplete(
-      () {
-        switch (loginState.value) {
-          case SuccessState e:
-            if (e.value != null) {
-              authModel.value = e.value;
-              showSuccess(AppMessages.passwordResetEmailSent);
-              break;
-            }
-          case FailedState e:
-            if (e.isRetirable) {
-              showError(e.error.description);
-              break;
-            }
-          default:
-            showError(AppMessages.passwordResetFailed);
+    getIt<AuthService>().forgotPassword(forgotEmailController.text).handler(
+      forgotState,
+      onSuccess: (value) {
+        if (value.data is Map) {
+          if (value.data['ResponseCode'] == 1) {
+            showSuccess(AppMessages.passwordResetEmailSent);
+            verificationCode.clear();
+            Get.toNamed(AppRoutes.verifyCode);
+          } else {
+            showError(value.data['ResponseMsg']);
+          }
         }
+      },
+      onFailed: (value) {
+        showError(value.error.description);
       },
     );
   }
@@ -129,55 +146,68 @@ class AuthController extends GetxController {
   // Reset password method with password match validation
   Future<void> resetPassword(BuildContext context) async {
     if (!Form.of(context).validate()) return;
-    _authService
-        .resetPassword(
-          forgotEmailController.text,
-          resetPassController.text,
-          Options(
-            sendTimeout: const Duration(minutes: 2),
-          ),
-        )
-        .handler(resetPassState)
-        .whenComplete(() {
-      switch (loginState.value) {
-        case SuccessState e:
-          if (e.value != null) {
-            authModel.value = e.value;
-            showSuccess(AppMessages.passwordResetSuccess);
-            break;
-          }
-        case FailedState e:
-          if (e.isRetirable) {
-            showError(e.error.description);
-            break;
-          }
-        default:
-          showError(AppMessages.passwordResetFailed);
-      }
-    });
+    getIt<AuthService>().resetPassword(forgotEmailController.text, resetPassController.text.convertMd5).handler(
+      resetPassState,
+      onSuccess: (value) {
+        if (value.ResponseCode == 1) {
+          showSuccess(AppMessages.passwordResetSuccess);
+          Get
+            ..closeAllSnackbars()
+            ..offAllNamed(AppRoutes.theme);
+        } else {
+          showError(value.ResponseMsg);
+        }
+      },
+      onFailed: (value) {
+        showError(value.error.description);
+      },
+    );
   }
 
   // Verify code method
   Future<void> verifyCode(BuildContext context) async {
     if (!Form.of(context).validate()) return;
-    _authService.verifyCode(forgotEmailController.text, verificationCode.text).handler(verificationState).whenComplete(
-      () {
-        switch (loginState.value) {
-          case SuccessState e:
-            if (e.value != null) {
-              authModel.value = e.value;
-              showSuccess(AppMessages.codeVerificationSuccess);
-              break;
-            }
-          case FailedState e:
-            if (e.isRetirable) {
-              showError(e.error.description);
-              break;
-            }
-          default:
-            showError(AppMessages.codeVerificationFailed);
+    if (Get.previousRoute == AppRoutes.register) {
+      return register(context);
+    }
+    getIt<AuthService>().verifyCode(forgotEmailController.text, verificationCode.text).handler(
+      verificationState,
+      onSuccess: (value) {
+        if (value.data is Map) {
+          if (value.data['ResponseCode'] == 1) {
+            showSuccess(AppMessages.codeVerificationSuccess);
+            Get.offNamed(AppRoutes.resetPassword);
+          } else {
+            showError(value.data['ResponseMsg']);
+          }
         }
       },
+      onFailed: (value) {
+        showError(value.error.description);
+      },
     );
+  }
+
+  @override
+  @i.disposeMethod
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    forgotEmailController.dispose();
+    registerEmailController.dispose();
+    passController.dispose();
+    registerPassController.dispose();
+    resetPassController.dispose();
+    confirmPassController.dispose();
+    nameController.dispose();
+    phoneNumberController.dispose();
+    verificationCode.dispose();
+    loginState.close();
+    forgotState.close();
+    resetPassState.close();
+    registerState.close();
+    verificationState.close();
+    authModel.close();
+    isDarkTheme.close();
   }
 }

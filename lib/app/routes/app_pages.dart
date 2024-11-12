@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 
-import '../ui/pages/forgot_password_page.dart';
-import '../ui/pages/login_page.dart';
-import '../ui/pages/register_page.dart';
-import '../ui/pages/reset_password_page.dart';
-import '../ui/pages/theme_page.dart';
-import '../ui/pages/verify_code_page.dart';
+import '../ui/pages/authentication/forgot_password_page.dart';
+import '../ui/pages/authentication/login_page.dart';
+import '../ui/pages/authentication/register_page.dart';
+import '../ui/pages/authentication/reset_password_page.dart';
+import '../ui/pages/authentication/verify_code_page.dart';
+import '../ui/pages/theme/theme_page.dart';
 import 'app_routes.dart';
 
 class AppPages {

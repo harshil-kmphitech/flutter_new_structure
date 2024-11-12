@@ -1,7 +1,7 @@
 import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
 
-import '../../utils/helpers/all_imports.dart';
-import '../../utils/helpers/injectable/injectable.dart';
+import '../../../utils/helpers/all_imports.dart';
+import '../../../utils/helpers/injectable/injectable.dart';
 
 class ThemePage extends GetView<AuthController> {
   const ThemePage({super.key});

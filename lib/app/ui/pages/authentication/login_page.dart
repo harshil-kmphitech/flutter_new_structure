@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_structure/app/utils/helpers/exeption/exeption.dart';
+import 'package:flutter_new_structure/app/routes/app_routes.dart';
+import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
 import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/auth_controller.dart';
-import '../../utils/constants/app_messages.dart';
-import '../../utils/helpers/injectable/injectable.dart';
+import '../../../controllers/auth_controller.dart';
+import '../../../utils/constants/app_messages.dart';
+import '../../../utils/helpers/injectable/injectable.dart';
 
 class LoginPage extends StatelessWidget {
   final AuthController _authController = getIt<AuthController>();
@@ -44,21 +45,29 @@ class LoginPage extends StatelessWidget {
                     : Builder(
                         builder: (context) {
                           return ElevatedButton(
-                            onPressed: () {
-                              _authController.login(context);
-                            },
+                            onPressed: () => _authController.login(context),
                             child: const Text(AppMessages.loginButton),
                           );
                         },
                       ),
               ),
               TextButton(
-                onPressed: () => Get.toNamed('/register'),
+                onPressed: () => Get.toNamed(AppRoutes.register),
                 child: const Text(AppMessages.registerRedirect),
               ),
               TextButton(
-                onPressed: () => Get.toNamed('/forgot-password'),
+                onPressed: () {
+                  _authController
+                    ..forgotEmailController.clear()
+                    ..resetPassController.clear()
+                    ..confirmPassController.clear();
+                  Get.toNamed(AppRoutes.forgotPassword);
+                },
                 child: const Text(AppMessages.forgotPasswordRedirect),
+              ),
+              TextButton(
+                onPressed: () => Get.toNamed(AppRoutes.theme),
+                child: const Text(AppMessages.theme),
               ),
             ],
           ),

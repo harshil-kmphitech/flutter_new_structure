@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_structure/app/utils/helpers/exeption/exeption.dart';
+import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
 import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/auth_controller.dart';
-import '../../utils/constants/app_messages.dart';
-import '../../utils/helpers/injectable/injectable.dart';
+import '../../../controllers/auth_controller.dart';
+import '../../../utils/constants/app_messages.dart';
+import '../../../utils/helpers/injectable/injectable.dart';
 
 class VerifyCodePage extends StatelessWidget {
   final AuthController _authController = getIt<AuthController>();

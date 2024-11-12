@@ -5,7 +5,7 @@
 To inject all the required packages in the project, run the following command:
 
 ```
-flutter pub add dio dio_smart_retry dio_cache_interceptor dio_cache_interceptor_hive_store injectable retrofit json_annotation get_it path_provider
+flutter pub add dio dio_smart_retry dio_cache_interceptor dio_cache_interceptor_hive_store injectable retrofit json_annotation get_it path_provider shared_preferences
 ```
 
 Or inject Dev dependencies:

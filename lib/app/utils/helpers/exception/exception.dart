@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_new_structure/app/utils/constants/app_messages.dart';
+import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+
+import '../../constants/app_messages.dart';
 
 @immutable
 class UserFriendlyError {
@@ -12,89 +14,63 @@ class UserFriendlyError {
   const UserFriendlyError(this.title, this.description);
 }
 
-extension DioExceptionTypeExtension on DioExceptionType {
+extension DioExceptionTypeX on DioExceptionType {
   /// context should pass for incase app works with Localization so the context is required
   UserFriendlyError toUserFriendlyError() {
     switch (this) {
       case DioExceptionType.connectionTimeout:
         return const UserFriendlyError(
-          "Connection Timeout",
-          "Oops! It seems the connection timed out. Please check your internet connection and try again.",
+          AppMessages.connectionTimeout,
+          AppMessages.connectionTimeoutDesc,
         );
       case DioExceptionType.sendTimeout:
         return const UserFriendlyError(
-          "Connection Timeout",
-          "Oops! It seems the connection timed out. Please check your internet connection and try again.",
+          AppMessages.sendTimeout,
+          AppMessages.sendTimeoutDesc,
         );
       case DioExceptionType.receiveTimeout:
         return const UserFriendlyError(
-          "Data Reception Issue",
-          "Oops! We're having trouble receiving data right now. Please try again later.",
+          AppMessages.receiveTimeout,
+          AppMessages.receiveTimeoutDesc,
         );
       case DioExceptionType.badCertificate:
         return const UserFriendlyError(
-          "Security Certificate Problem",
-          "Sorry, there's a problem with the security certificate. Please contact support for assistance.",
+          AppMessages.badCertificate,
+          AppMessages.badCertificateDesc,
         );
       case DioExceptionType.badResponse:
         return const UserFriendlyError(
-          "Unexpected Server Response",
-          "Oh no! We received an unexpected response from the server. Please try again later.",
+          AppMessages.badResponse,
+          AppMessages.badResponseDesc,
         );
       case DioExceptionType.cancel:
         return const UserFriendlyError(
-          "Request Cancelled",
-          "Your request has been cancelled. Please try again.",
+          AppMessages.cancel,
+          AppMessages.cancelDesc,
         );
       case DioExceptionType.connectionError:
         return const UserFriendlyError(
-          "Connection Issue",
-          "We're having trouble connecting to the server. Please check your internet connection and try again.",
+          AppMessages.connectionError,
+          AppMessages.connectionErrorDesc,
         );
       case DioExceptionType.unknown:
       default:
         return const UserFriendlyError(
-          "Unknown Error",
-          "Oops! Something went wrong. Please try again later.",
+          AppMessages.unknown,
+          AppMessages.unknownDesc,
         );
     }
   }
 }
 
-mixin class ApiHandler<T> {
-  Future<void> handler(Future<T> request) async {
-    try {
-      state.value = LoadingState();
-      final response = await request;
-      state.value = SuccessState(response);
-    } on DioExceptionType catch (e) {
-      state.value = FailedState(
-        isRetirable: switch (e) {
-          DioExceptionType.connectionTimeout || DioExceptionType.sendTimeout || DioExceptionType.receiveTimeout => true,
-          _ => false,
-        },
-        error: e.toUserFriendlyError(),
-      );
-    }
-  }
-
-  Rx<ApiState> state = Rx(InitialState());
-}
-
 extension ApiHandlingExtension<T> on Future<T> {
-  Future<void> handler(Rx<ApiState> state) async {
+  /// Must use handler it's a better way to handle request's response api calling
+  Future<void> handler(Rx<ApiState> state, {ValueChanged<T>? onSuccess, ValueChanged<FailedState>? onFailed}) async {
     try {
       state.value = LoadingState();
       final response = await this;
-      state.value = SuccessState(response);
-    } on DioExceptionType catch (e) {
-      state.value = FailedState(
-        isRetirable: switch (e) {
-          DioExceptionType.connectionTimeout || DioExceptionType.sendTimeout || DioExceptionType.receiveTimeout => true,
-          _ => false,
-        },
-        error: e.toUserFriendlyError(),
-      );
+      state.value = SuccessState<T>(response);
+      onSuccess?.call(response);
     } on DioException catch (e) {
       state.value = FailedState(
         isRetirable: switch (e.type) {
@@ -103,7 +79,11 @@ extension ApiHandlingExtension<T> on Future<T> {
         },
         error: e.type.toUserFriendlyError(),
       );
-    } catch (e) {
+      onFailed?.call(state.value as FailedState);
+    } on Exception catch (e) {
+      /// If you need more detailed information about exception so simply remove this catch
+      /// after removing this catch you are able to see thrawed exception in debug console.
+      e.log;
       state.value = FailedState(
         isRetirable: false,
         error: const UserFriendlyError(
@@ -111,6 +91,7 @@ extension ApiHandlingExtension<T> on Future<T> {
           AppMessages.apiErrorDescription,
         ),
       );
+      onFailed?.call(state.value as FailedState);
     }
   }
 }

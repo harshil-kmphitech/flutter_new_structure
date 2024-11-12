@@ -1,4 +1,4 @@
-package com.example.flutter_new_structure
+package com.demo.app
 
 import io.flutter.embedding.android.FlutterActivity
 

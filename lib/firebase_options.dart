@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'flutterfire-23423.firebasestorage.app',
     iosBundleId: 'com.example.flutterNewStructure',
   );
+
 }
