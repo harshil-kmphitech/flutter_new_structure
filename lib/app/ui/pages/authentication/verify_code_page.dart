@@ -4,7 +4,7 @@ import 'package:flutter_new_structure/app/utils/helpers/validations/validations.
 import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
-import '../../../utils/constants/app_messages.dart';
+import '../../../utils/constants/app_strings.dart';
 import '../../../utils/helpers/injectable/injectable.dart';
 import '../../widgets/custom_textfields.dart';
 
@@ -18,7 +18,7 @@ class VerifyCodePage extends StatelessWidget {
     return Form(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(AppMessages.verifyCodePageTitle),
+          title: Text(AppStrings.T.verifyCode),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -27,7 +27,7 @@ class VerifyCodePage extends StatelessWidget {
               TextInputField(
                 type: InputType.digits,
                 controller: _authController.verificationCode,
-                hintLabel: AppMessages.codeLabel,
+                hintLabel: AppStrings.T.codeLabel,
                 validator: AppValidations.verificationCodeValidation,
               ),
               Obx(
@@ -36,7 +36,7 @@ class VerifyCodePage extends StatelessWidget {
                     : Builder(builder: (context) {
                         return ElevatedButton(
                           onPressed: () => _authController.verifyCode(context),
-                          child: const Text(AppMessages.verifyButton),
+                          child: Text(AppStrings.T.verifyCode),
                         );
                       }),
               ),

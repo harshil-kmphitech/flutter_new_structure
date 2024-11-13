@@ -1,3 +1,4 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
 
 import '../../../utils/helpers/all_imports.dart';
@@ -22,6 +23,20 @@ class ThemePage extends GetView<AuthController> {
         shrinkWrap: true,
         padding: EdgeInsets.zero,
         children: [
+          DropdownButton(
+            items: AppLocalizations.supportedLocales.map(
+              (e) {
+                return DropdownMenuItem(
+                  value: e,
+                  child: Text(e.languageCode),
+                );
+              },
+            ).toList(),
+            onChanged: (value) {
+              if (value == null) return;
+              Get.updateLocale(value);
+            },
+          ),
           const Text(
             "Default Text",
           ),

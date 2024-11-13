@@ -5,7 +5,7 @@ import 'package:flutter_new_structure/app/utils/helpers/validations/validations.
 import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
-import '../../../utils/constants/app_messages.dart';
+import '../../../utils/constants/app_strings.dart';
 import '../../../utils/helpers/injectable/injectable.dart';
 import '../../widgets/custom_textfields.dart';
 
@@ -20,7 +20,7 @@ class LoginPage extends StatelessWidget {
     return Form(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(AppMessages.loginPageTitle),
+          title: Text(AppStrings.T.login),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -30,7 +30,7 @@ class LoginPage extends StatelessWidget {
                 TextInputField(
                   type: InputType.text,
                   controller: _authController.emailController,
-                  hintLabel: AppMessages.emailLabel,
+                  hintLabel: AppStrings.T.emailLabel,
                   validator: AppValidations.emailValidation,
                 ),
                 const SizedBox(height: 16),
@@ -38,7 +38,7 @@ class LoginPage extends StatelessWidget {
                   () => TextInputField(
                     type: InputType.password,
                     controller: _authController.passController,
-                    hintLabel: AppMessages.passwordLabel,
+                    hintLabel: AppStrings.T.passwordLabel,
                     obscureText: passObscure,
                     textInputAction: TextInputAction.done,
                     validator: AppValidations.passwordValidation,
@@ -56,8 +56,8 @@ class LoginPage extends StatelessWidget {
                                 height: 44,
                                 child: ElevatedButton(
                                   onPressed: () => _authController.login(context),
-                                  child: const Text(
-                                    AppMessages.loginButton,
+                                  child: Text(
+                                    AppStrings.T.login,
                                   ),
                                 ),
                               );
@@ -67,7 +67,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () => Get.toNamed(AppRoutes.register),
-                  child: const Text(AppMessages.registerRedirect),
+                  child: Text(AppStrings.T.registerRedirect),
                 ),
                 TextButton(
                   onPressed: () {
@@ -77,11 +77,11 @@ class LoginPage extends StatelessWidget {
                       ..confirmPassController.clear();
                     Get.toNamed(AppRoutes.forgotPassword);
                   },
-                  child: const Text(AppMessages.forgotPasswordRedirect),
+                  child: Text(AppStrings.T.forgotPasswordRedirect),
                 ),
                 TextButton(
                   onPressed: () => Get.toNamed(AppRoutes.theme),
-                  child: const Text(AppMessages.theme),
+                  child: Text(AppStrings.T.theme),
                 ),
               ],
             ),

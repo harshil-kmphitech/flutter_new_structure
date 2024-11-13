@@ -3,7 +3,7 @@ import 'package:flutter_new_structure/app/utils/helpers/validations/validations.
 import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
-import '../../../utils/constants/app_messages.dart';
+import '../../../utils/constants/app_strings.dart';
 import '../../../utils/helpers/exception/exception.dart';
 import '../../../utils/helpers/injectable/injectable.dart';
 import '../../widgets/custom_textfields.dart';
@@ -19,7 +19,7 @@ class RegisterPage extends StatelessWidget {
     return Form(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(AppMessages.registerPageTitle),
+          title: Text(AppStrings.T.register),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -28,21 +28,21 @@ class RegisterPage extends StatelessWidget {
               TextInputField(
                 type: InputType.name,
                 controller: _authController.nameController,
-                hintLabel: AppMessages.nameLabel,
+                hintLabel: AppStrings.T.nameLabel,
                 validator: AppValidations.nameValidation,
               ),
               const SizedBox(height: 16),
               TextInputField(
                 type: InputType.email,
                 controller: _authController.registerEmailController,
-                hintLabel: AppMessages.emailLabel,
+                hintLabel: AppStrings.T.emailLabel,
                 validator: AppValidations.emailValidation,
               ),
               const SizedBox(height: 16),
               TextInputField(
                 type: InputType.newPassword,
                 controller: _authController.registerPassController,
-                hintLabel: AppMessages.passwordLabel,
+                hintLabel: AppStrings.T.passwordLabel,
                 obscureText: passObscure,
                 validator: AppValidations.passwordValidation,
               ),
@@ -50,7 +50,7 @@ class RegisterPage extends StatelessWidget {
               TextInputField(
                 type: InputType.phoneNumber,
                 controller: _authController.phoneNumberController,
-                hintLabel: AppMessages.phoneNumberLabel,
+                hintLabel: AppStrings.T.phoneNumberLabel,
                 validator: AppValidations.phoneNumberValidation,
               ),
               const SizedBox(height: 16),
@@ -60,7 +60,7 @@ class RegisterPage extends StatelessWidget {
                       builder: (context) {
                         return ElevatedButton(
                           onPressed: () => _authController.sendOtp(context),
-                          child: const Text(AppMessages.registerButton),
+                          child: Text(AppStrings.T.register),
                         );
                       },
                     )),

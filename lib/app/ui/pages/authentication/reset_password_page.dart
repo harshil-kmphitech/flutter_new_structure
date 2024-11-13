@@ -3,7 +3,7 @@ import 'package:flutter_new_structure/app/utils/helpers/validations/validations.
 import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
-import '../../../utils/constants/app_messages.dart';
+import '../../../utils/constants/app_strings.dart';
 import '../../../utils/helpers/exception/exception.dart';
 import '../../../utils/helpers/injectable/injectable.dart';
 import '../../widgets/custom_textfields.dart';
@@ -20,7 +20,7 @@ class ResetPasswordPage extends StatelessWidget {
     return Form(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(AppMessages.resetPasswordPageTitle),
+          title: Text(AppStrings.T.resetPassword),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -30,7 +30,7 @@ class ResetPasswordPage extends StatelessWidget {
                 () => TextInputField(
                   type: InputType.newPassword,
                   controller: _authController.resetPassController,
-                  hintLabel: AppMessages.newPasswordLabel,
+                  hintLabel: AppStrings.T.newPasswordLabel,
                   obscureText: passObscure,
                   validator: AppValidations.passwordValidation,
                 ),
@@ -40,7 +40,7 @@ class ResetPasswordPage extends StatelessWidget {
                   type: InputType.confirmPassword,
                   controller: _authController.confirmPassController,
                   validator: (value) => AppValidations.confirmPasswordValidation(value, _authController.passController.text),
-                  hintLabel: AppMessages.confirmPasswordLabel,
+                  hintLabel: AppStrings.T.confirmPasswordLabel,
                   obscureText: confirmPassObscure,
                 ),
               ),
@@ -50,7 +50,7 @@ class ResetPasswordPage extends StatelessWidget {
                     : Builder(builder: (context) {
                         return ElevatedButton(
                           onPressed: () => _authController.resetPassword(context),
-                          child: const Text(AppMessages.resetPasswordButton),
+                          child: Text(AppStrings.T.resetPassword),
                         );
                       }),
               ),

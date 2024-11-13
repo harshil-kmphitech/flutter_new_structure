@@ -20,7 +20,7 @@ flutter:
   generate: true
 ```
 
-and check out the files [app_en.arb](https://github.com/harshil-kmphitech/flutter_new_structure/blob/Jay-Padsala/lib/l10n/app_en.arb) and [app_hi.arb](https://github.com/harshil-kmphitech/flutter_new_structure/blob/Jay-Padsala/lib/l10n/app_hi.arb)
+and check out the files [app_en.arb](https://github.com/harshil-kmphitech/flutter_new_structure/blob/main/lib/l10n/app_en.arb) and [app_hi.arb](https://github.com/harshil-kmphitech/flutter_new_structure/blob/main/lib/l10n/app_hi.arb)
 
 run command for generate localizations.
 ```
@@ -41,7 +41,7 @@ MaterialApp(
     supportedLocales: AppLocalizations.supportedLocales,
 )
 ```
-[check here](https://github.com/harshil-kmphitech/flutter_new_structure/blob/Jay-Padsala/lib/main.dart)
+[check here](https://github.com/harshil-kmphitech/flutter_new_structure/blob/main/lib/main.dart)
 
 **Access Localized Strings:**
 
@@ -53,4 +53,4 @@ class AppStrings {
 AppStrings.T.title; // usage
 ```
 
-[check here](https://github.com/harshil-kmphitech/flutter_new_structure/blob/Jay-Padsala/lib/app/utils/constants/app_strings.dart)
+[check here](https://github.com/harshil-kmphitech/flutter_new_structure/blob/main/lib/app/utils/constants/app_strings.dart)

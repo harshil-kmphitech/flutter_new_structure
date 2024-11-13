@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,6 +34,8 @@ class MyApp extends StatelessWidget {
           getPages: AppPages.routes,
           scrollBehavior: CustomScrollBehavior(),
           initialRoute: AppRoutes.login,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
 
           ///Default Theme
           themeMode: ThemeMode.light,

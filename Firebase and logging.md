@@ -96,3 +96,7 @@ Mandatory Step: If you have not already changed your Android package name or iOS
 ```
 
 That's it! You have now initialized Firebase for your project on all selected platforms.
+
+## Adding Crashlytics to Code
+
+[check here](https://github.com/harshil-kmphitech/flutter_new_structure/blob/main/lib/app/utils/helpers/injectable/injectable.dart)

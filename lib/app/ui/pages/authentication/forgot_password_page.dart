@@ -4,7 +4,7 @@ import 'package:flutter_new_structure/app/utils/helpers/validations/validations.
 import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
-import '../../../utils/constants/app_messages.dart';
+import '../../../utils/constants/app_strings.dart';
 import '../../../utils/helpers/injectable/injectable.dart';
 import '../../widgets/custom_textfields.dart';
 
@@ -18,7 +18,7 @@ class ForgotPasswordPage extends StatelessWidget {
     return Form(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(AppMessages.forgotPasswordPageTitle),
+          title: Text(AppStrings.T.forgotPassword),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -28,7 +28,7 @@ class ForgotPasswordPage extends StatelessWidget {
               TextInputField(
                 type: InputType.email,
                 controller: _authController.forgotEmailController,
-                hintLabel: AppMessages.emailLabel,
+                hintLabel: AppStrings.T.emailLabel,
                 validator: AppValidations.emailValidation,
               ),
               Obx(
@@ -37,7 +37,7 @@ class ForgotPasswordPage extends StatelessWidget {
                     : Builder(builder: (context) {
                         return ElevatedButton(
                           onPressed: () => _authController.forgotPassword(context),
-                          child: const Text(AppMessages.sendResetLinkButton),
+                          child: Text(AppStrings.T.sendResetLinkButton),
                         );
                       }),
               ),

@@ -6,7 +6,7 @@ import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.da
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:injectable/injectable.dart' as i;
 
-import '../utils/constants/app_messages.dart';
+import '../utils/constants/app_strings.dart';
 import '../utils/helpers/exception/exception.dart';
 
 @i.lazySingleton
@@ -81,12 +81,12 @@ class AuthController extends GetxController {
             verificationCode.clear();
             Get.toNamed(AppRoutes.verifyCode);
           } else {
-            showError(AppMessages.registerFailed);
+            showError(AppStrings.T.registerFailed);
           }
         }
       },
       onFailed: (value) {
-        showError(AppMessages.registerFailed);
+        showError(AppStrings.T.registerFailed);
       },
     );
   }
@@ -110,10 +110,10 @@ class AuthController extends GetxController {
       onSuccess: (value) {
         if (value?.ResponseCode == 1) {
           authModel.value = value;
-          showSuccess(AppMessages.registerSuccess);
+          showSuccess(AppStrings.T.registerSuccess);
           Get.offAllNamed(AppRoutes.theme);
         } else {
-          showError(value?.ResponseMsg ?? AppMessages.registerFailed);
+          showError(value?.ResponseMsg ?? AppStrings.T.registerFailed);
         }
       },
       onFailed: (value) {
@@ -131,7 +131,7 @@ class AuthController extends GetxController {
       onSuccess: (value) {
         if (value.data is Map) {
           if (value.data['ResponseCode'] == 1) {
-            showSuccess(AppMessages.passwordResetEmailSent);
+            showSuccess(AppStrings.T.passwordResetEmailSent);
             verificationCode.clear();
             Get.toNamed(AppRoutes.verifyCode);
           } else {
@@ -152,7 +152,7 @@ class AuthController extends GetxController {
       resetPassState,
       onSuccess: (value) {
         if (value.ResponseCode == 1) {
-          showSuccess(AppMessages.passwordResetSuccess);
+          showSuccess(AppStrings.T.passwordResetSuccess);
           Get
             ..closeAllSnackbars()
             ..offAllNamed(AppRoutes.theme);
@@ -177,7 +177,7 @@ class AuthController extends GetxController {
       onSuccess: (value) {
         if (value.data is Map) {
           if (value.data['ResponseCode'] == 1) {
-            showSuccess(AppMessages.codeVerificationSuccess);
+            showSuccess(AppStrings.T.codeVerificationSuccess);
             Get.offNamed(AppRoutes.resetPassword);
           } else {
             showError(value.data['ResponseMsg']);

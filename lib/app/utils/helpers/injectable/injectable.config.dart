@@ -38,10 +38,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => registerModule.pref(),
       preResolve: true,
     );
-    await gh.factoryAsync<_i497.Directory>(
-      () => registerModule.temporaryDirectory(),
-      preResolve: true,
-    );
     await gh.factoryAsync<_i982.FirebaseApp>(
       () => registerModule.initializeFireBase(),
       preResolve: true,
@@ -51,10 +47,22 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i289.AuthController(),
       dispose: (i) => i.dispose(),
     );
-    gh.lazySingleton<_i854.AppDirectory>(
-        () => _i854.AppDirectory(temporaryDirectory: gh<_i497.Directory>()));
     gh.lazySingleton<_i388.AuthService>(
         () => _i388.AuthService(gh<_i361.Dio>()));
+    await gh.factoryAsync<_i497.Directory>(
+      () => registerModule.temporaryDirectory(),
+      instanceName: 'temporary',
+      preResolve: true,
+    );
+    await gh.factoryAsync<_i497.Directory>(
+      () => registerModule.documentDirectory(),
+      instanceName: 'document',
+      preResolve: true,
+    );
+    gh.lazySingleton<_i854.AppDirectory>(() => _i854.AppDirectory(
+          temporaryDirectory: gh<_i497.Directory>(instanceName: 'temporary'),
+          documentDirectory: gh<_i497.Directory>(instanceName: 'document'),
+        ));
     return this;
   }
 }

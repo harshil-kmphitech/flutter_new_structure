@@ -28,7 +28,7 @@ Get_it is an resource locator that helps you to manage different module and easy
 
 ## Injectable:
 #### Method:
-**InjectableInit:** Must declare this method. and use `FileName.config.dart` [Check here](https://github.com/harshil-kmphitech/flutter_new_structure/blob/Jay-Padsala/lib/app/utils/helpers/injectable/injectable.dart) for auto generate the initialization code.
+**InjectableInit:** Must declare this method. and use `FileName.config.dart` [Check here](https://github.com/harshil-kmphitech/flutter_new_structure/blob/main/lib/app/utils/helpers/injectable/injectable.dart) for auto generate the initialization code.
 
 Must use configuration function in main function and pass runApp in parameter.
 
@@ -105,10 +105,12 @@ getIt<Directory>(instanceName: 'temporary');
 getIt<Directory>(instanceName: 'document');
 ```
 
+**Warning**: The `instanceName` parameter is mandatory. Failure to provide it will cause a runtime exception.
+
 
 ## Retrofit:
 
-Let's explore the [auth_retro.dart](https://github.com/harshil-kmphitech/flutter_new_structure/blob/Jay-Padsala/lib/app/data/providers/auth_retro.dart) file in this Flutter project. This file likely defines an API service using Retrofit for authentication purposes. We'll analyze its structure and how it interacts with the backend API endpoints.
+Let's explore the [auth_service.dart](https://github.com/harshil-kmphitech/flutter_new_structure/blob/main/lib/app/data/services/authService/auth_service.dart) file in this Flutter project. This file likely defines an API service using Retrofit for authentication purposes. We'll analyze its structure and how it interacts with the backend API endpoints.
 
 #### Module Declaration:
 
@@ -136,6 +138,8 @@ For upload Files with PART.
 
 #### PART Usage:
 
+If the API accepts form data, use the `@Part()` decorator.
+
 ```dart
 @POST('/uploadProfile')
 @MultiPart()
@@ -143,6 +147,8 @@ Future<CommonResModel> uploadProfile({
     @Part(name: "profile_image", contentType: 'image/png') required File image,
 });
 ```
+
+As a last step, please review the automated [token interceptor](https://github.com/harshil-kmphitech/flutter_new_structure/blob/main/lib/app/utils/helpers/Interceptor/token_interceptor.dart).
 
 ## Json Serialization:
 

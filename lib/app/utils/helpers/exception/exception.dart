@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
-import '../../constants/app_messages.dart';
+import '../../../utils/constants/app_strings.dart';
 
 @immutable
 class UserFriendlyError {
@@ -19,66 +19,66 @@ extension DioExceptionX on DioException {
   UserFriendlyError toUserFriendlyError() {
     switch (type) {
       case DioExceptionType.connectionTimeout:
-        return const UserFriendlyError(
-          AppMessages.connectionTimeout,
-          AppMessages.connectionTimeoutDesc,
+        return UserFriendlyError(
+          AppStrings.T.connectionTimeout,
+          AppStrings.T.connectionTimeoutDesc,
         );
       case DioExceptionType.sendTimeout:
-        return const UserFriendlyError(
-          AppMessages.sendTimeout,
-          AppMessages.sendTimeoutDesc,
+        return UserFriendlyError(
+          AppStrings.T.sendTimeout,
+          AppStrings.T.sendTimeoutDesc,
         );
       case DioExceptionType.receiveTimeout:
-        return const UserFriendlyError(
-          AppMessages.receiveTimeout,
-          AppMessages.receiveTimeoutDesc,
+        return UserFriendlyError(
+          AppStrings.T.receiveTimeout,
+          AppStrings.T.receiveTimeoutDesc,
         );
       case DioExceptionType.badCertificate:
-        return const UserFriendlyError(
-          AppMessages.badCertificate,
-          AppMessages.badCertificateDesc,
+        return UserFriendlyError(
+          AppStrings.T.badCertificate,
+          AppStrings.T.badCertificateDesc,
         );
       case DioExceptionType.badResponse:
         return UserFriendlyError(
-          AppMessages.badResponse,
+          AppStrings.T.badResponse,
           _statusCode(response?.statusCode ?? 0),
         );
       case DioExceptionType.cancel:
-        return const UserFriendlyError(
-          AppMessages.cancel,
-          AppMessages.cancelDesc,
+        return UserFriendlyError(
+          AppStrings.T.cancel,
+          AppStrings.T.cancelDesc,
         );
       case DioExceptionType.connectionError:
-        return const UserFriendlyError(
-          AppMessages.connectionError,
-          AppMessages.connectionErrorDesc,
+        return UserFriendlyError(
+          AppStrings.T.connectionError,
+          AppStrings.T.connectionErrorDesc,
         );
       case DioExceptionType.unknown:
       default:
-        return const UserFriendlyError(
-          AppMessages.unknown,
-          AppMessages.unknownDesc,
+        return UserFriendlyError(
+          AppStrings.T.unknown,
+          AppStrings.T.unknownDesc,
         );
     }
   }
 
   String _statusCode(int? statusCode) {
     return switch (statusCode) {
-      200 => AppMessages.code200,
-      201 => AppMessages.code201,
-      202 => AppMessages.code202,
-      301 => AppMessages.code301,
-      302 => AppMessages.code302,
-      304 => AppMessages.code304,
-      400 => AppMessages.code400,
-      401 => AppMessages.code401,
-      403 => AppMessages.code403,
-      404 => AppMessages.code404,
-      405 => AppMessages.code405,
-      409 => AppMessages.code409,
-      500 => AppMessages.code500,
-      503 => AppMessages.code503,
-      _ => AppMessages.badResponseDesc,
+      200 => AppStrings.T.code200,
+      201 => AppStrings.T.code201,
+      202 => AppStrings.T.code202,
+      301 => AppStrings.T.code301,
+      302 => AppStrings.T.code302,
+      304 => AppStrings.T.code304,
+      400 => AppStrings.T.code400,
+      401 => AppStrings.T.code401,
+      403 => AppStrings.T.code403,
+      404 => AppStrings.T.code404,
+      405 => AppStrings.T.code405,
+      409 => AppStrings.T.code409,
+      500 => AppStrings.T.code500,
+      503 => AppStrings.T.code503,
+      _ => AppStrings.T.badResponseDesc,
     };
   }
 }
@@ -88,45 +88,45 @@ extension DioExceptionTypeX on DioExceptionType {
   UserFriendlyError toUserFriendlyError() {
     switch (this) {
       case DioExceptionType.connectionTimeout:
-        return const UserFriendlyError(
-          AppMessages.connectionTimeout,
-          AppMessages.connectionTimeoutDesc,
+        return UserFriendlyError(
+          AppStrings.T.connectionTimeout,
+          AppStrings.T.connectionTimeoutDesc,
         );
       case DioExceptionType.sendTimeout:
-        return const UserFriendlyError(
-          AppMessages.sendTimeout,
-          AppMessages.sendTimeoutDesc,
+        return UserFriendlyError(
+          AppStrings.T.sendTimeout,
+          AppStrings.T.sendTimeoutDesc,
         );
       case DioExceptionType.receiveTimeout:
-        return const UserFriendlyError(
-          AppMessages.receiveTimeout,
-          AppMessages.receiveTimeoutDesc,
+        return UserFriendlyError(
+          AppStrings.T.receiveTimeout,
+          AppStrings.T.receiveTimeoutDesc,
         );
       case DioExceptionType.badCertificate:
-        return const UserFriendlyError(
-          AppMessages.badCertificate,
-          AppMessages.badCertificateDesc,
+        return UserFriendlyError(
+          AppStrings.T.badCertificate,
+          AppStrings.T.badCertificateDesc,
         );
       case DioExceptionType.badResponse:
-        return const UserFriendlyError(
-          AppMessages.badResponse,
-          AppMessages.badResponseDesc,
+        return UserFriendlyError(
+          AppStrings.T.badResponse,
+          AppStrings.T.badResponseDesc,
         );
       case DioExceptionType.cancel:
-        return const UserFriendlyError(
-          AppMessages.cancel,
-          AppMessages.cancelDesc,
+        return UserFriendlyError(
+          AppStrings.T.cancel,
+          AppStrings.T.cancelDesc,
         );
       case DioExceptionType.connectionError:
-        return const UserFriendlyError(
-          AppMessages.connectionError,
-          AppMessages.connectionErrorDesc,
+        return UserFriendlyError(
+          AppStrings.T.connectionError,
+          AppStrings.T.connectionErrorDesc,
         );
       case DioExceptionType.unknown:
       default:
-        return const UserFriendlyError(
-          AppMessages.unknown,
-          AppMessages.unknownDesc,
+        return UserFriendlyError(
+          AppStrings.T.unknown,
+          AppStrings.T.unknownDesc,
         );
     }
   }
@@ -157,9 +157,9 @@ extension ApiHandlingExtension<T> on Future<T> {
       state.value = FailedState(
         statusCode: 0,
         isRetirable: false,
-        error: const UserFriendlyError(
-          AppMessages.apiError,
-          AppMessages.apiErrorDescription,
+        error: UserFriendlyError(
+          AppStrings.T.apiError,
+          AppStrings.T.apiErrorDescription,
         ),
       );
       onFailed?.call(state.value as FailedState);
