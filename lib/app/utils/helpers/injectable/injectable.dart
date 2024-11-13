@@ -17,7 +17,7 @@ import 'injectable.config.dart';
 final getIt = GetIt.instance;
 
 @i.injectableInit
-Future<void> configuration({required void Function() runApp}) async {
+Future<void> configuration({required Widget myApp}) async {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +38,7 @@ Future<void> configuration({required void Function() runApp}) async {
         ..add(DioCacheInterceptor(options: cacheOption))
         ..add(RetryInterceptor(dio: getIt<Dio>()));
 
-      runApp();
+      runApp(myApp);
     },
     (error, stackTrace) => FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true),
     zoneSpecification: ZoneSpecification(

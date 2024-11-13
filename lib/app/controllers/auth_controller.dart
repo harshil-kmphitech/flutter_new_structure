@@ -65,6 +65,8 @@ class AuthController extends GetxController {
   }
 
   void sendOtp(BuildContext context) {
+    if (!Form.of(context).validate()) return;
+
     getIt<AuthService>()
         .sendOTP(
       registerEmailController.text,

@@ -10,9 +10,7 @@ import 'app/utils/themes/app_theme.dart';
 
 void main() {
   configuration(
-    runApp: () => runApp(
-      const MyApp(),
-    ),
+    myApp: const MyApp(),
   );
 }
 

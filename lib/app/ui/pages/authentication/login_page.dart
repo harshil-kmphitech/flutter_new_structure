@@ -45,17 +45,25 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Obx(
-                  () => _authController.loginState.isLoading
-                      ? const CircularProgressIndicator()
-                      : Builder(
-                          builder: (context) {
-                            return ElevatedButton(
-                              onPressed: () => _authController.login(context),
-                              child: const Text(AppMessages.loginButton),
-                            );
-                          },
-                        ),
+                Align(
+                  alignment: MediaQuery.sizeOf(context).width > 600 ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Obx(
+                    () => _authController.loginState.isLoading
+                        ? const CircularProgressIndicator()
+                        : Builder(
+                            builder: (context) {
+                              return SizedBox(
+                                height: 44,
+                                child: ElevatedButton(
+                                  onPressed: () => _authController.login(context),
+                                  child: const Text(
+                                    AppMessages.loginButton,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                  ),
                 ),
                 TextButton(
                   onPressed: () => Get.toNamed(AppRoutes.register),

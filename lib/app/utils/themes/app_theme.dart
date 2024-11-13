@@ -272,6 +272,70 @@ class AppTheme {
         },
       ),
     ),
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: AppColors.greyTextColor),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.red),
+      ),
+      contentPadding: const EdgeInsets.all(8),
+      errorStyle: TextStyle(color: AppColors.red, fontSize: 12.sp, fontWeight: FontWeight.w600),
+      hintStyle: WidgetStateTextStyle.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.error)) {
+            return TextStyle(
+              color: AppColors.red,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+            );
+          }
+          return TextStyle(
+            color: AppColors.primaryColor,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w600,
+          );
+        },
+      ),
+      labelStyle: WidgetStateTextStyle.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.error)) {
+            return TextStyle(
+              color: AppColors.red,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+            );
+          }
+          return TextStyle(
+            color: AppColors.primaryColor,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w600,
+          );
+        },
+      ),
+      floatingLabelStyle: WidgetStateTextStyle.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.error)) {
+            return TextStyle(
+              color: AppColors.red,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w600,
+            );
+          }
+          return TextStyle(
+            color: AppColors.primaryColor,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+          );
+        },
+      ),
+    ),
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: AppColors.black,
       shape: RoundedRectangleBorder(

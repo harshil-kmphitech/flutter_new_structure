@@ -31,12 +31,14 @@ class RegisterPage extends StatelessWidget {
                 hintLabel: AppMessages.nameLabel,
                 validator: AppValidations.nameValidation,
               ),
+              const SizedBox(height: 16),
               TextInputField(
                 type: InputType.email,
                 controller: _authController.registerEmailController,
                 hintLabel: AppMessages.emailLabel,
                 validator: AppValidations.emailValidation,
               ),
+              const SizedBox(height: 16),
               TextInputField(
                 type: InputType.newPassword,
                 controller: _authController.registerPassController,
@@ -44,12 +46,14 @@ class RegisterPage extends StatelessWidget {
                 obscureText: passObscure,
                 validator: AppValidations.passwordValidation,
               ),
+              const SizedBox(height: 16),
               TextInputField(
                 type: InputType.phoneNumber,
                 controller: _authController.phoneNumberController,
                 hintLabel: AppMessages.phoneNumberLabel,
                 validator: AppValidations.phoneNumberValidation,
               ),
+              const SizedBox(height: 16),
               Obx(() => _authController.registerState.isLoading
                   ? const CircularProgressIndicator()
                   : Builder(
