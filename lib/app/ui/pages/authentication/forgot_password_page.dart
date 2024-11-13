@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../controllers/auth_controller.dart';
 import '../../../utils/constants/app_messages.dart';
 import '../../../utils/helpers/injectable/injectable.dart';
+import '../../widgets/custom_textfields.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   final AuthController _authController = getIt<AuthController>();
@@ -24,10 +25,10 @@ class ForgotPasswordPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextFormField(
+              TextInputField(
+                type: InputType.email,
                 controller: _authController.forgotEmailController,
-                decoration: const InputDecoration(labelText: AppMessages.emailLabel),
-                keyboardType: TextInputType.emailAddress,
+                hintLabel: AppMessages.emailLabel,
                 validator: AppValidations.emailValidation,
               ),
               Obx(

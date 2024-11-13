@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../../../controllers/auth_controller.dart';
 import '../../../utils/constants/app_messages.dart';
 import '../../../utils/helpers/injectable/injectable.dart';
+import '../../widgets/custom_textfields.dart';
 
 class LoginPage extends StatelessWidget {
   final AuthController _authController = getIt<AuthController>();
@@ -15,6 +16,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var passObscure = true.obs;
     return Form(
       child: Scaffold(
         appBar: AppBar(
@@ -22,54 +24,59 @@ class LoginPage extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: _authController.emailController,
-                decoration: const InputDecoration(labelText: AppMessages.emailLabel),
-                keyboardType: TextInputType.emailAddress,
-                validator: AppValidations.emailValidation,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _authController.passController,
-                decoration: const InputDecoration(labelText: AppMessages.passwordLabel),
-                obscureText: true,
-                validator: AppValidations.passwordValidation,
-              ),
-              const SizedBox(height: 16),
-              Obx(
-                () => _authController.loginState.isLoading
-                    ? const CircularProgressIndicator()
-                    : Builder(
-                        builder: (context) {
-                          return ElevatedButton(
-                            onPressed: () => _authController.login(context),
-                            child: const Text(AppMessages.loginButton),
-                          );
-                        },
-                      ),
-              ),
-              TextButton(
-                onPressed: () => Get.toNamed(AppRoutes.register),
-                child: const Text(AppMessages.registerRedirect),
-              ),
-              TextButton(
-                onPressed: () {
-                  _authController
-                    ..forgotEmailController.clear()
-                    ..resetPassController.clear()
-                    ..confirmPassController.clear();
-                  Get.toNamed(AppRoutes.forgotPassword);
-                },
-                child: const Text(AppMessages.forgotPasswordRedirect),
-              ),
-              TextButton(
-                onPressed: () => Get.toNamed(AppRoutes.theme),
-                child: const Text(AppMessages.theme),
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextInputField(
+                  type: InputType.text,
+                  controller: _authController.emailController,
+                  hintLabel: AppMessages.emailLabel,
+                  validator: AppValidations.emailValidation,
+                ),
+                const SizedBox(height: 16),
+                Obx(
+                  () => TextInputField(
+                    type: InputType.password,
+                    controller: _authController.passController,
+                    hintLabel: AppMessages.passwordLabel,
+                    obscureText: passObscure,
+                    textInputAction: TextInputAction.done,
+                    validator: AppValidations.passwordValidation,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Obx(
+                  () => _authController.loginState.isLoading
+                      ? const CircularProgressIndicator()
+                      : Builder(
+                          builder: (context) {
+                            return ElevatedButton(
+                              onPressed: () => _authController.login(context),
+                              child: const Text(AppMessages.loginButton),
+                            );
+                          },
+                        ),
+                ),
+                TextButton(
+                  onPressed: () => Get.toNamed(AppRoutes.register),
+                  child: const Text(AppMessages.registerRedirect),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _authController
+                      ..forgotEmailController.clear()
+                      ..resetPassController.clear()
+                      ..confirmPassController.clear();
+                    Get.toNamed(AppRoutes.forgotPassword);
+                  },
+                  child: const Text(AppMessages.forgotPasswordRedirect),
+                ),
+                TextButton(
+                  onPressed: () => Get.toNamed(AppRoutes.theme),
+                  child: const Text(AppMessages.theme),
+                ),
+              ],
+            ),
           ),
         ),
       ),

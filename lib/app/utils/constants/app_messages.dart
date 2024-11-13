@@ -74,4 +74,19 @@ class AppMessages {
 
   static const unknown = "Unknown Error";
   static const unknownDesc = "Oops! Something went wrong. Please try again later.";
+
+  static const code200 = 'The request was successful.';
+  static const code201 = 'A new resource was created successfully.';
+  static const code202 = 'The request was accepted for processing, but the processing has not been completed.';
+  static const code301 = 'The resource has been permanently moved to a new location.';
+  static const code302 = 'The resource has been temporarily moved to a new location.';
+  static const code304 = 'The resource has not been modified since the last request.';
+  static const code400 = 'The server could not understand the request due to malformed syntax.';
+  static const code401 = 'The request requires user authentication.';
+  static const code403 = 'The server understood the request, but refuses to fulfill it.';
+  static const code404 = 'The requested resource could not be found.';
+  static const code405 = 'The method specified in the request is not allowed for the requested resource.';
+  static const code409 = 'The request could not be completed due to a conflict with the current state of the resource.';
+  static const code500 = 'The server encountered an unexpected condition which prevented it from fulfilling the request.';
+  static const code503 = 'The server is currently unable to handle the request.';
 }

@@ -6,6 +6,7 @@ import '../../../controllers/auth_controller.dart';
 import '../../../utils/constants/app_messages.dart';
 import '../../../utils/helpers/exception/exception.dart';
 import '../../../utils/helpers/injectable/injectable.dart';
+import '../../widgets/custom_textfields.dart';
 
 class ResetPasswordPage extends StatelessWidget {
   final AuthController _authController = getIt<AuthController>();
@@ -14,6 +15,8 @@ class ResetPasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var passObscure = true.obs;
+    var confirmPassObscure = true.obs;
     return Form(
       child: Scaffold(
         appBar: AppBar(
@@ -23,17 +26,23 @@ class ResetPasswordPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              TextFormField(
-                decoration: const InputDecoration(labelText: AppMessages.newPasswordLabel),
-                obscureText: true,
-                controller: _authController.resetPassController,
-                validator: AppValidations.passwordValidation,
+              Obx(
+                () => TextInputField(
+                  type: InputType.newPassword,
+                  controller: _authController.resetPassController,
+                  hintLabel: AppMessages.newPasswordLabel,
+                  obscureText: passObscure,
+                  validator: AppValidations.passwordValidation,
+                ),
               ),
-              TextFormField(
-                controller: _authController.confirmPassController,
-                validator: (value) => AppValidations.confirmPasswordValidation(value, _authController.passController.text),
-                decoration: const InputDecoration(labelText: AppMessages.confirmPasswordLabel),
-                obscureText: true,
+              Obx(
+                () => TextInputField(
+                  type: InputType.confirmPassword,
+                  controller: _authController.confirmPassController,
+                  validator: (value) => AppValidations.confirmPasswordValidation(value, _authController.passController.text),
+                  hintLabel: AppMessages.confirmPasswordLabel,
+                  obscureText: confirmPassObscure,
+                ),
               ),
               Obx(
                 () => _authController.resetPassState.isLoading

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../controllers/auth_controller.dart';
 import '../../../utils/constants/app_messages.dart';
 import '../../../utils/helpers/injectable/injectable.dart';
+import '../../widgets/custom_textfields.dart';
 
 class VerifyCodePage extends StatelessWidget {
   final AuthController _authController = getIt<AuthController>();
@@ -23,10 +24,10 @@ class VerifyCodePage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              TextFormField(
+              TextInputField(
+                type: InputType.digits,
                 controller: _authController.verificationCode,
-                decoration: const InputDecoration(labelText: AppMessages.codeLabel),
-                keyboardType: TextInputType.number,
+                hintLabel: AppMessages.codeLabel,
                 validator: AppValidations.verificationCodeValidation,
               ),
               Obx(

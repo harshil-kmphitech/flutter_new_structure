@@ -6,6 +6,7 @@ import '../../../controllers/auth_controller.dart';
 import '../../../utils/constants/app_messages.dart';
 import '../../../utils/helpers/exception/exception.dart';
 import '../../../utils/helpers/injectable/injectable.dart';
+import '../../widgets/custom_textfields.dart';
 
 class RegisterPage extends StatelessWidget {
   final AuthController _authController = getIt<AuthController>();
@@ -14,6 +15,7 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var passObscure = true.obs;
     return Form(
       child: Scaffold(
         appBar: AppBar(
@@ -23,36 +25,41 @@ class RegisterPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              TextFormField(
-                decoration: const InputDecoration(labelText: AppMessages.nameLabel),
+              TextInputField(
+                type: InputType.name,
                 controller: _authController.nameController,
+                hintLabel: AppMessages.nameLabel,
                 validator: AppValidations.nameValidation,
               ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: AppMessages.emailLabel),
+              TextInputField(
+                type: InputType.email,
                 controller: _authController.registerEmailController,
+                hintLabel: AppMessages.emailLabel,
                 validator: AppValidations.emailValidation,
               ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: AppMessages.passwordLabel),
-                obscureText: true,
+              TextInputField(
+                type: InputType.newPassword,
                 controller: _authController.registerPassController,
+                hintLabel: AppMessages.passwordLabel,
+                obscureText: passObscure,
                 validator: AppValidations.passwordValidation,
               ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: AppMessages.phoneNumberLabel),
-                keyboardType: TextInputType.phone,
+              TextInputField(
+                type: InputType.phoneNumber,
                 controller: _authController.phoneNumberController,
+                hintLabel: AppMessages.phoneNumberLabel,
                 validator: AppValidations.phoneNumberValidation,
               ),
               Obx(() => _authController.registerState.isLoading
                   ? const CircularProgressIndicator()
-                  : Builder(builder: (context) {
-                      return ElevatedButton(
-                        onPressed: () => _authController.sendOtp(context),
-                        child: const Text(AppMessages.registerButton),
-                      );
-                    })),
+                  : Builder(
+                      builder: (context) {
+                        return ElevatedButton(
+                          onPressed: () => _authController.sendOtp(context),
+                          child: const Text(AppMessages.registerButton),
+                        );
+                      },
+                    )),
             ],
           ),
         ),

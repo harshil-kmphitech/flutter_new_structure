@@ -63,6 +63,8 @@ class AppTheme {
         return null;
       }),
     ),
+
+    /// Whenever your use the AppBar make sure most of the scenario your AppBar theme is must be sat here.
     appBarTheme: AppBarTheme(
       elevation: 0.h,
       color: AppColors.primaryColor,
@@ -72,8 +74,10 @@ class AppTheme {
         fontWeight: FontWeight.w600,
         color: AppColors.white,
       ),
-      iconTheme: const IconThemeData(color: AppColors.black),
+      iconTheme: const IconThemeData(color: AppColors.white),
     ),
+
+    /// If you app supports a single FontFamily, So this is the best way to change FontFamily for allover the app.
     fontFamily: "Outfit",
     checkboxTheme: CheckboxThemeData(
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -85,6 +89,73 @@ class AppTheme {
             return AppColors.primaryColor;
           }
           return AppColors.white;
+        },
+      ),
+    ),
+
+    /// InputDecorationTheme is used for make you TextFormField, DropDownFormField and many more widget.
+    /// Those Widget Which is depended on InputDecorationTheme.
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: AppColors.greyTextColor),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.red),
+      ),
+      contentPadding: const EdgeInsets.all(8),
+      errorStyle: TextStyle(color: AppColors.red, fontSize: 12.sp, fontWeight: FontWeight.w600),
+      hintStyle: WidgetStateTextStyle.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.error)) {
+            return TextStyle(
+              color: AppColors.red,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+            );
+          }
+          return TextStyle(
+            color: AppColors.primaryColor,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w600,
+          );
+        },
+      ),
+      labelStyle: WidgetStateTextStyle.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.error)) {
+            return TextStyle(
+              color: AppColors.red,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+            );
+          }
+          return TextStyle(
+            color: AppColors.primaryColor,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w600,
+          );
+        },
+      ),
+      floatingLabelStyle: WidgetStateTextStyle.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.error)) {
+            return TextStyle(
+              color: AppColors.red,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w600,
+            );
+          }
+          return TextStyle(
+            color: AppColors.primaryColor,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+          );
         },
       ),
     ),
@@ -107,7 +178,6 @@ class AppTheme {
       headlineSmall: TextStyle(color: AppColors.black, fontSize: 20.sp, fontWeight: FontWeight.w600),
 
       ///  title styles:  are smaller than headline styles and should be used for shorter, medium-emphasis text.
-      // titleLarge: ,
 
       /// Used For Most Used Styles
       bodyLarge: TextStyle(color: AppColors.black, fontSize: 20.sp, fontWeight: FontWeight.w500),

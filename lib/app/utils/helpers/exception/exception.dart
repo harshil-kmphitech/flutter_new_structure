@@ -14,6 +14,75 @@ class UserFriendlyError {
   const UserFriendlyError(this.title, this.description);
 }
 
+extension DioExceptionX on DioException {
+  /// context should pass for incase app works with Localization so the context is required
+  UserFriendlyError toUserFriendlyError() {
+    switch (type) {
+      case DioExceptionType.connectionTimeout:
+        return const UserFriendlyError(
+          AppMessages.connectionTimeout,
+          AppMessages.connectionTimeoutDesc,
+        );
+      case DioExceptionType.sendTimeout:
+        return const UserFriendlyError(
+          AppMessages.sendTimeout,
+          AppMessages.sendTimeoutDesc,
+        );
+      case DioExceptionType.receiveTimeout:
+        return const UserFriendlyError(
+          AppMessages.receiveTimeout,
+          AppMessages.receiveTimeoutDesc,
+        );
+      case DioExceptionType.badCertificate:
+        return const UserFriendlyError(
+          AppMessages.badCertificate,
+          AppMessages.badCertificateDesc,
+        );
+      case DioExceptionType.badResponse:
+        return UserFriendlyError(
+          AppMessages.badResponse,
+          _statusCode(response?.statusCode ?? 0),
+        );
+      case DioExceptionType.cancel:
+        return const UserFriendlyError(
+          AppMessages.cancel,
+          AppMessages.cancelDesc,
+        );
+      case DioExceptionType.connectionError:
+        return const UserFriendlyError(
+          AppMessages.connectionError,
+          AppMessages.connectionErrorDesc,
+        );
+      case DioExceptionType.unknown:
+      default:
+        return const UserFriendlyError(
+          AppMessages.unknown,
+          AppMessages.unknownDesc,
+        );
+    }
+  }
+
+  String _statusCode(int? statusCode) {
+    return switch (statusCode) {
+      200 => AppMessages.code200,
+      201 => AppMessages.code201,
+      202 => AppMessages.code202,
+      301 => AppMessages.code301,
+      302 => AppMessages.code302,
+      304 => AppMessages.code304,
+      400 => AppMessages.code400,
+      401 => AppMessages.code401,
+      403 => AppMessages.code403,
+      404 => AppMessages.code404,
+      405 => AppMessages.code405,
+      409 => AppMessages.code409,
+      500 => AppMessages.code500,
+      503 => AppMessages.code503,
+      _ => AppMessages.badResponseDesc,
+    };
+  }
+}
+
 extension DioExceptionTypeX on DioExceptionType {
   /// context should pass for incase app works with Localization so the context is required
   UserFriendlyError toUserFriendlyError() {
@@ -73,11 +142,12 @@ extension ApiHandlingExtension<T> on Future<T> {
       onSuccess?.call(response);
     } on DioException catch (e) {
       state.value = FailedState(
+        statusCode: e.response?.statusCode ?? 0,
         isRetirable: switch (e.type) {
           DioExceptionType.connectionTimeout || DioExceptionType.sendTimeout || DioExceptionType.receiveTimeout => true,
           _ => false,
         },
-        error: e.type.toUserFriendlyError(),
+        error: e.toUserFriendlyError(),
       );
       onFailed?.call(state.value as FailedState);
     } on Exception catch (e) {
@@ -85,6 +155,7 @@ extension ApiHandlingExtension<T> on Future<T> {
       /// after removing this catch you are able to see thrawed exception in debug console.
       e.log;
       state.value = FailedState(
+        statusCode: 0,
         isRetirable: false,
         error: const UserFriendlyError(
           AppMessages.apiError,
@@ -120,8 +191,11 @@ class FailedState extends ApiState {
   bool isRetirable;
   UserFriendlyError error;
 
+  int statusCode;
+
   FailedState({
     required this.isRetirable,
     required this.error,
+    required this.statusCode,
   });
 }
