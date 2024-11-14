@@ -9,7 +9,11 @@ import 'package:injectable/injectable.dart' as i;
 import '../utils/constants/app_strings.dart';
 import '../utils/helpers/exception/exception.dart';
 
-@i.lazySingleton
+void _disposeAuthController(AuthController instance) {
+  instance.dispose();
+}
+
+@i.LazySingleton(dispose: _disposeAuthController)
 @i.injectable
 class AuthController extends GetxController {
   var isDarkTheme = false.obs;
@@ -55,6 +59,7 @@ class AuthController extends GetxController {
         if (value != null) {
           authModel.value = value;
           showSuccess(authModel.value!.ResponseMsg);
+          Get.offNamed(AppRoutes.theme);
         }
       },
       onFailed: (value) {

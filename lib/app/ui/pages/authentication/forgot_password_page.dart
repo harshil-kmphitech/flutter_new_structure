@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
+import 'package:flutter_new_structure/app/utils/helpers/getItHook/getit_hook.dart';
 import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../utils/constants/app_strings.dart';
-import '../../../utils/helpers/injectable/injectable.dart';
 import '../../widgets/custom_textfields.dart';
 
-class ForgotPasswordPage extends StatelessWidget {
-  final AuthController _authController = getIt<AuthController>();
-
-  ForgotPasswordPage({super.key});
+class ForgotPasswordPage extends GetItHook<AuthController> {
+  const ForgotPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +25,16 @@ class ForgotPasswordPage extends StatelessWidget {
             children: [
               TextInputField(
                 type: InputType.email,
-                controller: _authController.forgotEmailController,
+                controller: controller.forgotEmailController,
                 hintLabel: AppStrings.T.emailLabel,
                 validator: AppValidations.emailValidation,
               ),
               Obx(
-                () => _authController.forgotState.isLoading
+                () => controller.forgotState.isLoading
                     ? const CircularProgressIndicator()
                     : Builder(builder: (context) {
                         return ElevatedButton(
-                          onPressed: () => _authController.forgotPassword(context),
+                          onPressed: () => controller.forgotPassword(context),
                           child: Text(AppStrings.T.sendResetLinkButton),
                         );
                       }),
@@ -47,4 +45,15 @@ class ForgotPasswordPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get canDisposeController => false;
+
+  @override
+  void init() {
+    controller.forgotEmailController.clear();
+  }
+
+  @override
+  void onDispose() {}
 }

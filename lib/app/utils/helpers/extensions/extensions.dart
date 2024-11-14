@@ -15,6 +15,18 @@ extension SharedPreferencesX on SharedPreferences {
       setString('token', value);
     }
   }
+
+  String? get getAppLocal {
+    return getString('appLocal');
+  }
+
+  set setAppLocal(String? value) {
+    if (value == null) {
+      remove('appLocal');
+    } else {
+      setString('appLocal', value);
+    }
+  }
 }
 
 extension StringX on String {

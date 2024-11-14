@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_new_structure/app/utils/helpers/getItHook/getit_hook.dart';
 import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../utils/constants/app_strings.dart';
 import '../../../utils/helpers/exception/exception.dart';
-import '../../../utils/helpers/injectable/injectable.dart';
 import '../../widgets/custom_textfields.dart';
 
-class ResetPasswordPage extends StatelessWidget {
-  final AuthController _authController = getIt<AuthController>();
-
-  ResetPasswordPage({super.key});
+class ResetPasswordPage extends GetItHook<AuthController> {
+  const ResetPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +27,7 @@ class ResetPasswordPage extends StatelessWidget {
               Obx(
                 () => TextInputField(
                   type: InputType.newPassword,
-                  controller: _authController.resetPassController,
+                  controller: controller.resetPassController,
                   hintLabel: AppStrings.T.newPasswordLabel,
                   obscureText: passObscure,
                   validator: AppValidations.passwordValidation,
@@ -38,18 +36,18 @@ class ResetPasswordPage extends StatelessWidget {
               Obx(
                 () => TextInputField(
                   type: InputType.confirmPassword,
-                  controller: _authController.confirmPassController,
-                  validator: (value) => AppValidations.confirmPasswordValidation(value, _authController.passController.text),
+                  controller: controller.confirmPassController,
+                  validator: (value) => AppValidations.confirmPasswordValidation(value, controller.passController.text),
                   hintLabel: AppStrings.T.confirmPasswordLabel,
                   obscureText: confirmPassObscure,
                 ),
               ),
               Obx(
-                () => _authController.resetPassState.isLoading
+                () => controller.resetPassState.isLoading
                     ? const CircularProgressIndicator()
                     : Builder(builder: (context) {
                         return ElevatedButton(
-                          onPressed: () => _authController.resetPassword(context),
+                          onPressed: () => controller.resetPassword(context),
                           child: Text(AppStrings.T.resetPassword),
                         );
                       }),
@@ -60,4 +58,17 @@ class ResetPasswordPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get canDisposeController => false;
+
+  @override
+  void init() {
+    controller
+      ..resetPassController.clear()
+      ..confirmPassController.clear();
+  }
+
+  @override
+  void onDispose() {}
 }

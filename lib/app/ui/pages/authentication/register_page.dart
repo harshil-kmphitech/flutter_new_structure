@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_new_structure/app/utils/helpers/getItHook/getit_hook.dart';
 import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../utils/constants/app_strings.dart';
 import '../../../utils/helpers/exception/exception.dart';
-import '../../../utils/helpers/injectable/injectable.dart';
 import '../../widgets/custom_textfields.dart';
 
-class RegisterPage extends StatelessWidget {
-  final AuthController _authController = getIt<AuthController>();
-
-  RegisterPage({super.key});
+class RegisterPage extends GetItHook<AuthController> {
+  const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,21 +25,21 @@ class RegisterPage extends StatelessWidget {
             children: [
               TextInputField(
                 type: InputType.name,
-                controller: _authController.nameController,
+                controller: controller.nameController,
                 hintLabel: AppStrings.T.nameLabel,
                 validator: AppValidations.nameValidation,
               ),
               const SizedBox(height: 16),
               TextInputField(
                 type: InputType.email,
-                controller: _authController.registerEmailController,
+                controller: controller.registerEmailController,
                 hintLabel: AppStrings.T.emailLabel,
                 validator: AppValidations.emailValidation,
               ),
               const SizedBox(height: 16),
               TextInputField(
                 type: InputType.newPassword,
-                controller: _authController.registerPassController,
+                controller: controller.registerPassController,
                 hintLabel: AppStrings.T.passwordLabel,
                 obscureText: passObscure,
                 validator: AppValidations.passwordValidation,
@@ -49,17 +47,17 @@ class RegisterPage extends StatelessWidget {
               const SizedBox(height: 16),
               TextInputField(
                 type: InputType.phoneNumber,
-                controller: _authController.phoneNumberController,
+                controller: controller.phoneNumberController,
                 hintLabel: AppStrings.T.phoneNumberLabel,
                 validator: AppValidations.phoneNumberValidation,
               ),
               const SizedBox(height: 16),
-              Obx(() => _authController.registerState.isLoading
+              Obx(() => controller.registerState.isLoading
                   ? const CircularProgressIndicator()
                   : Builder(
                       builder: (context) {
                         return ElevatedButton(
-                          onPressed: () => _authController.sendOtp(context),
+                          onPressed: () => controller.sendOtp(context),
                           child: Text(AppStrings.T.register),
                         );
                       },
@@ -70,4 +68,19 @@ class RegisterPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get canDisposeController => false;
+
+  @override
+  void init() {
+    controller
+      ..nameController.clear()
+      ..registerEmailController.clear()
+      ..registerPassController.clear()
+      ..phoneNumberController.clear();
+  }
+
+  @override
+  void onDispose() {}
 }

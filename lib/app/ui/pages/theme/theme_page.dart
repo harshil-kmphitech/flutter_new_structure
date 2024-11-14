@@ -1,5 +1,8 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
+import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
+import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/helpers/all_imports.dart';
 import '../../../utils/helpers/injectable/injectable.dart';
@@ -15,7 +18,7 @@ class ThemePage extends GetView<AuthController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('APP BAR'),
+        title: Text(AppStrings.T.welcome('User')),
         centerTitle: true,
       ),
       body: ListView(
@@ -23,20 +26,6 @@ class ThemePage extends GetView<AuthController> {
         shrinkWrap: true,
         padding: EdgeInsets.zero,
         children: [
-          DropdownButton(
-            items: AppLocalizations.supportedLocales.map(
-              (e) {
-                return DropdownMenuItem(
-                  value: e,
-                  child: Text(e.languageCode),
-                );
-              },
-            ).toList(),
-            onChanged: (value) {
-              if (value == null) return;
-              Get.updateLocale(value);
-            },
-          ),
           const Text(
             "Default Text",
           ),
@@ -79,7 +68,25 @@ class ThemePage extends GetView<AuthController> {
             "Label Small",
             style: textTheme.labelSmall,
           ),
+          const SizedBox(height: 16),
           const TextField(),
+          const SizedBox(height: 16),
+          DropdownButtonFormField(
+            value: Locale(getIt<SharedPreferences>().getAppLocal ?? 'en'),
+            items: AppLocalizations.supportedLocales.map(
+              (e) {
+                return DropdownMenuItem(
+                  value: e,
+                  child: Text(e.languageCode),
+                );
+              },
+            ).toList(),
+            onChanged: (value) {
+              if (value == null) return;
+              getIt<SharedPreferences>().setAppLocal = value.languageCode;
+              Get.updateLocale(value);
+            },
+          ),
           Obx(() {
             return Row(
               children: [

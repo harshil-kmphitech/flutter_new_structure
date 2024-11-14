@@ -6,13 +6,11 @@ import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../utils/constants/app_strings.dart';
-import '../../../utils/helpers/injectable/injectable.dart';
+import '../../../utils/helpers/getItHook/getit_hook.dart';
 import '../../widgets/custom_textfields.dart';
 
-class LoginPage extends StatelessWidget {
-  final AuthController _authController = getIt<AuthController>();
-
-  LoginPage({super.key});
+class LoginPage extends GetItHook<AuthController> {
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +27,7 @@ class LoginPage extends StatelessWidget {
               children: [
                 TextInputField(
                   type: InputType.text,
-                  controller: _authController.emailController,
+                  controller: controller.emailController,
                   hintLabel: AppStrings.T.emailLabel,
                   validator: AppValidations.emailValidation,
                 ),
@@ -37,7 +35,7 @@ class LoginPage extends StatelessWidget {
                 Obx(
                   () => TextInputField(
                     type: InputType.password,
-                    controller: _authController.passController,
+                    controller: controller.passController,
                     hintLabel: AppStrings.T.passwordLabel,
                     obscureText: passObscure,
                     textInputAction: TextInputAction.done,
@@ -48,14 +46,14 @@ class LoginPage extends StatelessWidget {
                 Align(
                   alignment: MediaQuery.sizeOf(context).width > 600 ? Alignment.centerRight : Alignment.centerLeft,
                   child: Obx(
-                    () => _authController.loginState.isLoading
+                    () => controller.loginState.isLoading
                         ? const CircularProgressIndicator()
                         : Builder(
                             builder: (context) {
                               return SizedBox(
                                 height: 44,
                                 child: ElevatedButton(
-                                  onPressed: () => _authController.login(context),
+                                  onPressed: () => controller.login(context),
                                   child: Text(
                                     AppStrings.T.login,
                                   ),
@@ -71,7 +69,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    _authController
+                    controller
                       ..forgotEmailController.clear()
                       ..resetPassController.clear()
                       ..confirmPassController.clear();
@@ -90,4 +88,16 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get canDisposeController => false;
+
+  @override
+  void init() {
+    controller.emailController.clear();
+    controller.passController.clear();
+  }
+
+  @override
+  void onDispose() {}
 }

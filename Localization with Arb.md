@@ -39,6 +39,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 MaterialApp(
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
+    locale: Locale(getIt<SharedPreferences>().getAppLocal ?? 'en'),
 )
 ```
 [check here](https://github.com/harshil-kmphitech/flutter_new_structure/blob/main/lib/main.dart)
