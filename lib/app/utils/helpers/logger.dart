@@ -28,11 +28,6 @@ extension LoggerExtension<T> on T {
     return this;
   }
 
-  T get logWithRuntimeType {
-    dev.log(toString(), name: runtimeType.toString());
-    return this;
-  }
-
   T logWithName(String name) {
     dev.log(toString(), name: name);
     return this;

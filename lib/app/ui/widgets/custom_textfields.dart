@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
-
-import '../../utils/helpers/all_imports.dart';
+import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
 
 class _SuffixIcon extends StatelessWidget {
   const _SuffixIcon({
@@ -42,9 +41,9 @@ class TextInputField extends TextFormField {
     Widget? suffixIcon,
     Widget? prefixIcon,
     List<TextInputFormatter>? inputFormatters,
-  })  : assert(type == InputType.multiline ? textInputAction == TextInputAction.newline : true, 'Make textInputAction = TextInputAction.newline'),
+  })  : assert(type != InputType.multiline || textInputAction == TextInputAction.newline, 'Make textInputAction = TextInputAction.newline'),
         assert(
-          (type == InputType.password || type == InputType.newPassword || type == InputType.confirmPassword) ? obscureText != null : true,
+          (type != InputType.password && type != InputType.newPassword && type != InputType.confirmPassword) || obscureText != null,
           'Make sure your providing obscureText and Wrap Obx on TextInputField',
         ),
         super(
@@ -71,7 +70,7 @@ class TextInputField extends TextFormField {
               InputType.newPassword => AutofillHints.newPassword,
               InputType.phoneNumber => AutofillHints.telephoneNumber,
               _ => '',
-            }
+            },
           ],
           inputFormatters: [
             if (inputFormatters != null) ...inputFormatters,
@@ -86,8 +85,12 @@ class TextInputField extends TextFormField {
             suffixIcon: suffixIcon ??
                 (obscureText == null
                     ? null
-                    : _SuffixIcon(
-                        showing: obscureText,
+                    : Builder(
+                        builder: (context) {
+                          return _SuffixIcon(
+                            showing: obscureText,
+                          );
+                        },
                       )),
           ),
         );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_new_structure/app/utils/constants/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../constants/app_colors.dart';
 
 // TextTheme textTheme = Get.theme.textTheme;
 // ColorScheme colorScheme = Get.theme.colorScheme;
@@ -70,7 +69,7 @@ class AppTheme {
       elevation: 0.h,
       color: AppColors.primaryColor,
       titleTextStyle: TextStyle(
-        fontFamily: "Outfit",
+        fontFamily: 'Outfit',
         fontSize: 24.sp,
         fontWeight: FontWeight.w600,
         color: AppColors.white,
@@ -79,13 +78,13 @@ class AppTheme {
     ),
 
     /// If you app supports a single FontFamily, So this is the best way to change FontFamily for allover the app.
-    fontFamily: "Outfit",
+    fontFamily: 'Outfit',
     checkboxTheme: CheckboxThemeData(
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
       visualDensity: VisualDensity.compact,
       fillColor: WidgetStateProperty.resolveWith(
-        (Set states) {
+        (states) {
           if (states.contains(WidgetState.selected)) {
             return AppColors.primaryColor;
           }
@@ -99,7 +98,6 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -252,20 +250,20 @@ class AppTheme {
       elevation: 0.h,
       color: AppColors.primaryColor,
       titleTextStyle: TextStyle(
-        fontFamily: "Outfit",
+        fontFamily: 'Outfit',
         fontSize: 24.sp,
         fontWeight: FontWeight.w600,
         color: AppColors.white,
       ),
       iconTheme: const IconThemeData(color: AppColors.black),
     ),
-    fontFamily: "Outfit",
+    fontFamily: 'Outfit',
     checkboxTheme: CheckboxThemeData(
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
       visualDensity: VisualDensity.compact,
       fillColor: WidgetStateProperty.resolveWith(
-        (Set states) {
+        (states) {
           if (states.contains(WidgetState.selected)) {
             return AppColors.primaryColor;
           }
@@ -276,7 +274,6 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),

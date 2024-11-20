@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
+import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
-
-import '../injectable/injectable.dart';
 
 abstract class GetItHook<T extends Object> extends StatefulWidget {
   const GetItHook({super.key, T? controller}) : _controller = controller;
@@ -10,7 +9,7 @@ abstract class GetItHook<T extends Object> extends StatefulWidget {
   @override
   State<GetItHook<T>> createState() => _GetItHookState<T>();
 
-  void init();
+  void onInit();
 
   bool get canDisposeController;
 
@@ -40,13 +39,13 @@ class _GetItHookState<T extends Object> extends State<GetItHook<T>> {
   @override
   void initState() {
     super.initState();
-    widget.init();
+    widget.onInit();
   }
 
   @override
   void dispose() {
-    super.dispose();
     widget.onDispose();
+    super.dispose();
     widget._unRegister();
   }
 }

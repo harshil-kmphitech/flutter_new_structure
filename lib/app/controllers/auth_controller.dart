@@ -1,13 +1,12 @@
 import 'package:flutter_new_structure/app/data/models/authModel/auth_model.dart';
 import 'package:flutter_new_structure/app/data/services/authService/auth_service.dart';
 import 'package:flutter_new_structure/app/routes/app_routes.dart';
+import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
 import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
+import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
 import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:injectable/injectable.dart' as i;
-
-import '../utils/constants/app_strings.dart';
-import '../utils/helpers/exception/exception.dart';
 
 void _disposeAuthController(AuthController instance) {
   instance.dispose();
@@ -16,19 +15,19 @@ void _disposeAuthController(AuthController instance) {
 @i.LazySingleton(dispose: _disposeAuthController)
 @i.injectable
 class AuthController extends GetxController {
-  var isDarkTheme = false;
+  bool isDarkTheme = false;
 
   // Observable variables for user input
-  var emailController = TextEditingController();
-  var forgotEmailController = TextEditingController();
-  var registerEmailController = TextEditingController();
-  var passController = TextEditingController();
-  var registerPassController = TextEditingController();
-  var resetPassController = TextEditingController();
-  var confirmPassController = TextEditingController();
-  var nameController = TextEditingController();
-  var phoneNumberController = TextEditingController();
-  var verificationCode = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController forgotEmailController = TextEditingController();
+  TextEditingController registerEmailController = TextEditingController();
+  TextEditingController passController = TextEditingController();
+  TextEditingController registerPassController = TextEditingController();
+  TextEditingController resetPassController = TextEditingController();
+  TextEditingController confirmPassController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController verificationCode = TextEditingController();
 
   final loginState = ApiState.initial().obs;
   final forgotState = ApiState.initial().obs;
@@ -37,21 +36,23 @@ class AuthController extends GetxController {
   final verificationState = ApiState.initial().obs;
 
   // State variables for loading and model
-  var authModel = Rxn<AuthModel>();
+  Rxn<AuthModel> authModel = Rxn<AuthModel>();
 
   // Helper method to display success messages
   void showSuccess(String message) {
-    Get.snackbar("Success", message);
+    Get.snackbar('Success', message);
   }
 
   // Helper method to display error messages
   void showError(String message) {
-    Get.snackbar("Error", message);
+    Get.snackbar('Error', message);
   }
 
   // Login method
-  Future<void> login(BuildContext context) async {
-    if (!Form.of(context).validate()) return;
+  void login(BuildContext context) {
+    if (!Form.of(context).validate()) {
+      return;
+    }
 
     getIt<AuthService>().login(emailController.text, passController.text.convertMd5).handler(
       loginState,
@@ -70,7 +71,9 @@ class AuthController extends GetxController {
   }
 
   void sendOtp(BuildContext context) {
-    if (!Form.of(context).validate()) return;
+    if (!Form.of(context).validate()) {
+      return;
+    }
 
     getIt<AuthService>()
         .sendOTP(
@@ -80,14 +83,12 @@ class AuthController extends GetxController {
         .handler(
       registerState,
       onSuccess: (value) {
-        if (value.data is Map) {
-          if (value.data['ResponseCode'] == 1) {
-            showSuccess(value.data['ResponseMsg']);
-            verificationCode.clear();
-            Get.toNamed(AppRoutes.verifyCode);
-          } else {
-            showError(AppStrings.T.registerFailed);
-          }
+        if (value.data['ResponseCode'] == 1) {
+          showSuccess(value.data['ResponseMsg'].toString());
+          verificationCode.clear();
+          Get.toNamed(AppRoutes.verifyCode);
+        } else {
+          showError(AppStrings.T.registerFailed);
         }
       },
       onFailed: (value) {
@@ -98,7 +99,9 @@ class AuthController extends GetxController {
 
   // Registration method
   void register(BuildContext context) {
-    if (!Form.of(context).validate()) return;
+    if (!Form.of(context).validate()) {
+      return;
+    }
 
     getIt<AuthService>()
         .register(
@@ -128,20 +131,20 @@ class AuthController extends GetxController {
   }
 
   // Forgot password method
-  Future<void> forgotPassword(BuildContext context) async {
-    if (!Form.of(context).validate()) return;
+  void forgotPassword(BuildContext context) {
+    if (!Form.of(context).validate()) {
+      return;
+    }
 
     getIt<AuthService>().forgotPassword(forgotEmailController.text).handler(
       forgotState,
       onSuccess: (value) {
-        if (value.data is Map) {
-          if (value.data['ResponseCode'] == 1) {
-            showSuccess(AppStrings.T.passwordResetEmailSent);
-            verificationCode.clear();
-            Get.toNamed(AppRoutes.verifyCode);
-          } else {
-            showError(value.data['ResponseMsg']);
-          }
+        if (value.data['ResponseCode'] == 1) {
+          showSuccess(AppStrings.T.passwordResetEmailSent);
+          verificationCode.clear();
+          Get.toNamed(AppRoutes.verifyCode);
+        } else {
+          showError(value.data['ResponseMsg'].toString());
         }
       },
       onFailed: (value) {
@@ -151,8 +154,10 @@ class AuthController extends GetxController {
   }
 
   // Reset password method with password match validation
-  Future<void> resetPassword(BuildContext context) async {
-    if (!Form.of(context).validate()) return;
+  void resetPassword(BuildContext context) {
+    if (!Form.of(context).validate()) {
+      return;
+    }
     getIt<AuthService>().resetPassword(forgotEmailController.text, resetPassController.text.convertMd5).handler(
       resetPassState,
       onSuccess: (value) {
@@ -172,7 +177,7 @@ class AuthController extends GetxController {
   }
 
   // Verify code method
-  Future<void> verifyCode(BuildContext context) async {
+  void verifyCode(BuildContext context) {
     if (!Form.of(context).validate()) return;
     if (Get.previousRoute == AppRoutes.register) {
       return register(context);
@@ -180,13 +185,11 @@ class AuthController extends GetxController {
     getIt<AuthService>().verifyCode(forgotEmailController.text, verificationCode.text).handler(
       verificationState,
       onSuccess: (value) {
-        if (value.data is Map) {
-          if (value.data['ResponseCode'] == 1) {
-            showSuccess(AppStrings.T.codeVerificationSuccess);
-            Get.offNamed(AppRoutes.resetPassword);
-          } else {
-            showError(value.data['ResponseMsg']);
-          }
+        if (value.data['ResponseCode'] == 1) {
+          showSuccess(AppStrings.T.codeVerificationSuccess);
+          Get.offNamed(AppRoutes.resetPassword);
+        } else {
+          showError(value.data['ResponseMsg'].toString());
         }
       },
       onFailed: (value) {

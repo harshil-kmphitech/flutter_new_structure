@@ -1,20 +1,19 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
+import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
 import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
+import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../utils/helpers/all_imports.dart';
-import '../../../utils/helpers/injectable/injectable.dart';
 
 class ThemePage extends GetView<AuthController> {
   const ThemePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final AuthController controller = getIt<AuthController>();
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+    final controller = getIt<AuthController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -27,45 +26,45 @@ class ThemePage extends GetView<AuthController> {
         padding: EdgeInsets.zero,
         children: [
           const Text(
-            "Default Text",
+            'Default Text',
           ),
           12.heightBox,
           Text(
-            "Headline Large",
+            'Headline Large',
             style: textTheme.headlineLarge,
           ),
           Text(
-            "Headline Medium",
+            'Headline Medium',
             style: textTheme.headlineMedium,
           ),
           Text(
-            "Headline Small",
+            'Headline Small',
             style: textTheme.headlineSmall,
           ),
           12.heightBox,
           Text(
-            "Body Large",
+            'Body Large',
             style: textTheme.bodyLarge,
           ),
           Text(
-            "Body Medium",
+            'Body Medium',
             style: textTheme.bodyMedium,
           ),
           Text(
-            "Body Small",
+            'Body Small',
             style: textTheme.bodySmall,
           ),
           12.heightBox,
           Text(
-            "Label Large",
+            'Label Large',
             style: textTheme.labelLarge,
           ),
           Text(
-            "Label Medium",
+            'Label Medium',
             style: textTheme.labelMedium,
           ),
           Text(
-            "Label Small",
+            'Label Small',
             style: textTheme.labelSmall,
           ),
           const SizedBox(height: 16),

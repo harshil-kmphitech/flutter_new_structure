@@ -1,8 +1,9 @@
+import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
 import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
 
-import '../../constants/app_strings.dart';
-
 class AppValidations {
+  AppValidations._();
+
   static String? verificationCodeValidation(String? value) {
     if (value == null || value.isEmpty) return AppStrings.T.emptyVerificationCode;
     return null;
@@ -30,7 +31,6 @@ class AppValidations {
     return null;
   }
 
-  AppValidations._();
   static String? emailValidation(String? value) {
     if (value == null || value.isEmpty) return AppStrings.T.emptyEmail;
     if (!value.isEmail) return AppStrings.T.invalidEmail;

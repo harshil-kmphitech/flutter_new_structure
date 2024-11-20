@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
-import 'package:dio_smart_retry/src/retry_not_supported_exception.dart';
 import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
@@ -19,9 +18,9 @@ class TokenInterceptor implements Interceptor {
   }
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    String? token = getIt<SharedPreferences>().getToken;
-    if (token?.isNotEmpty == true) {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    final token = getIt<SharedPreferences>().getToken;
+    if (token?.isNotEmpty ?? false) {
       'Api token $token'.log;
       options.headers['Authorization'] = 'Bearer $token';
       options.headers['content-type'] = 'application/json';
@@ -31,8 +30,8 @@ class TokenInterceptor implements Interceptor {
   }
 
   @override
-  Future<void> onResponse(Response response, ResponseInterceptorHandler handler) async {
-    if (response.data['ResponseCode'] == 9) {
+  Future<void> onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) async {
+    if (response.data?['ResponseCode'] == 9) {
       getIt<SharedPreferences>().setToken = null;
 
       // TODO: add Refresh Token Api here
@@ -77,5 +76,17 @@ class TokenInterceptor implements Interceptor {
       }
     }
     return options.copyWith(data: newFormData);
+  }
+}
+
+class RetryNotSupportedException implements Exception {
+  RetryNotSupportedException([this.message]);
+
+  final String? message;
+
+  @override
+  String toString() {
+    if (message == null) return 'RetryNotSupportedException';
+    return 'RetryNotSupportedException: $message';
   }
 }

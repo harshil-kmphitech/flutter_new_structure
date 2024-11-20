@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
+import 'package:flutter_new_structure/app/ui/widgets/custom_textfields.dart';
+import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
 import 'package:flutter_new_structure/app/utils/helpers/getItHook/getit_hook.dart';
 import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/auth_controller.dart';
-import '../../../utils/constants/app_strings.dart';
-import '../../widgets/custom_textfields.dart';
 
 class ForgotPasswordPage extends GetItHook<AuthController> {
   const ForgotPasswordPage({super.key});
@@ -19,7 +18,7 @@ class ForgotPasswordPage extends GetItHook<AuthController> {
           title: Text(AppStrings.T.forgotPassword),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -32,12 +31,14 @@ class ForgotPasswordPage extends GetItHook<AuthController> {
               Obx(
                 () => controller.forgotState.isLoading
                     ? const CircularProgressIndicator()
-                    : Builder(builder: (context) {
-                        return ElevatedButton(
-                          onPressed: () => controller.forgotPassword(context),
-                          child: Text(AppStrings.T.sendResetLinkButton),
-                        );
-                      }),
+                    : Builder(
+                        builder: (context) {
+                          return ElevatedButton(
+                            onPressed: () => controller.forgotPassword(context),
+                            child: Text(AppStrings.T.sendResetLinkButton),
+                          );
+                        },
+                      ),
               ),
             ],
           ),
@@ -50,7 +51,7 @@ class ForgotPasswordPage extends GetItHook<AuthController> {
   bool get canDisposeController => false;
 
   @override
-  void init() {
+  void onInit() {
     controller.forgotEmailController.clear();
   }
 

@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: require_trailing_commas
+
 part of 'auth_service.dart';
 
 // **************************************************************************
@@ -64,9 +66,7 @@ class _AuthService implements AuthService {
     final _result = await _dio.fetch<Map<String, dynamic>?>(_options);
     late AuthModel? _value;
     try {
-      _value = _result.data == null
-          ? null
-          : await compute(deserializeAuthModel, _result.data!);
+      _value = _result.data == null ? null : await compute(deserializeAuthModel, _result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -135,9 +135,7 @@ class _AuthService implements AuthService {
     final _result = await _dio.fetch<Map<String, dynamic>?>(_options);
     late AuthModel? _value;
     try {
-      _value = _result.data == null
-          ? null
-          : await compute(deserializeAuthModel, _result.data!);
+      _value = _result.data == null ? null : await compute(deserializeAuthModel, _result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -146,7 +144,7 @@ class _AuthService implements AuthService {
   }
 
   @override
-  Future<HttpResponse<dynamic>> forgotPassword(String email) async {
+  Future<HttpResponse<Map<String, dynamic>>> forgotPassword(String email) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -155,7 +153,7 @@ class _AuthService implements AuthService {
       'email',
       email,
     ));
-    final _options = _setStreamType<HttpResponse<dynamic>>(Options(
+    final _options = _setStreamType<HttpResponse<Map<String, dynamic>>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -171,8 +169,14 @@ class _AuthService implements AuthService {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Map<String, dynamic> _value;
+    try {
+      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map((e) async => MapEntry(e.key, await compute(deserializedynamic, e.value as Map<String, dynamic>)))));
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
@@ -222,7 +226,7 @@ class _AuthService implements AuthService {
   }
 
   @override
-  Future<HttpResponse<dynamic>> verifyCode(
+  Future<HttpResponse<Map<String, dynamic>>> verifyCode(
     String email,
     String otp,
   ) async {
@@ -238,7 +242,7 @@ class _AuthService implements AuthService {
       'otp',
       otp,
     ));
-    final _options = _setStreamType<HttpResponse<dynamic>>(Options(
+    final _options = _setStreamType<HttpResponse<Map<String, dynamic>>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -254,14 +258,20 @@ class _AuthService implements AuthService {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Map<String, dynamic> _value;
+    try {
+      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map((e) async => MapEntry(e.key, await compute(deserializedynamic, e.value as Map<String, dynamic>)))));
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
   @override
-  Future<HttpResponse<dynamic>> sendOTP(
+  Future<HttpResponse<Map<String, dynamic>>> sendOTP(
     String email,
     String name,
   ) async {
@@ -277,7 +287,7 @@ class _AuthService implements AuthService {
       'name',
       name,
     ));
-    final _options = _setStreamType<HttpResponse<dynamic>>(Options(
+    final _options = _setStreamType<HttpResponse<Map<String, dynamic>>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -293,16 +303,20 @@ class _AuthService implements AuthService {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Map<String, dynamic> _value;
+    try {
+      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map((e) async => MapEntry(e.key, await compute(deserializedynamic, e.value as Map<String, dynamic>)))));
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
-    if (T != dynamic &&
-        !(requestOptions.responseType == ResponseType.bytes ||
-            requestOptions.responseType == ResponseType.stream)) {
+    if (T != dynamic && !(requestOptions.responseType == ResponseType.bytes || requestOptions.responseType == ResponseType.stream)) {
       if (T == String) {
         requestOptions.responseType = ResponseType.plain;
       } else {

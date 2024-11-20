@@ -36,7 +36,6 @@ extension AlignmentExtension on Widget {
 
   // Align the widget to the center
   Widget get alignCenter => Align(
-        alignment: Alignment.center,
         child: this,
       );
 

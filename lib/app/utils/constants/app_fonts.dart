@@ -4,10 +4,10 @@ class AppFonts {
   static const String primaryFont = 'Roboto'; // Primary font used in the app
 
   // Font sizes
-  static const double fontSizeSmall = 12.0;
-  static const double fontSizeMedium = 16.0;
-  static const double fontSizeLarge = 20.0;
-  static const double fontSizeExtraLarge = 24.0;
+  static const double fontSizeSmall = 12;
+  static const double fontSizeMedium = 16;
+  static const double fontSizeLarge = 20;
+  static const double fontSizeExtraLarge = 24;
 
   // Font weights
   static const FontWeight fontWeightLight = FontWeight.w300;

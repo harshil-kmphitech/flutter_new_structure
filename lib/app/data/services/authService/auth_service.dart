@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_new_structure/app/data/models/authModel/auth_model.dart';
 import 'package:flutter_new_structure/app/global/app_config.dart';
 import 'package:injectable/injectable.dart' as i;
 import 'package:retrofit/retrofit.dart';
 
-import '../../models/authModel/auth_model.dart';
-
 part 'auth_service.g.dart';
+
+// ignore: public_member_api_docs
+Map<String, dynamic> deserializedynamic(Map<String, dynamic> json) => json;
 
 /// Add base Url here..
 @RestApi(parser: Parser.FlutterCompute, baseUrl: AppConfig.baseUrl)
@@ -35,7 +37,7 @@ abstract class AuthService {
   });
 
   @POST(EndPoints.userForgotPassword)
-  Future<HttpResponse> forgotPassword(@Part() String email);
+  Future<HttpResponse<Map<String, dynamic>>> forgotPassword(@Part() String email);
 
   @POST(EndPoints.userUpdatePassword)
   Future<AuthModel> resetPassword(
@@ -44,13 +46,13 @@ abstract class AuthService {
   );
 
   @POST(EndPoints.userVerifyOTP)
-  Future<HttpResponse> verifyCode(
+  Future<HttpResponse<Map<String, dynamic>>> verifyCode(
     @Part() String email,
     @Part() String otp,
   );
 
   @POST(EndPoints.userSendOTP)
-  Future<HttpResponse> sendOTP(
+  Future<HttpResponse<Map<String, dynamic>>> sendOTP(
     @Part() String email,
     @Part() String name,
   );

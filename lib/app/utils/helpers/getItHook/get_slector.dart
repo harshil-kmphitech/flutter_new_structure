@@ -85,7 +85,7 @@ class _Selector0State<T, G extends GetxController> extends State<_Selector0<T, G
 
   void _subscribeToController() {
     _remove?.call();
-    if ((widget.id == null)) {
+    if (widget.id == null) {
       _remove = widget.controller.addListener(getUpdate);
     } else {
       _remove = widget.controller.addListenerId(widget.id, getUpdate);

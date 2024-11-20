@@ -1,19 +1,18 @@
+import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
 import 'package:flutter_new_structure/app/routes/app_routes.dart';
+import 'package:flutter_new_structure/app/ui/widgets/custom_textfields.dart';
+import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
 import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
+import 'package:flutter_new_structure/app/utils/helpers/getItHook/getit_hook.dart';
 import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
-
-import '../../../controllers/auth_controller.dart';
-import '../../../utils/constants/app_strings.dart';
-import '../../../utils/helpers/getItHook/getit_hook.dart';
-import '../../widgets/custom_textfields.dart';
 
 class LoginPage extends GetItHook<AuthController> {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var passObscure = true.obs;
+    final passObscure = true.obs;
 
     return Form(
       child: Scaffold(
@@ -21,12 +20,12 @@ class LoginPage extends GetItHook<AuthController> {
           title: Text(AppStrings.T.login),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: SingleChildScrollView(
             child: Column(
               children: [
                 TextInputField(
-                  type: InputType.text,
+                  type: InputType.email,
                   controller: controller.emailController,
                   hintLabel: AppStrings.T.emailLabel,
                   validator: AppValidations.emailValidation,
@@ -69,10 +68,6 @@ class LoginPage extends GetItHook<AuthController> {
                 ),
                 TextButton(
                   onPressed: () {
-                    controller
-                      ..forgotEmailController.clear()
-                      ..resetPassController.clear()
-                      ..confirmPassController.clear();
                     Get.toNamed(AppRoutes.forgotPassword);
                   },
                   child: Text(AppStrings.T.forgotPasswordRedirect),
@@ -93,7 +88,7 @@ class LoginPage extends GetItHook<AuthController> {
   bool get canDisposeController => false;
 
   @override
-  void init() {
+  void onInit() {
     controller.emailController.clear();
     controller.passController.clear();
   }

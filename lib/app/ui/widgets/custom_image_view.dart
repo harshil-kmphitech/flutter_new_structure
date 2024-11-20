@@ -8,20 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomImageView extends StatelessWidget {
-  ///[imagePath] is required parameter for showing image
-
-  String? imagePath;
-  Uint8List? imageData;
-  double? height;
-  double? width;
-  Color? color;
-  BoxFit? fit;
-  Alignment? alignment;
-  VoidCallback? onTap;
-  EdgeInsetsGeometry? margin;
-  BorderRadius? radius;
-  BoxBorder? border;
-
   CustomImageView({
     super.key,
     this.imagePath,
@@ -36,6 +22,20 @@ class CustomImageView extends StatelessWidget {
     this.margin,
     this.border,
   });
+
+  ///[imagePath] is required parameter for showing image
+
+  String? imagePath;
+  Uint8List? imageData;
+  double? height;
+  double? width;
+  Color? color;
+  BoxFit? fit;
+  Alignment? alignment;
+  VoidCallback? onTap;
+  EdgeInsetsGeometry? margin;
+  BorderRadius? radius;
+  BoxBorder? border;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class CustomImageView extends StatelessWidget {
     );
   }
 
-  _buildCircleImage() {
+  Widget _buildCircleImage() {
     if (radius != null) {
       return ClipRRect(
         borderRadius: radius ?? BorderRadius.zero,
@@ -68,7 +68,7 @@ class CustomImageView extends StatelessWidget {
     }
   }
 
-  _buildImageWithBorder() {
+  Widget _buildImageWithBorder() {
     if (border != null) {
       return Container(
         decoration: BoxDecoration(
@@ -107,27 +107,35 @@ class CustomImageView extends StatelessWidget {
           );
         case ImageType.network:
           return CachedNetworkImage(
+            height: height,
+            width: width,
+            fit: fit,
+            imageUrl: imagePath!,
+            color: color,
+            placeholder: (context, url) => SizedBox(
+              height: 30,
+              width: 30,
+              child: LinearProgressIndicator(
+                color: Colors.grey.shade200,
+                backgroundColor: Colors.grey.shade100,
+              ),
+            ),
+            errorWidget: (context, url, error) => Image.asset(
+              'assets/images/png/image_not_found.png',
               height: height,
               width: width,
-              fit: fit,
-              imageUrl: imagePath!,
-              color: color,
-              placeholder: (context, url) => SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: LinearProgressIndicator(
-                      color: Colors.grey.shade200,
-                      backgroundColor: Colors.grey.shade100,
-                    ),
-                  ),
-              errorWidget: (context, url, error) => Image.asset(
-                    "assets/images/png/image_not_found.png",
-                    height: height,
-                    width: width,
-                    fit: fit ?? BoxFit.cover,
-                  ));
+              fit: fit ?? BoxFit.cover,
+            ),
+          );
         case ImageType.png:
-        default:
+          return Image.asset(
+            imagePath!,
+            height: height,
+            width: width,
+            fit: fit ?? BoxFit.cover,
+            color: color,
+          );
+        case ImageType.unknown:
           return Image.asset(
             imagePath!,
             height: height,

@@ -15,13 +15,12 @@ abstract class DefaultPath {
 @lazySingleton
 @injectable
 class AppDirectory implements DefaultPath {
-  final Directory temporaryDirectory;
-  final Directory documentDirectory;
-
   AppDirectory({
     @Named('temporary') required this.temporaryDirectory,
     @Named('document') required this.documentDirectory,
   });
+  final Directory temporaryDirectory;
+  final Directory documentDirectory;
 
   @override
   Directory getTemporaryDirectory() => temporaryDirectory;

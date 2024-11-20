@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
+import 'package:flutter_new_structure/app/ui/widgets/custom_textfields.dart';
+import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
 import 'package:flutter_new_structure/app/utils/helpers/getItHook/getit_hook.dart';
 import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
 import 'package:get/get.dart';
-
-import '../../../controllers/auth_controller.dart';
-import '../../../utils/constants/app_strings.dart';
-import '../../widgets/custom_textfields.dart';
 
 class VerifyCodePage extends GetItHook<AuthController> {
   const VerifyCodePage({super.key});
@@ -19,7 +18,7 @@ class VerifyCodePage extends GetItHook<AuthController> {
           title: Text(AppStrings.T.verifyCode),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               TextInputField(
@@ -31,12 +30,14 @@ class VerifyCodePage extends GetItHook<AuthController> {
               Obx(
                 () => controller.verificationState.isLoading
                     ? const CircularProgressIndicator()
-                    : Builder(builder: (context) {
-                        return ElevatedButton(
-                          onPressed: () => controller.verifyCode(context),
-                          child: Text(AppStrings.T.verifyCode),
-                        );
-                      }),
+                    : Builder(
+                        builder: (context) {
+                          return ElevatedButton(
+                            onPressed: () => controller.verifyCode(context),
+                            child: Text(AppStrings.T.verifyCode),
+                          );
+                        },
+                      ),
               ),
             ],
           ),
@@ -49,7 +50,7 @@ class VerifyCodePage extends GetItHook<AuthController> {
   bool get canDisposeController => false;
 
   @override
-  void init() {
+  void onInit() {
     controller.verificationCode.clear();
   }
 
