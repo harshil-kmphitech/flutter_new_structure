@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
 import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
 
 import '../injectable/injectable.dart';

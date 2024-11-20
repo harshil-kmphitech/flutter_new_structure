@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_new_structure/app/routes/app_routes.dart';
+import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
 import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
-import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../utils/constants/app_strings.dart';
@@ -15,6 +14,7 @@ class LoginPage extends GetItHook<AuthController> {
   @override
   Widget build(BuildContext context) {
     var passObscure = true.obs;
+
     return Form(
       child: Scaffold(
         appBar: AppBar(

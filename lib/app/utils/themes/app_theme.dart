@@ -10,7 +10,8 @@ class AppTheme {
   AppTheme._();
 
   static ThemeData lightTheme = ThemeData(
-    useMaterial3: false,
+    useMaterial3: true,
+
     colorScheme: ColorScheme(
       brightness: Brightness.light,
 
@@ -194,7 +195,7 @@ class AppTheme {
   );
 
   static ThemeData darkTheme = ThemeData(
-    useMaterial3: false,
+    useMaterial3: true,
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
 

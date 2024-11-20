@@ -16,7 +16,7 @@ void _disposeAuthController(AuthController instance) {
 @i.LazySingleton(dispose: _disposeAuthController)
 @i.injectable
 class AuthController extends GetxController {
-  var isDarkTheme = false.obs;
+  var isDarkTheme = false;
 
   // Observable variables for user input
   var emailController = TextEditingController();
@@ -215,6 +215,6 @@ class AuthController extends GetxController {
     registerState.close();
     verificationState.close();
     authModel.close();
-    isDarkTheme.close();
+    // isDarkTheme.close();
   }
 }

@@ -87,36 +87,38 @@ class ThemePage extends GetView<AuthController> {
               Get.updateLocale(value);
             },
           ),
-          Obx(() {
-            return Row(
-              children: [
-                Switch(
-                  value: controller.isDarkTheme.value,
-                  onChanged: (value) {
-                    controller.isDarkTheme.value = !controller.isDarkTheme.value;
-                    if (value) {
-                      Get.changeThemeMode(ThemeMode.dark);
-                    } else {
-                      Get.changeThemeMode(ThemeMode.light);
-                    }
-                  },
-                ),
-                Checkbox(
-                  value: controller.isDarkTheme.value,
-                  onChanged: (value) {
-                    controller.isDarkTheme.value = !controller.isDarkTheme.value;
-                    if (value ?? false) {
-                      Get.changeThemeMode(ThemeMode.dark);
-                    } else {
-                      Get.changeThemeMode(ThemeMode.light);
-                    }
-                  },
-                ),
-                12.widthBox,
-                const CircularProgressIndicator(),
-              ],
-            );
-          }),
+          Row(
+            children: [
+              Switch(
+                value: controller.isDarkTheme,
+                onChanged: (value) {
+                  controller
+                    ..isDarkTheme = !controller.isDarkTheme
+                    ..update();
+                  if (value) {
+                    Get.changeThemeMode(ThemeMode.dark);
+                  } else {
+                    Get.changeThemeMode(ThemeMode.light);
+                  }
+                },
+              ),
+              Checkbox(
+                value: controller.isDarkTheme,
+                onChanged: (value) {
+                  controller
+                    ..isDarkTheme = !controller.isDarkTheme
+                    ..update();
+                  if (value ?? false) {
+                    Get.changeThemeMode(ThemeMode.dark);
+                  } else {
+                    Get.changeThemeMode(ThemeMode.light);
+                  }
+                },
+              ),
+              12.widthBox,
+              const CircularProgressIndicator(),
+            ],
+          ),
           Row(
             children: [
               Expanded(

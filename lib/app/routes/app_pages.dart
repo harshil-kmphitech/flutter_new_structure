@@ -13,27 +13,27 @@ class AppPages {
     // Login Page
     GetPage(
       name: AppRoutes.login,
-      page: () => LoginPage(),
+      page: () => const LoginPage(),
     ),
     // Registration Page
     GetPage(
       name: AppRoutes.register,
-      page: () => RegisterPage(),
+      page: () => const RegisterPage(),
     ),
     // Forgot Password Page
     GetPage(
       name: AppRoutes.forgotPassword,
-      page: () => ForgotPasswordPage(),
+      page: () => const ForgotPasswordPage(),
     ),
     // Verification Code Page
     GetPage(
       name: AppRoutes.verifyCode,
-      page: () => VerifyCodePage(),
+      page: () => const VerifyCodePage(),
     ),
     // Reset Password Page
     GetPage(
       name: AppRoutes.resetPassword,
-      page: () => ResetPasswordPage(),
+      page: () => const ResetPasswordPage(),
     ),
     GetPage(
       name: AppRoutes.theme,
