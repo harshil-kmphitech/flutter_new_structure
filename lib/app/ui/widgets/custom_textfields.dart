@@ -1,5 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
+import 'package:get/get.dart';
 
 class _SuffixIcon extends StatelessWidget {
   const _SuffixIcon({

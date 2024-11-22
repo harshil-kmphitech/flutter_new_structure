@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 extension SharedPreferencesX on SharedPreferences {
@@ -31,4 +32,8 @@ extension SharedPreferencesX on SharedPreferences {
 
 extension StringX on String {
   String get convertMd5 => md5.convert(utf8.encode(this)).toString();
+}
+
+extension BuildContextX on BuildContext {
+  ColorScheme get colorScheme => Theme.of(this).colorScheme;
 }

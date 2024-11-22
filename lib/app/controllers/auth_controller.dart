@@ -1,11 +1,12 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_new_structure/app/data/models/authModel/auth_model.dart';
 import 'package:flutter_new_structure/app/data/services/authService/auth_service.dart';
 import 'package:flutter_new_structure/app/routes/app_routes.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
-import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
 import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
+import 'package:get/get.dart';
 import 'package:injectable/injectable.dart' as i;
 
 void _disposeAuthController(AuthController instance) {
@@ -18,16 +19,16 @@ class AuthController extends GetxController {
   bool isDarkTheme = false;
 
   // Observable variables for user input
-  TextEditingController emailController = TextEditingController();
-  TextEditingController forgotEmailController = TextEditingController();
-  TextEditingController registerEmailController = TextEditingController();
-  TextEditingController passController = TextEditingController();
-  TextEditingController registerPassController = TextEditingController();
-  TextEditingController resetPassController = TextEditingController();
-  TextEditingController confirmPassController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController phoneNumberController = TextEditingController();
-  TextEditingController verificationCode = TextEditingController();
+  final emailController = TextEditingController();
+  final forgotEmailController = TextEditingController();
+  final registerEmailController = TextEditingController();
+  final passController = TextEditingController();
+  final registerPassController = TextEditingController();
+  final resetPassController = TextEditingController();
+  final confirmPassController = TextEditingController();
+  final nameController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  final verificationCode = TextEditingController();
 
   final loginState = ApiState.initial().obs;
   final forgotState = ApiState.initial().obs;

@@ -1,4 +1,4 @@
-import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
+import 'package:flutter/widgets.dart';
 
 class AppText extends Text {
   const AppText(

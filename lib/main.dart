@@ -9,7 +9,6 @@ import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.da
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
 import 'package:flutter_new_structure/app/utils/themes/app_theme.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,30 +29,21 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      // minTextAdapt: true,
-      enableScaleText: () => false,
-      splitScreenMode: true,
-      // Use builder only if you need to use library outside ScreenUtilInit context
-      builder: (_, child) {
-        FlutterNativeSplash.remove();
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'FLUTTER STRUCTURE',
-          getPages: AppPages.routes,
-          scrollBehavior: CustomScrollBehavior(),
-          initialRoute: AppRoutes.login,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: Locale(getIt<SharedPreferences>().getAppLocal ?? 'en'),
+    FlutterNativeSplash.remove();
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'FLUTTER STRUCTURE',
+      getPages: AppPages.routes,
+      scrollBehavior: CustomScrollBehavior(),
+      initialRoute: AppRoutes.login,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: Locale(getIt<SharedPreferences>().getAppLocal ?? 'en'),
 
-          ///Default Theme
-          themeMode: ThemeMode.light,
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-        );
-      },
+      ///Default Theme
+      themeMode: ThemeMode.light,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
     );
   }
 
@@ -93,13 +83,5 @@ class CustomScrollBehavior extends ScrollBehavior {
   @override
   ScrollPhysics getScrollPhysics(BuildContext context) {
     return const ClampingScrollPhysics(); // Set your desired physics here
-  }
-
-  Widget buildViewportChrome(
-    BuildContext context,
-    Widget child,
-    AxisDirection axisDirection,
-  ) {
-    return child; // Return the child without any effects
   }
 }

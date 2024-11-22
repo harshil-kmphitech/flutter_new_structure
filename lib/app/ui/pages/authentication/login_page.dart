@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
 import 'package:flutter_new_structure/app/routes/app_routes.dart';
+import 'package:flutter_new_structure/app/ui/widgets/custom_text.dart';
 import 'package:flutter_new_structure/app/ui/widgets/custom_textfields.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
-import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
 import 'package:flutter_new_structure/app/utils/helpers/getItHook/getit_hook.dart';
 import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends GetItHook<AuthController> {
   const LoginPage({super.key});
@@ -42,39 +44,45 @@ class LoginPage extends GetItHook<AuthController> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Align(
-                  alignment: MediaQuery.sizeOf(context).width > 600 ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Obx(
-                    () => controller.loginState.isLoading
-                        ? const CircularProgressIndicator()
-                        : Builder(
-                            builder: (context) {
-                              return SizedBox(
-                                height: 44,
-                                child: ElevatedButton(
-                                  onPressed: () => controller.login(context),
-                                  child: Text(
-                                    AppStrings.T.login,
-                                  ),
+                Obx(
+                  () => controller.loginState.isLoading
+                      ? const CircularProgressIndicator()
+                      : Builder(
+                          builder: (context) {
+                            return SizedBox(
+                              height: 44,
+                              child: ElevatedButton(
+                                onPressed: () => controller.login(context),
+                                child: Text(
+                                  AppStrings.T.login,
                                 ),
-                              );
-                            },
-                          ),
-                  ),
+                              ),
+                            );
+                          },
+                        ),
                 ),
                 TextButton(
                   onPressed: () => Get.toNamed(AppRoutes.register),
-                  child: Text(AppStrings.T.registerRedirect),
+                  child: CenterText(
+                    AppStrings.T.registerRedirect,
+                    style: null,
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
                     Get.toNamed(AppRoutes.forgotPassword);
                   },
-                  child: Text(AppStrings.T.forgotPasswordRedirect),
+                  child: CenterText(
+                    AppStrings.T.forgotPasswordRedirect,
+                    style: null,
+                  ),
                 ),
                 TextButton(
-                  onPressed: () => Get.toNamed(AppRoutes.theme),
-                  child: Text(AppStrings.T.theme),
+                  onPressed: () => Get.offNamed(AppRoutes.theme),
+                  child: CenterText(
+                    AppStrings.T.theme,
+                    style: null,
+                  ),
                 ),
               ],
             ),
@@ -85,7 +93,7 @@ class LoginPage extends GetItHook<AuthController> {
   }
 
   @override
-  bool get canDisposeController => false;
+  bool get canDisposeController => true;
 
   @override
   void onInit() {

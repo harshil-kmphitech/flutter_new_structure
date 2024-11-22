@@ -1,13 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
-import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
+import 'package:get/get.dart';
 
-abstract class GetItHook<T extends Object> extends StatefulWidget {
+abstract class GetItHook<T extends GetxController> extends StatefulWidget {
   const GetItHook({super.key, T? controller}) : _controller = controller;
 
   @override
-  State<GetItHook<T>> createState() => _GetItHookState<T>();
+  State<GetItHook> createState() => _GetItHookState<T>();
+
+  void _onInit() => onInit();
 
   void onInit();
 
@@ -22,24 +23,20 @@ abstract class GetItHook<T extends Object> extends StatefulWidget {
   void onDispose();
 
   void _unRegister() {
-    try {
-      if (canDisposeController && getIt.isRegistered<T>()) {
-        getIt.unregister<T>();
-      }
-    } on Exception catch (e) {
-      e.log;
+    if (canDisposeController && getIt.isRegistered<T>()) {
+      getIt.resetLazySingleton<T>();
     }
   }
 }
 
-class _GetItHookState<T extends Object> extends State<GetItHook<T>> {
+class _GetItHookState<T extends GetxController> extends State<GetItHook> {
   @override
   Widget build(BuildContext context) => widget.build(context);
 
   @override
   void initState() {
     super.initState();
-    widget.onInit();
+    widget._onInit();
   }
 
   @override

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_colors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // TextTheme textTheme = Get.theme.textTheme;
 // ColorScheme colorScheme = Get.theme.colorScheme;
@@ -65,23 +64,23 @@ class AppTheme {
     ),
 
     /// Whenever your use the AppBar make sure most of the scenario your AppBar theme is must be sat here.
-    appBarTheme: AppBarTheme(
-      elevation: 0.h,
+    appBarTheme: const AppBarTheme(
+      elevation: 0,
       color: AppColors.primaryColor,
       titleTextStyle: TextStyle(
         fontFamily: 'Outfit',
-        fontSize: 24.sp,
+        fontSize: 24,
         fontWeight: FontWeight.w600,
         color: AppColors.white,
       ),
-      iconTheme: const IconThemeData(color: AppColors.white),
+      iconTheme: IconThemeData(color: AppColors.white),
     ),
 
     /// If you app supports a single FontFamily, So this is the best way to change FontFamily for allover the app.
     fontFamily: 'Outfit',
     checkboxTheme: CheckboxThemeData(
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       visualDensity: VisualDensity.compact,
       fillColor: WidgetStateProperty.resolveWith(
         (states) {
@@ -108,19 +107,19 @@ class AppTheme {
         borderSide: const BorderSide(color: AppColors.red),
       ),
       contentPadding: const EdgeInsets.all(8),
-      errorStyle: TextStyle(color: AppColors.red, fontSize: 12.sp, fontWeight: FontWeight.w600),
+      errorStyle: const TextStyle(color: AppColors.red, fontSize: 12, fontWeight: FontWeight.w600),
       hintStyle: WidgetStateTextStyle.resolveWith(
         (states) {
           if (states.contains(WidgetState.error)) {
-            return TextStyle(
+            return const TextStyle(
               color: AppColors.red,
-              fontSize: 14.sp,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
             );
           }
-          return TextStyle(
+          return const TextStyle(
             color: AppColors.primaryColor,
-            fontSize: 14.sp,
+            fontSize: 14,
             fontWeight: FontWeight.w600,
           );
         },
@@ -128,15 +127,15 @@ class AppTheme {
       labelStyle: WidgetStateTextStyle.resolveWith(
         (states) {
           if (states.contains(WidgetState.error)) {
-            return TextStyle(
+            return const TextStyle(
               color: AppColors.red,
-              fontSize: 14.sp,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
             );
           }
-          return TextStyle(
+          return const TextStyle(
             color: AppColors.primaryColor,
-            fontSize: 14.sp,
+            fontSize: 14,
             fontWeight: FontWeight.w600,
           );
         },
@@ -144,25 +143,25 @@ class AppTheme {
       floatingLabelStyle: WidgetStateTextStyle.resolveWith(
         (states) {
           if (states.contains(WidgetState.error)) {
-            return TextStyle(
+            return const TextStyle(
               color: AppColors.red,
-              fontSize: 12.sp,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
             );
           }
-          return TextStyle(
+          return const TextStyle(
             color: AppColors.primaryColor,
-            fontSize: 12.sp,
+            fontSize: 12,
             fontWeight: FontWeight.w600,
           );
         },
       ),
     ),
-    bottomSheetTheme: BottomSheetThemeData(
+    bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: AppColors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20.r),
+          top: Radius.circular(20),
         ),
       ),
     ),
@@ -172,21 +171,21 @@ class AppTheme {
     ),
     textTheme: TextTheme(
       /// Used for Headline Like AppBar And Other Titles which are largest in Ui.
-      headlineLarge: TextStyle(color: AppColors.black, fontSize: 26.sp, fontWeight: FontWeight.w600),
-      headlineMedium: TextStyle(color: AppColors.black, fontSize: 22.sp, fontWeight: FontWeight.w600),
-      headlineSmall: TextStyle(color: AppColors.black, fontSize: 20.sp, fontWeight: FontWeight.w600),
+      headlineLarge: const TextStyle(color: AppColors.black, fontSize: 26, fontWeight: FontWeight.w600),
+      headlineMedium: const TextStyle(color: AppColors.black, fontSize: 22, fontWeight: FontWeight.w600),
+      headlineSmall: const TextStyle(color: AppColors.black, fontSize: 20, fontWeight: FontWeight.w600),
 
       ///  title styles:  are smaller than headline styles and should be used for shorter, medium-emphasis text.
 
       /// Used For Most Used Styles
-      bodyLarge: TextStyle(color: AppColors.black, fontSize: 20.sp, fontWeight: FontWeight.w500),
-      bodyMedium: TextStyle(color: AppColors.black, fontSize: 18.sp, fontWeight: FontWeight.w500),
-      bodySmall: TextStyle(color: AppColors.black, fontSize: 16.sp, fontWeight: FontWeight.w500),
+      bodyLarge: const TextStyle(color: AppColors.black, fontSize: 20, fontWeight: FontWeight.w500),
+      bodyMedium: const TextStyle(color: AppColors.black, fontSize: 18, fontWeight: FontWeight.w500),
+      bodySmall: const TextStyle(color: AppColors.black, fontSize: 16, fontWeight: FontWeight.w500),
 
       ///USED for Description and Small Text.
-      labelLarge: TextStyle(color: AppColors.greyTextColor, fontSize: 18.sp, fontWeight: FontWeight.w400),
-      labelMedium: TextStyle(color: AppColors.greyTextColor, fontSize: 16.sp, fontWeight: FontWeight.w400),
-      labelSmall: TextStyle(color: AppColors.greyTextColor, fontSize: 14.sp, fontWeight: FontWeight.w400),
+      labelLarge: TextStyle(color: AppColors.greyTextColor, fontSize: 18, fontWeight: FontWeight.w400),
+      labelMedium: TextStyle(color: AppColors.greyTextColor, fontSize: 16, fontWeight: FontWeight.w400),
+      labelSmall: TextStyle(color: AppColors.greyTextColor, fontSize: 14, fontWeight: FontWeight.w400),
 
       //   Also U can add More TextStyle According Your Design
     ),
@@ -246,21 +245,21 @@ class AppTheme {
         return null;
       }),
     ),
-    appBarTheme: AppBarTheme(
-      elevation: 0.h,
+    appBarTheme: const AppBarTheme(
+      elevation: 0,
       color: AppColors.primaryColor,
       titleTextStyle: TextStyle(
         fontFamily: 'Outfit',
-        fontSize: 24.sp,
+        fontSize: 24,
         fontWeight: FontWeight.w600,
         color: AppColors.white,
       ),
-      iconTheme: const IconThemeData(color: AppColors.black),
+      iconTheme: IconThemeData(color: AppColors.black),
     ),
     fontFamily: 'Outfit',
     checkboxTheme: CheckboxThemeData(
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       visualDensity: VisualDensity.compact,
       fillColor: WidgetStateProperty.resolveWith(
         (states) {
@@ -284,19 +283,19 @@ class AppTheme {
         borderSide: const BorderSide(color: AppColors.red),
       ),
       contentPadding: const EdgeInsets.all(8),
-      errorStyle: TextStyle(color: AppColors.red, fontSize: 12.sp, fontWeight: FontWeight.w600),
+      errorStyle: const TextStyle(color: AppColors.red, fontSize: 12, fontWeight: FontWeight.w600),
       hintStyle: WidgetStateTextStyle.resolveWith(
         (states) {
           if (states.contains(WidgetState.error)) {
-            return TextStyle(
+            return const TextStyle(
               color: AppColors.red,
-              fontSize: 14.sp,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
             );
           }
-          return TextStyle(
+          return const TextStyle(
             color: AppColors.primaryColor,
-            fontSize: 14.sp,
+            fontSize: 14,
             fontWeight: FontWeight.w600,
           );
         },
@@ -304,15 +303,15 @@ class AppTheme {
       labelStyle: WidgetStateTextStyle.resolveWith(
         (states) {
           if (states.contains(WidgetState.error)) {
-            return TextStyle(
+            return const TextStyle(
               color: AppColors.red,
-              fontSize: 14.sp,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
             );
           }
-          return TextStyle(
+          return const TextStyle(
             color: AppColors.primaryColor,
-            fontSize: 14.sp,
+            fontSize: 14,
             fontWeight: FontWeight.w600,
           );
         },
@@ -320,25 +319,25 @@ class AppTheme {
       floatingLabelStyle: WidgetStateTextStyle.resolveWith(
         (states) {
           if (states.contains(WidgetState.error)) {
-            return TextStyle(
+            return const TextStyle(
               color: AppColors.red,
-              fontSize: 12.sp,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
             );
           }
-          return TextStyle(
+          return const TextStyle(
             color: AppColors.primaryColor,
-            fontSize: 12.sp,
+            fontSize: 12,
             fontWeight: FontWeight.w600,
           );
         },
       ),
     ),
-    bottomSheetTheme: BottomSheetThemeData(
+    bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: AppColors.black,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20.r),
+          top: Radius.circular(20),
         ),
       ),
     ),
@@ -346,24 +345,40 @@ class AppTheme {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.primaryColor,
     ),
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(debugLabel: 'blackMountainView displayLarge', fontFamily: 'Roboto', color: Colors.black54, decoration: TextDecoration.none),
+      displayMedium: TextStyle(debugLabel: 'blackMountainView displayMedium', fontFamily: 'Roboto', color: Colors.black54, decoration: TextDecoration.none),
+      displaySmall: TextStyle(debugLabel: 'blackMountainView displaySmall', fontFamily: 'Roboto', color: Colors.black54, decoration: TextDecoration.none),
+      headlineLarge: TextStyle(debugLabel: 'blackMountainView headlineLarge', fontFamily: 'Roboto', color: Colors.black54, decoration: TextDecoration.none),
+      headlineMedium: TextStyle(debugLabel: 'blackMountainView headlineMedium', fontFamily: 'Roboto', color: Colors.black54, decoration: TextDecoration.none),
+      headlineSmall: TextStyle(debugLabel: 'blackMountainView headlineSmall', fontFamily: 'Roboto', color: Colors.black87, decoration: TextDecoration.none),
+      titleLarge: TextStyle(debugLabel: 'blackMountainView titleLarge', fontFamily: 'Roboto', color: Colors.black87, decoration: TextDecoration.none),
+      titleMedium: TextStyle(debugLabel: 'blackMountainView titleMedium', fontFamily: 'Roboto', color: Colors.black87, decoration: TextDecoration.none),
+      titleSmall: TextStyle(debugLabel: 'blackMountainView titleSmall', fontFamily: 'Roboto', color: Colors.black, decoration: TextDecoration.none),
+      bodyLarge: TextStyle(debugLabel: 'blackMountainView bodyLarge', fontFamily: 'Roboto', color: Colors.black87, decoration: TextDecoration.none),
+      bodyMedium: TextStyle(debugLabel: 'blackMountainView bodyMedium', fontFamily: 'Roboto', color: Colors.black87, decoration: TextDecoration.none),
+      bodySmall: TextStyle(debugLabel: 'blackMountainView bodySmall', fontFamily: 'Roboto', color: Colors.black54, decoration: TextDecoration.none),
+      labelLarge: TextStyle(debugLabel: 'blackMountainView labelLarge', fontFamily: 'Roboto', color: Colors.black87, decoration: TextDecoration.none),
+      labelMedium: TextStyle(debugLabel: 'blackMountainView labelMedium', fontFamily: 'Roboto', color: Colors.black, decoration: TextDecoration.none),
+      labelSmall: TextStyle(debugLabel: 'blackMountainView labelSmall', fontFamily: 'Roboto', color: Colors.black, decoration: TextDecoration.none),
+
       /// Used for Headline Like AppBar And Other Titles which are largest in Ui.
-      headlineLarge: TextStyle(color: AppColors.white, fontSize: 26.sp, fontWeight: FontWeight.w600),
-      headlineMedium: TextStyle(color: AppColors.white, fontSize: 22.sp, fontWeight: FontWeight.w600),
-      headlineSmall: TextStyle(color: AppColors.white, fontSize: 20.sp, fontWeight: FontWeight.w600),
+      // headlineLarge: const TextStyle(color: AppColors.white, fontSize: 26, fontWeight: FontWeight.w600),
+      // headlineMedium: const TextStyle(color: AppColors.white, fontSize: 22, fontWeight: FontWeight.w600),
+      // headlineSmall: const TextStyle(color: AppColors.white, fontSize: 20, fontWeight: FontWeight.w600),
 
-      ///  title styles:  are smaller than headline styles and should be used for shorter, medium-emphasis text.
-      // titleLarge: ,
+      // ///  title styles:  are smaller than headline styles and should be used for shorter, medium-emphasis text.
+      // // titleLarge: ,
 
-      /// Used For Most Used Styles
-      bodyLarge: TextStyle(color: AppColors.white, fontSize: 20.sp, fontWeight: FontWeight.w500),
-      bodyMedium: TextStyle(color: AppColors.white, fontSize: 18.sp, fontWeight: FontWeight.w500),
-      bodySmall: TextStyle(color: AppColors.white, fontSize: 16.sp, fontWeight: FontWeight.w500),
+      // /// Used For Most Used Styles
+      // bodyLarge: const TextStyle(color: AppColors.white, fontSize: 20, fontWeight: FontWeight.w500),
+      // bodyMedium: const TextStyle(color: AppColors.white, fontSize: 18, fontWeight: FontWeight.w500),
+      // bodySmall: const TextStyle(color: AppColors.white, fontSize: 16, fontWeight: FontWeight.w500),
 
-      ///USED for Description and Small Text.
-      labelLarge: TextStyle(color: AppColors.bgOneColor, fontSize: 18.sp, fontWeight: FontWeight.w400),
-      labelMedium: TextStyle(color: AppColors.bgOneColor, fontSize: 16.sp, fontWeight: FontWeight.w400),
-      labelSmall: TextStyle(color: AppColors.bgOneColor, fontSize: 14.sp, fontWeight: FontWeight.w400),
+      // ///USED for Description and Small Text.
+      // labelLarge: TextStyle(color: AppColors.bgOneColor, fontSize: 18, fontWeight: FontWeight.w400),
+      // labelMedium: TextStyle(color: AppColors.bgOneColor, fontSize: 16, fontWeight: FontWeight.w400),
+      // labelSmall: TextStyle(color: AppColors.bgOneColor, fontSize: 14, fontWeight: FontWeight.w400),
 
       //   Also U can add More TextStyle According Your Design
     ),

@@ -1,5 +1,5 @@
 import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
-import 'package:flutter_new_structure/app/utils/helpers/all_imports.dart';
+import 'package:get/get.dart';
 
 class AppValidations {
   AppValidations._();
