@@ -1,6 +1,6 @@
 {
     "@@locale": "en",
-    "title": "Hello World",
+    "title": "Hello",
     "description": "Hello World in description",
     "emailLabel": "Email",
     "passwordLabel": "Password",

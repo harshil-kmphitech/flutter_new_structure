@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
-import 'package:demo/app/utils/helpers/injectable/injectable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:get/get.dart';
 
 typedef ShouldRebuild<T> = bool Function(T previous, T next);

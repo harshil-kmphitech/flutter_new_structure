@@ -1,4 +1,4 @@
-import 'package:demo/app/utils/helpers/injectable/injectable.dart';
+import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton

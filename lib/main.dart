@@ -1,14 +1,15 @@
-import 'package:demo/app/routes/app_pages.dart';
-import 'package:demo/app/routes/app_routes.dart';
-import 'package:demo/app/utils/helpers/extensions/extensions.dart';
-import 'package:demo/app/utils/helpers/injectable/injectable.dart';
-import 'package:demo/app/utils/helpers/logger.dart';
-import 'package:demo/app/utils/themes/app_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_new_structure/app/routes/app_pages.dart';
+import 'package:flutter_new_structure/app/routes/app_routes.dart';
+import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
+import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
+import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
+import 'package:flutter_new_structure/app/utils/themes/app_theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,7 +35,6 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'FLUTTER STRUCTURE',
       getPages: AppPages.routes,
-      scrollBehavior: CustomScrollBehavior(),
       initialRoute: AppRoutes.login,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -44,6 +44,7 @@ class _MyAppState extends State<MyApp> {
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
+      builder: EasyLoading.init(),
     );
   }
 
@@ -76,12 +77,5 @@ class _MyAppState extends State<MyApp> {
     if (kDebugMode) {
       exception.logWithName('precacheImageError');
     }
-  }
-}
-
-class CustomScrollBehavior extends ScrollBehavior {
-  @override
-  ScrollPhysics getScrollPhysics(BuildContext context) {
-    return const ClampingScrollPhysics(); // Set your desired physics here
   }
 }

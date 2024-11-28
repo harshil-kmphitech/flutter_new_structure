@@ -1,5 +1,5 @@
-import 'package:demo/app/utils/helpers/injectable/injectable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:get/get.dart';
 
 abstract class GetItHook<T extends GetxController> extends StatefulWidget {

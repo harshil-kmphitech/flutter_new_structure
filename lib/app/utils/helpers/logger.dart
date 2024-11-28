@@ -2,7 +2,7 @@
 
 import 'dart:developer' as dev;
 
-import 'package:demo/app/global/app_config.dart';
+import 'package:flutter_new_structure/app/global/app_config.dart';
 
 class Logger {
   static void log(String message) {

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomImageView extends StatelessWidget {
-  CustomImageView({
+  const CustomImageView({
     super.key,
     this.imagePath,
     this.imageData,
@@ -25,36 +25,45 @@ class CustomImageView extends StatelessWidget {
 
   ///[imagePath] is required parameter for showing image
 
-  String? imagePath;
-  Uint8List? imageData;
-  double? height;
-  double? width;
-  Color? color;
-  BoxFit? fit;
-  Alignment? alignment;
-  VoidCallback? onTap;
-  EdgeInsetsGeometry? margin;
-  BorderRadius? radius;
-  BoxBorder? border;
+  final String? imagePath;
+  final Uint8List? imageData;
+  final double? height;
+  final double? width;
+  final Color? color;
+  final BoxFit? fit;
+  final Alignment? alignment;
+  final VoidCallback? onTap;
+  final EdgeInsetsGeometry? margin;
+  final BorderRadius? radius;
+  final BoxBorder? border;
 
   @override
   Widget build(BuildContext context) {
-    return alignment != null
-        ? Align(
-            alignment: alignment!,
-            child: _buildWidget(),
-          )
-        : _buildWidget();
+    if (alignment != null) {
+      return Align(
+        alignment: alignment!,
+        child: _buildWidget(),
+      );
+    }
+
+    return _buildWidget();
   }
 
   Widget _buildWidget() {
-    return Padding(
-      padding: margin ?? EdgeInsets.zero,
-      child: InkWell(
+    var buildCircleImage = _buildCircleImage();
+    if (onTap != null) {
+      buildCircleImage = InkWell(
         onTap: onTap,
-        child: _buildCircleImage(),
-      ),
-    );
+        child: buildCircleImage,
+      );
+    }
+    if (margin != null) {
+      buildCircleImage = Padding(
+        padding: margin ?? EdgeInsets.zero,
+        child: buildCircleImage,
+      );
+    }
+    return buildCircleImage;
   }
 
   Widget _buildCircleImage() {
@@ -63,9 +72,8 @@ class CustomImageView extends StatelessWidget {
         borderRadius: radius ?? BorderRadius.zero,
         child: _buildImageWithBorder(),
       );
-    } else {
-      return _buildImageWithBorder();
     }
+    return _buildImageWithBorder();
   }
 
   Widget _buildImageWithBorder() {
@@ -77,9 +85,8 @@ class CustomImageView extends StatelessWidget {
         ),
         child: _buildImageView(),
       );
-    } else {
-      return _buildImageView();
     }
+    return _buildImageView();
   }
 
   Widget _buildImageView() {
@@ -112,6 +119,7 @@ class CustomImageView extends StatelessWidget {
             fit: fit,
             imageUrl: imagePath!,
             color: color,
+            filterQuality: FilterQuality.medium,
             placeholder: (context, url) => SizedBox(
               height: 30,
               width: 30,
@@ -128,14 +136,6 @@ class CustomImageView extends StatelessWidget {
             ),
           );
         case ImageType.png:
-          return Image.asset(
-            imagePath!,
-            height: height,
-            width: width,
-            fit: fit ?? BoxFit.cover,
-            color: color,
-          );
-        case ImageType.unknown:
           return Image.asset(
             imagePath!,
             height: height,
@@ -163,4 +163,4 @@ extension ImageTypeExtension on String {
   }
 }
 
-enum ImageType { svg, png, network, file, unknown }
+enum ImageType { svg, png, network, file }

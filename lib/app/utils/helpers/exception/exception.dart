@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:demo/app/utils/constants/app_strings.dart';
-import 'package:demo/app/utils/helpers/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
+import 'package:flutter_new_structure/app/utils/helpers/loading.dart';
+import 'package:get/get.dart';
 
 @immutable
 class UserFriendlyError {
@@ -131,27 +131,32 @@ extension DioExceptionTypeX on DioExceptionType {
 
 extension ApiHandlingExtension<T> on Future<T> {
   /// Must use handler it's a better way to handle request's response api calling
-  Future<void> handler(Rx<ApiState> state, {ValueChanged<T>? onSuccess, ValueChanged<FailedState>? onFailed}) async {
+  /// Must use handler it's a better way to handle request's response api calling
+  Future<void> handler(
+    Rx<ApiState>? state, {
+    bool isLoading = true,
+    ValueChanged<T>? onSuccess,
+    ValueChanged<FailedState>? onFailed,
+  }) async {
     try {
-      state.value = LoadingState();
+      state?.value = LoadingState();
+      if (isLoading) Loading.show();
       final response = await this;
-      state.value = SuccessState<T>(response);
+      state?.value = SuccessState<T>(response);
       onSuccess?.call(response);
     } on DioException catch (e) {
-      state.value = FailedState(
+      final failedState = FailedState(
         statusCode: e.response?.statusCode ?? 0,
         isRetirable: switch (e.type) {
-          DioExceptionType.connectionTimeout || DioExceptionType.sendTimeout || DioExceptionType.receiveTimeout => true,
+          DioExceptionType.connectionError || DioExceptionType.connectionTimeout || DioExceptionType.sendTimeout || DioExceptionType.receiveTimeout => true,
           _ => false,
         },
         error: e.toUserFriendlyError(),
       );
-      onFailed?.call(state.value as FailedState);
-    } on Exception catch (e) {
-      /// If you need more detailed information about exception so simply remove this catch
-      /// after removing this catch you are able to see thrawed exception in debug console.
-      e.log;
-      state.value = FailedState(
+      state?.value = failedState;
+      onFailed?.call((state?.value ?? failedState) as FailedState);
+    } on Exception {
+      final failedState = FailedState(
         statusCode: 0,
         isRetirable: false,
         error: UserFriendlyError(
@@ -159,7 +164,10 @@ extension ApiHandlingExtension<T> on Future<T> {
           AppStrings.T.apiErrorDescription,
         ),
       );
-      onFailed?.call(state.value as FailedState);
+      state?.value = failedState;
+      onFailed?.call((state?.value ?? failedState) as FailedState);
+    } finally {
+      if (isLoading) Loading.dismiss();
     }
   }
 }
