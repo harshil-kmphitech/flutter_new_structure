@@ -88,6 +88,7 @@ class TextInputField extends TextFormField {
                     ? null
                     : Builder(
                         builder: (context) {
+                          if (type case InputType.email || InputType.password) {}
                           return _SuffixIcon(
                             showing: obscureText,
                           );

@@ -1,11 +1,11 @@
+import 'package:demo/app/data/models/authModel/auth_model.dart';
+import 'package:demo/app/data/services/authService/auth_service.dart';
+import 'package:demo/app/routes/app_routes.dart';
+import 'package:demo/app/utils/constants/app_strings.dart';
+import 'package:demo/app/utils/helpers/exception/exception.dart';
+import 'package:demo/app/utils/helpers/extensions/extensions.dart';
+import 'package:demo/app/utils/helpers/injectable/injectable.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_new_structure/app/data/models/authModel/auth_model.dart';
-import 'package:flutter_new_structure/app/data/services/authService/auth_service.dart';
-import 'package:flutter_new_structure/app/routes/app_routes.dart';
-import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
-import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
-import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
-import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:get/get.dart';
 import 'package:injectable/injectable.dart' as i;
 
@@ -17,6 +17,7 @@ void _disposeAuthController(AuthController instance) {
 @i.injectable
 class AuthController extends GetxController {
   bool isDarkTheme = false;
+  bool isDarkTheme1 = false;
 
   // Observable variables for user input
   final emailController = TextEditingController();

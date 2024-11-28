@@ -1,4 +1,4 @@
-import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
+import 'package:demo/app/utils/constants/app_strings.dart';
 import 'package:get/get.dart';
 
 class AppValidations {

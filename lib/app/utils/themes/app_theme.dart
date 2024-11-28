@@ -1,5 +1,5 @@
+import 'package:demo/app/utils/constants/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_new_structure/app/utils/constants/app_colors.dart';
 
 // TextTheme textTheme = Get.theme.textTheme;
 // ColorScheme colorScheme = Get.theme.colorScheme;

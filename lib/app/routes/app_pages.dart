@@ -1,10 +1,10 @@
-import 'package:flutter_new_structure/app/routes/app_routes.dart';
-import 'package:flutter_new_structure/app/ui/pages/authentication/forgot_password_page.dart';
-import 'package:flutter_new_structure/app/ui/pages/authentication/login_page.dart';
-import 'package:flutter_new_structure/app/ui/pages/authentication/register_page.dart';
-import 'package:flutter_new_structure/app/ui/pages/authentication/reset_password_page.dart';
-import 'package:flutter_new_structure/app/ui/pages/authentication/verify_code_page.dart';
-import 'package:flutter_new_structure/app/ui/pages/theme/theme_page.dart';
+import 'package:demo/app/routes/app_routes.dart';
+import 'package:demo/app/ui/pages/authentication/forgot_password_page.dart';
+import 'package:demo/app/ui/pages/authentication/login_page.dart';
+import 'package:demo/app/ui/pages/authentication/register_page.dart';
+import 'package:demo/app/ui/pages/authentication/reset_password_page.dart';
+import 'package:demo/app/ui/pages/authentication/verify_code_page.dart';
+import 'package:demo/app/ui/pages/theme/theme_page.dart';
 import 'package:get/get.dart';
 
 class AppPages {

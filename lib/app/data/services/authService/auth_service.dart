@@ -1,7 +1,7 @@
+import 'package:demo/app/data/models/authModel/auth_model.dart';
+import 'package:demo/app/global/app_config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_new_structure/app/data/models/authModel/auth_model.dart';
-import 'package:flutter_new_structure/app/global/app_config.dart';
 import 'package:injectable/injectable.dart' as i;
 import 'package:retrofit/retrofit.dart';
 

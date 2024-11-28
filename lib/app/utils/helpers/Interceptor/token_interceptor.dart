@@ -1,8 +1,8 @@
+import 'package:demo/app/utils/helpers/extensions/extensions.dart';
+import 'package:demo/app/utils/helpers/injectable/injectable.dart';
+import 'package:demo/app/utils/helpers/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
-import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
-import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
-import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenInterceptor implements Interceptor {

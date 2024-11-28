@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: require_trailing_commas
-
 part of 'auth_service.dart';
 
 // **************************************************************************
@@ -66,7 +64,9 @@ class _AuthService implements AuthService {
     final _result = await _dio.fetch<Map<String, dynamic>?>(_options);
     late AuthModel? _value;
     try {
-      _value = _result.data == null ? null : await compute(deserializeAuthModel, _result.data!);
+      _value = _result.data == null
+          ? null
+          : await compute(deserializeAuthModel, _result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -135,7 +135,9 @@ class _AuthService implements AuthService {
     final _result = await _dio.fetch<Map<String, dynamic>?>(_options);
     late AuthModel? _value;
     try {
-      _value = _result.data == null ? null : await compute(deserializeAuthModel, _result.data!);
+      _value = _result.data == null
+          ? null
+          : await compute(deserializeAuthModel, _result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -144,7 +146,8 @@ class _AuthService implements AuthService {
   }
 
   @override
-  Future<HttpResponse<Map<String, dynamic>>> forgotPassword(String email) async {
+  Future<HttpResponse<Map<String, dynamic>>> forgotPassword(
+      String email) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -172,7 +175,11 @@ class _AuthService implements AuthService {
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Map<String, dynamic> _value;
     try {
-      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map((e) async => MapEntry(e.key, await compute(deserializedynamic, e.value as Map<String, dynamic>)))));
+      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map(
+          (e) async => MapEntry(
+              e.key,
+              await compute(
+                  deserializedynamic, e.value as Map<String, dynamic>)))));
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -261,7 +268,11 @@ class _AuthService implements AuthService {
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Map<String, dynamic> _value;
     try {
-      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map((e) async => MapEntry(e.key, await compute(deserializedynamic, e.value as Map<String, dynamic>)))));
+      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map(
+          (e) async => MapEntry(
+              e.key,
+              await compute(
+                  deserializedynamic, e.value as Map<String, dynamic>)))));
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -306,7 +317,11 @@ class _AuthService implements AuthService {
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late Map<String, dynamic> _value;
     try {
-      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map((e) async => MapEntry(e.key, await compute(deserializedynamic, e.value as Map<String, dynamic>)))));
+      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map(
+          (e) async => MapEntry(
+              e.key,
+              await compute(
+                  deserializedynamic, e.value as Map<String, dynamic>)))));
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -316,7 +331,9 @@ class _AuthService implements AuthService {
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
-    if (T != dynamic && !(requestOptions.responseType == ResponseType.bytes || requestOptions.responseType == ResponseType.stream)) {
+    if (T != dynamic &&
+        !(requestOptions.responseType == ResponseType.bytes ||
+            requestOptions.responseType == ResponseType.stream)) {
       if (T == String) {
         requestOptions.responseType = ResponseType.plain;
       } else {

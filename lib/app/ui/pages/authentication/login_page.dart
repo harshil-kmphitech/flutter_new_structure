@@ -1,12 +1,12 @@
+import 'package:demo/app/controllers/auth_controller.dart';
+import 'package:demo/app/routes/app_routes.dart';
+import 'package:demo/app/ui/widgets/custom_text.dart';
+import 'package:demo/app/ui/widgets/custom_textfields.dart';
+import 'package:demo/app/utils/constants/app_strings.dart';
+import 'package:demo/app/utils/helpers/exception/exception.dart';
+import 'package:demo/app/utils/helpers/getItHook/getit_hook.dart';
+import 'package:demo/app/utils/helpers/validations/validations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
-import 'package:flutter_new_structure/app/routes/app_routes.dart';
-import 'package:flutter_new_structure/app/ui/widgets/custom_text.dart';
-import 'package:flutter_new_structure/app/ui/widgets/custom_textfields.dart';
-import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
-import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
-import 'package:flutter_new_structure/app/utils/helpers/getItHook/getit_hook.dart';
-import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends GetItHook<AuthController> {
@@ -69,9 +69,7 @@ class LoginPage extends GetItHook<AuthController> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.forgotPassword);
-                  },
+                  onPressed: () => Get.toNamed(AppRoutes.forgotPassword),
                   child: CenterText(
                     AppStrings.T.forgotPasswordRedirect,
                     style: null,
@@ -93,7 +91,7 @@ class LoginPage extends GetItHook<AuthController> {
   }
 
   @override
-  bool get canDisposeController => true;
+  bool get canDisposeController => false;
 
   @override
   void onInit() {

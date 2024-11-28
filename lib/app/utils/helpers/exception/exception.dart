@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:demo/app/utils/constants/app_strings.dart';
+import 'package:demo/app/utils/helpers/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
-import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 @immutable

@@ -1,10 +1,10 @@
+import 'package:demo/app/controllers/auth_controller.dart';
+import 'package:demo/app/ui/widgets/custom_textfields.dart';
+import 'package:demo/app/utils/constants/app_strings.dart';
+import 'package:demo/app/utils/helpers/exception/exception.dart';
+import 'package:demo/app/utils/helpers/getItHook/getit_hook.dart';
+import 'package:demo/app/utils/helpers/validations/validations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
-import 'package:flutter_new_structure/app/ui/widgets/custom_textfields.dart';
-import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
-import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
-import 'package:flutter_new_structure/app/utils/helpers/getItHook/getit_hook.dart';
-import 'package:flutter_new_structure/app/utils/helpers/validations/validations.dart';
 import 'package:get/get.dart';
 
 class ForgotPasswordPage extends GetItHook<AuthController> {
