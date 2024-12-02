@@ -70,6 +70,11 @@ class _Selector0State<T, G extends GetxController> extends State<_Selector0<T, G
   @override
   void dispose() {
     _remove?.call();
+    if (widget.id == null) {
+      widget.controller.removeListener(getUpdate);
+    } else {
+      widget.controller.removeListenerId(widget.id!, getUpdate);
+    }
     super.dispose();
   }
 
