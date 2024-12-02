@@ -16,76 +16,77 @@ class LoginPage extends GetItHook<AuthController> {
   Widget build(BuildContext context) {
     final passObscure = true.obs;
 
-    return Form(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(AppStrings.T.login),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextInputField(
-                  type: InputType.email,
-                  controller: controller.emailController,
-                  hintLabel: AppStrings.T.emailLabel,
-                  validator: AppValidations.emailValidation,
-                ),
-                const SizedBox(height: 16),
-                Obx(
-                  () => TextInputField(
-                    type: InputType.password,
-                    controller: controller.passController,
-                    hintLabel: AppStrings.T.passwordLabel,
-                    obscureText: passObscure,
-                    textInputAction: TextInputAction.done,
-                    validator: AppValidations.passwordValidation,
+    return FocusScope(
+      child: Form(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(AppStrings.T.login),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextInputField(
+                    type: InputType.email,
+                    controller: controller.emailController,
+                    hintLabel: AppStrings.T.emailLabel,
+                    validator: AppValidations.emailValidation,
                   ),
-                ),
-                const SizedBox(height: 16),
-                Obx(
-                  () {
-                    return controller.loginState.isLoading
-                        ? const CircularProgressIndicator()
-                        : Builder(
-                            builder: (context) {
-                              return SizedBox(
-                                height: 44,
-                                child: ElevatedButton(
-                                  onPressed: null,
-                                  // () => controller.login(context),
-                                  child: Text(
-                                    AppStrings.T.login,
+                  const SizedBox(height: 16),
+                  Obx(
+                    () => TextInputField(
+                      type: InputType.password,
+                      controller: controller.passController,
+                      hintLabel: AppStrings.T.passwordLabel,
+                      obscureText: passObscure,
+                      textInputAction: TextInputAction.done,
+                      validator: AppValidations.passwordValidation,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Obx(
+                    () {
+                      return controller.loginState.isLoading
+                          ? const CircularProgressIndicator()
+                          : Builder(
+                              builder: (context) {
+                                return SizedBox(
+                                  height: 44,
+                                  child: ElevatedButton(
+                                    onPressed: () => controller.login(context),
+                                    child: Text(
+                                      AppStrings.T.login,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                          );
-                  },
-                ),
-                TextButton(
-                  onPressed: () => Get.toNamed(AppRoutes.register),
-                  child: CenterText(
-                    AppStrings.T.registerRedirect,
-                    style: null,
+                                );
+                              },
+                            );
+                    },
                   ),
-                ),
-                TextButton(
-                  onPressed: () => Get.toNamed(AppRoutes.forgotPassword),
-                  child: CenterText(
-                    AppStrings.T.forgotPasswordRedirect,
-                    style: null,
+                  TextButton(
+                    onPressed: () => Get.toNamed(AppRoutes.register),
+                    child: CenterText(
+                      AppStrings.T.registerRedirect,
+                      style: null,
+                    ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () => Get.offNamed(AppRoutes.theme),
-                  child: CenterText(
-                    AppStrings.T.theme,
-                    style: null,
+                  TextButton(
+                    onPressed: () => Get.toNamed(AppRoutes.forgotPassword),
+                    child: CenterText(
+                      AppStrings.T.forgotPasswordRedirect,
+                      style: null,
+                    ),
                   ),
-                ),
-              ],
+                  TextButton(
+                    onPressed: () => Get.offNamed(AppRoutes.theme),
+                    child: CenterText(
+                      AppStrings.T.theme,
+                      style: null,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

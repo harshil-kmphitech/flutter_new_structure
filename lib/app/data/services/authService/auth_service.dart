@@ -20,6 +20,9 @@ abstract class AuthService {
 
   @POST(EndPoints.userLogin)
   Future<AuthModel?> login(
+    @SendProgress() ProgressCallback? onSendProgress,
+    @ReceiveProgress() ProgressCallback? onReceiveProgress,
+    @DioOptions() Options? options,
     @Part() String email,
     @Part() String pass, {
     @Part() String role = 'Student',
