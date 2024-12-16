@@ -14,7 +14,7 @@ class _AuthService implements AuthService {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'https://api.group.llc:4001/api/user';
+    baseUrl ??= 'https://localhost:3030/api';
   }
 
   final Dio _dio;
@@ -27,24 +27,18 @@ class _AuthService implements AuthService {
   Future<AuthModel?> login(
     String email,
     String pass, {
-    String role = 'Student',
+    required String deviceType,
+    required String deviceToken,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'email',
-      email,
-    ));
-    _data.fields.add(MapEntry(
-      'pass',
-      pass,
-    ));
-    _data.fields.add(MapEntry(
-      'role',
-      role,
-    ));
+    final _data = {
+      'email': email,
+      'pass': pass,
+      'device_type': deviceType,
+      'device_token': deviceToken,
+    };
     final _options = _setStreamType<AuthModel>(Options(
       method: 'POST',
       headers: _headers,
@@ -52,7 +46,7 @@ class _AuthService implements AuthService {
     )
         .compose(
           _dio.options,
-          '/login',
+          '/auth/login',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -146,8 +140,7 @@ class _AuthService implements AuthService {
   }
 
   @override
-  Future<HttpResponse<Map<String, dynamic>>> forgotPassword(
-      String email) async {
+  Future<HttpResponse<dynamic>> forgotPassword(String email) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -156,7 +149,7 @@ class _AuthService implements AuthService {
       'email',
       email,
     ));
-    final _options = _setStreamType<HttpResponse<Map<String, dynamic>>>(Options(
+    final _options = _setStreamType<HttpResponse<dynamic>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -172,18 +165,8 @@ class _AuthService implements AuthService {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Map<String, dynamic> _value;
-    try {
-      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map(
-          (e) async => MapEntry(
-              e.key,
-              await compute(
-                  deserializedynamic, e.value as Map<String, dynamic>)))));
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
     final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
@@ -233,7 +216,7 @@ class _AuthService implements AuthService {
   }
 
   @override
-  Future<HttpResponse<Map<String, dynamic>>> verifyCode(
+  Future<HttpResponse<dynamic>> verifyCode(
     String email,
     String otp,
   ) async {
@@ -249,7 +232,7 @@ class _AuthService implements AuthService {
       'otp',
       otp,
     ));
-    final _options = _setStreamType<HttpResponse<Map<String, dynamic>>>(Options(
+    final _options = _setStreamType<HttpResponse<dynamic>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -265,24 +248,14 @@ class _AuthService implements AuthService {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Map<String, dynamic> _value;
-    try {
-      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map(
-          (e) async => MapEntry(
-              e.key,
-              await compute(
-                  deserializedynamic, e.value as Map<String, dynamic>)))));
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
     final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
   @override
-  Future<HttpResponse<Map<String, dynamic>>> sendOTP(
+  Future<HttpResponse<dynamic>> sendOTP(
     String email,
     String name,
   ) async {
@@ -298,7 +271,7 @@ class _AuthService implements AuthService {
       'name',
       name,
     ));
-    final _options = _setStreamType<HttpResponse<Map<String, dynamic>>>(Options(
+    final _options = _setStreamType<HttpResponse<dynamic>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -314,31 +287,21 @@ class _AuthService implements AuthService {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Map<String, dynamic> _value;
-    try {
-      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map(
-          (e) async => MapEntry(
-              e.key,
-              await compute(
-                  deserializedynamic, e.value as Map<String, dynamic>)))));
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
     final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
   @override
-  Future<HttpResponse<Map<String, dynamic>>> rawDataPassing(
+  Future<HttpResponse<dynamic>> rawDataPassing(
       Map<String, dynamic> data) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data);
-    final _options = _setStreamType<HttpResponse<Map<String, dynamic>>>(Options(
+    final _options = _setStreamType<HttpResponse<dynamic>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -354,31 +317,20 @@ class _AuthService implements AuthService {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Map<String, dynamic> _value;
-    try {
-      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map(
-          (e) async => MapEntry(
-              e.key,
-              await compute(
-                  deserializedynamic, e.value as Map<String, dynamic>)))));
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
     final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
   @override
-  Future<HttpResponse<Map<String, dynamic>>> requestModelPassing(
-      AuthModel data) async {
+  Future<HttpResponse<dynamic>> requestModelPassing(AuthModel data) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(await compute(serializeAuthModel, data));
-    final _options = _setStreamType<HttpResponse<Map<String, dynamic>>>(Options(
+    final _options = _setStreamType<HttpResponse<dynamic>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -394,18 +346,84 @@ class _AuthService implements AuthService {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Map<String, dynamic> _value;
-    try {
-      _value = Map.fromEntries(await Future.wait(_result.data!.entries.map(
-          (e) async => MapEntry(
-              e.key,
-              await compute(
-                  deserializedynamic, e.value as Map<String, dynamic>)))));
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
+  }
+
+  RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
+    if (T != dynamic &&
+        !(requestOptions.responseType == ResponseType.bytes ||
+            requestOptions.responseType == ResponseType.stream)) {
+      if (T == String) {
+        requestOptions.responseType = ResponseType.plain;
+      } else {
+        requestOptions.responseType = ResponseType.json;
+      }
     }
+    return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
+  }
+}
+
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations
+
+class _RefreshTokenService implements RefreshTokenService {
+  _RefreshTokenService(
+    this._dio, {
+    this.baseUrl,
+    this.errorLogger,
+  }) {
+    baseUrl ??= 'https://localhost:3030/api';
+  }
+
+  final Dio _dio;
+
+  String? baseUrl;
+
+  final ParseErrorLogger? errorLogger;
+
+  @override
+  Future<HttpResponse<dynamic>> refreshToken(String userId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = {'user_id': userId};
+    final _options = _setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/auth/refreshToken',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
     final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }

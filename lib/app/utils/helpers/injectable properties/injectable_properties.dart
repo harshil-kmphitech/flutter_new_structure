@@ -13,7 +13,7 @@ abstract class DefaultPath {
 }
 
 @lazySingleton
-@injectable
+// @injectable
 class AppDirectory implements DefaultPath {
   AppDirectory({
     @Named('temporary') required this.temporaryDirectory,
@@ -32,7 +32,21 @@ class AppDirectory implements DefaultPath {
 @module
 abstract class RegisterModule {
   @singleton
-  Dio dio() => Dio();
+  Dio dio() => Dio(
+        BaseOptions(
+          sendTimeout: const Duration(minutes: 1),
+          receiveTimeout: const Duration(minutes: 1),
+          connectTimeout: const Duration(seconds: 20),
+          headers: {
+            'versioncode': '1',
+            'devicetype': switch (Platform.operatingSystem) {
+              'android' => 'Android',
+              'ios' => 'iOS',
+              _ => 'Other',
+            },
+          },
+        ),
+      );
 
   @preResolve
   Future<SharedPreferences> pref() => SharedPreferences.getInstance();

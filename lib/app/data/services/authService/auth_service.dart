@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_new_structure/app/data/models/authModel/auth_model.dart';
 import 'package:flutter_new_structure/app/global/app_config.dart';
-import 'package:injectable/injectable.dart' as i;
+import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'auth_service.g.dart';
@@ -12,17 +12,17 @@ Map<String, dynamic> deserializedynamic(Map<String, dynamic> json) => json;
 
 /// Add base Url here..
 @RestApi(parser: Parser.FlutterCompute, baseUrl: AppConfig.baseUrl)
-@i.lazySingleton
-@i.injectable
+@lazySingleton
 abstract class AuthService {
-  @i.factoryMethod
+  @factoryMethod
   factory AuthService(Dio dio) = _AuthService;
 
   @POST(EndPoints.userLogin)
   Future<AuthModel?> login(
-    @Part() String email,
-    @Part() String pass, {
-    @Part() String role = 'Student',
+    @Field() String email,
+    @Field() String pass, {
+    @Field('device_type') required String deviceType,
+    @Field('device_token') required String deviceToken,
   });
 
   @POST(EndPoints.userSignUp)
@@ -37,7 +37,7 @@ abstract class AuthService {
   });
 
   @POST(EndPoints.userForgotPassword)
-  Future<HttpResponse<Map<String, dynamic>>> forgotPassword(@Part() String email);
+  Future<HttpResponse<dynamic>> forgotPassword(@Part() String email);
 
   @POST(EndPoints.userUpdatePassword)
   Future<AuthModel> resetPassword(
@@ -46,29 +46,41 @@ abstract class AuthService {
   );
 
   @POST(EndPoints.userVerifyOTP)
-  Future<HttpResponse<Map<String, dynamic>>> verifyCode(
+  Future<HttpResponse<dynamic>> verifyCode(
     @Part() String email,
     @Part() String otp,
   );
 
   @POST(EndPoints.userSendOTP)
-  Future<HttpResponse<Map<String, dynamic>>> sendOTP(
+  Future<HttpResponse<dynamic>> sendOTP(
     @Part() String email,
     @Part() String name,
   );
 
   // Raw data passing
   @POST(EndPoints.userSendOTP)
-  Future<HttpResponse<Map<String, dynamic>>> rawDataPassing(
+  Future<HttpResponse<dynamic>> rawDataPassing(
     @Body() Map<String, dynamic> data,
   );
 
   // Request Model Passing
   @POST(EndPoints.userSendOTP)
-  Future<HttpResponse<Map<String, dynamic>>> requestModelPassing(
+  Future<HttpResponse<dynamic>> requestModelPassing(
     @Body() AuthModel data,
   );
 
   /// There many more methods available for Server communication like PUT, DELETE, PATCH, HEAD etc...
   /// For upload Files with PART.
+}
+
+@RestApi(parser: Parser.FlutterCompute, baseUrl: AppConfig.baseUrl)
+@lazySingleton
+abstract class RefreshTokenService {
+  @factoryMethod
+  factory RefreshTokenService(Dio dio) = _RefreshTokenService;
+
+  @POST(EndPoints.refreshToken)
+  Future<HttpResponse<dynamic>> refreshToken(
+    @Field('user_id') String userId,
+  );
 }

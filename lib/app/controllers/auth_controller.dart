@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_new_structure/app/data/models/authModel/auth_model.dart';
 import 'package:flutter_new_structure/app/data/services/authService/auth_service.dart';
@@ -9,13 +11,13 @@ import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.da
 import 'package:get/get.dart';
 import 'package:injectable/injectable.dart' as i;
 
-void _disposeAuthController(AuthController instance) {
-  instance.dispose();
-}
-
-@i.LazySingleton(dispose: _disposeAuthController)
+@i.lazySingleton
 @i.injectable
 class AuthController extends GetxController {
+  AuthController() {
+    onInit();
+  }
+
   bool isDarkTheme = false;
   bool isDarkTheme1 = false;
 
@@ -56,7 +58,19 @@ class AuthController extends GetxController {
       return;
     }
 
-    Future.delayed(const Duration(seconds: 5), () => getIt<AuthService>().login(emailController.text, passController.text.convertMd5)).handler(
+    Future.delayed(
+      const Duration(seconds: 5),
+      () => getIt<AuthService>().login(
+        emailController.text,
+        passController.text.convertMd5,
+        deviceToken: '',
+        deviceType: switch (Platform.operatingSystem) {
+          'android' => 'Android',
+          'ios' => 'iOS',
+          _ => 'Other',
+        },
+      ),
+    ).handler(
       loginState,
       onSuccess: (value) {
         if (value != null) {

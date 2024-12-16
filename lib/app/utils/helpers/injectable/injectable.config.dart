@@ -12,6 +12,8 @@ import 'dart:io' as _i497;
 
 import 'package:dio/dio.dart' as _i361;
 import 'package:firebase_core/firebase_core.dart' as _i982;
+import 'package:flutter_new_structure/app/controllers/app_controller.dart'
+    as _i129;
 import 'package:flutter_new_structure/app/controllers/auth_controller.dart'
     as _i289;
 import 'package:flutter_new_structure/app/data/services/authService/auth_service.dart'
@@ -50,8 +52,11 @@ extension GetItInjectableX on _i174.GetIt {
       dispose: (i) => i.dispose(),
     );
     gh.lazySingleton<_i525.SocketService>(() => _i525.SocketService());
+    gh.lazySingleton<_i129.AppController>(() => _i129.AppController());
     gh.lazySingleton<_i388.AuthService>(
         () => _i388.AuthService(gh<_i361.Dio>()));
+    gh.lazySingleton<_i388.RefreshTokenService>(
+        () => _i388.RefreshTokenService(gh<_i361.Dio>()));
     await gh.factoryAsync<_i497.Directory>(
       () => registerModule.temporaryDirectory(),
       instanceName: 'temporary',
