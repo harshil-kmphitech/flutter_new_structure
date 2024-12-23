@@ -29,7 +29,11 @@ void configuration({required Widget myApp}) {
       };
 
       if (kDebugMode) {
-        getIt<Dio>().interceptors.add(PrettyDioLogger());
+        getIt<Dio>().interceptors.add(
+              PrettyDioLogger(
+                requestBody: true,
+              ),
+            );
       }
 
       getIt<Dio>().interceptors

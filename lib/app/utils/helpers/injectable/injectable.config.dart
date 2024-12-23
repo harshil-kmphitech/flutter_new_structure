@@ -20,6 +20,8 @@ import 'package:flutter_new_structure/app/data/services/authService/auth_service
     as _i388;
 import 'package:flutter_new_structure/app/data/services/common/socket_service.dart'
     as _i525;
+import 'package:flutter_new_structure/app/data/services/refreshToken/refresh_token_service.dart'
+    as _i298;
 import 'package:flutter_new_structure/app/utils/helpers/injectable%20properties/injectable_properties.dart'
     as _i854;
 import 'package:get_it/get_it.dart' as _i174;
@@ -55,8 +57,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i129.AppController>(() => _i129.AppController());
     gh.lazySingleton<_i388.AuthService>(
         () => _i388.AuthService(gh<_i361.Dio>()));
-    gh.lazySingleton<_i388.RefreshTokenService>(
-        () => _i388.RefreshTokenService(gh<_i361.Dio>()));
+    gh.lazySingleton<_i298.RefreshTokenService>(
+        () => _i298.RefreshTokenService(gh<_i361.Dio>()));
     await gh.factoryAsync<_i497.Directory>(
       () => registerModule.temporaryDirectory(),
       instanceName: 'temporary',

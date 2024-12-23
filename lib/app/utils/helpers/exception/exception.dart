@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
@@ -61,6 +63,12 @@ extension DioExceptionX on DioException {
   }
 
   String _statusCode(int? statusCode) {
+    final res = response?.data;
+    if (res is Map<String, dynamic>) {
+      if (res.containsKey('message')) {
+        return '${res['message']}';
+      }
+    }
     return switch (statusCode) {
       200 => AppStrings.T.code200,
       201 => AppStrings.T.code201,
@@ -142,6 +150,7 @@ extension ApiHandlingExtension<T> on Future<T> {
       state?.value = LoadingState();
       if (isLoading) Loading.show();
       final response = await this;
+      debugger();
       state?.value = SuccessState<T>(response);
       onSuccess?.call(response);
     } on DioException catch (e) {
@@ -151,7 +160,7 @@ extension ApiHandlingExtension<T> on Future<T> {
           DioExceptionType.connectionError || DioExceptionType.connectionTimeout || DioExceptionType.sendTimeout || DioExceptionType.receiveTimeout => true,
           _ => false,
         },
-        error: e.toUserFriendlyError(),
+        dioError: e,
       );
       state?.value = failedState;
       onFailed?.call((state?.value ?? failedState) as FailedState);
@@ -159,10 +168,7 @@ extension ApiHandlingExtension<T> on Future<T> {
       final failedState = FailedState(
         statusCode: 0,
         isRetirable: false,
-        error: UserFriendlyError(
-          AppStrings.T.apiError,
-          AppStrings.T.apiErrorDescription,
-        ),
+        dioError: null,
       );
       state?.value = failedState;
       onFailed?.call((state?.value ?? failedState) as FailedState);
@@ -194,13 +200,20 @@ class LoadingState extends ApiState {}
 
 class FailedState extends ApiState {
   bool isRetirable;
-  UserFriendlyError error;
+  UserFriendlyError get error =>
+      dioError?.toUserFriendlyError() ??
+      UserFriendlyError(
+        AppStrings.T.apiError,
+        AppStrings.T.apiErrorDescription,
+      );
+
+  DioException? dioError;
 
   int statusCode;
 
   FailedState({
     required this.isRetirable,
-    required this.error,
     required this.statusCode,
+    required this.dioError,
   });
 }

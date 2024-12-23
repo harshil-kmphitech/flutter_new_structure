@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
+import 'package:flutter_new_structure/app/routes/app_routes.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_edge_insets.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
 import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
-import 'package:flutter_new_structure/app/utils/helpers/getItHook/get_slector.dart';
 import 'package:flutter_new_structure/app/utils/helpers/getItHook/getit_hook.dart';
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
@@ -16,6 +14,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemePage extends GetItHook<AuthController> {
   const ThemePage({super.key});
+
+  static Future<T?>? offAllRoute<T>() {
+    return Get.offAllNamed(AppRoutes.theme);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,45 +127,23 @@ class ThemePage extends GetItHook<AuthController> {
               ),
               Row(
                 children: [
-                  Selector<AuthController, (bool, bool)>(
-                    selector: (p0, p1) => (p1.isDarkTheme1, p1.isDarkTheme),
-                    builder: (context, value, child) {
-                      return Switch(
-                        value: controller.isDarkTheme,
-                        onChanged: (value) {
-                          controller
-                            ..isDarkTheme = !controller.isDarkTheme
-                            ..update();
+                  Switch(
+                    value: controller.isDarkTheme,
+                    onChanged: (value) {
+                      controller.isDarkTheme = !controller.isDarkTheme;
 
-                          // if (value) {
-                          //   Get.changeThemeMode(ThemeMode.dark);
-                          // } else {
-                          //   Get.changeThemeMode(ThemeMode.light);
-                          // }
-                        },
-                      );
+                      if (value) {
+                        Get.changeThemeMode(ThemeMode.dark);
+                      } else {
+                        Get.changeThemeMode(ThemeMode.light);
+                      }
                     },
-                    child: Switch(
-                      value: controller.isDarkTheme,
-                      onChanged: (value) {
-                        controller
-                          ..isDarkTheme = !controller.isDarkTheme
-                          ..update();
-                        debugger();
-                        // if (value) {
-                        //   Get.changeThemeMode(ThemeMode.dark);
-                        // } else {
-                        //   Get.changeThemeMode(ThemeMode.light);
-                        // }
-                      },
-                    ),
                   ),
                   Checkbox(
                     value: controller.isDarkTheme,
                     onChanged: (value) {
-                      controller
-                        ..isDarkTheme = !controller.isDarkTheme
-                        ..update();
+                      controller.isDarkTheme = !controller.isDarkTheme;
+
                       if (value ?? false) {
                         Get.changeThemeMode(ThemeMode.dark);
                       } else {

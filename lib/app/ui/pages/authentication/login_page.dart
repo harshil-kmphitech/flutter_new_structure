@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
 import 'package:flutter_new_structure/app/routes/app_routes.dart';
+import 'package:flutter_new_structure/app/ui/pages/authentication/forgot_password_page.dart';
+import 'package:flutter_new_structure/app/ui/pages/authentication/register_page.dart';
+import 'package:flutter_new_structure/app/ui/pages/theme/theme_page.dart';
 import 'package:flutter_new_structure/app/ui/widgets/custom_text.dart';
 import 'package:flutter_new_structure/app/ui/widgets/custom_textfields.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
@@ -11,6 +14,10 @@ import 'package:get/get.dart';
 
 class LoginPage extends GetItHook<AuthController> {
   const LoginPage({super.key});
+
+  static Future<T?>? offAllRoute<T>() {
+    return Get.offAllNamed(AppRoutes.login);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,21 +72,21 @@ class LoginPage extends GetItHook<AuthController> {
                     },
                   ),
                   TextButton(
-                    onPressed: () => Get.toNamed(AppRoutes.register),
+                    onPressed: RegisterPage.route,
                     child: CenterText(
                       AppStrings.T.registerRedirect,
                       style: null,
                     ),
                   ),
                   TextButton(
-                    onPressed: () => Get.toNamed(AppRoutes.forgotPassword),
+                    onPressed: ForgotPasswordPage.route,
                     child: CenterText(
                       AppStrings.T.forgotPasswordRedirect,
                       style: null,
                     ),
                   ),
                   TextButton(
-                    onPressed: () => Get.offNamed(AppRoutes.theme),
+                    onPressed: ThemePage.offAllRoute,
                     child: CenterText(
                       AppStrings.T.theme,
                       style: null,
@@ -98,11 +105,11 @@ class LoginPage extends GetItHook<AuthController> {
   bool get canDisposeController => false;
 
   @override
-  void onInit() {
+  void onInit() {}
+
+  @override
+  void onDispose() {
     controller.emailController.clear();
     controller.passController.clear();
   }
-
-  @override
-  void onDispose() {}
 }

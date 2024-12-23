@@ -17,6 +17,18 @@ extension SharedPreferencesX on SharedPreferences {
     }
   }
 
+  String? get getUserId {
+    return getString('UserId');
+  }
+
+  set setUserId(String? value) {
+    if (value == null) {
+      remove('UserId');
+    } else {
+      setString('UserId', value);
+    }
+  }
+
   String? get getAppLocal {
     return getString('appLocal');
   }

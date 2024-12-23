@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
+import 'package:flutter_new_structure/app/data/models/common/common.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'auth_model.g.dart';
@@ -8,17 +9,15 @@ AuthModel deserializeAuthModel(Map<String, dynamic> json) => AuthModel.fromJson(
 Map<String, dynamic> serializeAuthModel(AuthModel model) => model.toJson();
 
 @JsonSerializable()
-class AuthModel {
-  int ResponseCode;
-  String ResponseMsg;
-  bool Result;
+class AuthModel extends ApiResponse {
   AuthData data;
 
   AuthModel({
-    required this.ResponseCode,
-    required this.ResponseMsg,
-    required this.Result,
     required this.data,
+    required super.version,
+    required super.statusCode,
+    required super.isSuccess,
+    required super.message,
   });
 
   // Factory method to create an AuthModel from JSON
@@ -31,33 +30,97 @@ class AuthModel {
 @JsonSerializable()
 class AuthData {
   @JsonKey(name: '_id')
-  final String? id;
-  final String? name;
-  final String? email;
-  @JsonKey(fromJson: _convertToEncrypted)
-  final String? password;
-  final int? phone;
-  final String? profile;
-  final String? token;
+  String id;
+  String name;
+  String email;
+  String password;
+  @JsonKey(name: 'is_confirm')
+  String isConfirm;
+  String profile;
+  String ucode;
+  @JsonKey(name: 'device_type')
+  String deviceType;
+  String token;
+  @JsonKey(name: 'device_token')
+  String deviceToken;
+  @JsonKey(name: 'is_fb')
+  String isFb;
+  @JsonKey(name: 'fb_id')
+  String fbId;
+  @JsonKey(name: 'is_google')
+  String isGoogle;
+  @JsonKey(name: 'google_id')
+  String googleId;
+  @JsonKey(name: 'is_apple')
+  String isApple;
+  @JsonKey(name: 'apple_id')
+  String appleId;
+  @JsonKey(name: 'delete_reason')
+  String deleteReason;
+  @JsonKey(name: 'is_subscription')
+  String isSubscription;
+  @JsonKey(name: 'plan_expiry')
+  String planExpiry;
+  @JsonKey(name: 'last_purchase_token')
+  String lastPurchaseToken;
+  @JsonKey(name: 'original_transaction_id')
+  String originalTransactionId;
+  @JsonKey(name: 'apple_transaction_id')
+  String appleTransactionId;
+  @JsonKey(name: 'product_id')
+  String productId;
+  @JsonKey(name: 'is_free_trial_used')
+  int isFreeTrialUsed;
 
   AuthData({
-    this.id,
-    this.name,
-    this.email,
-    this.password,
-    this.phone,
-    this.profile,
-    this.token,
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.password,
+    required this.isConfirm,
+    required this.profile,
+    required this.ucode,
+    required this.deviceType,
+    required this.token,
+    required this.deviceToken,
+    required this.isFb,
+    required this.fbId,
+    required this.isGoogle,
+    required this.googleId,
+    required this.isApple,
+    required this.appleId,
+    required this.deleteReason,
+    required this.isSubscription,
+    required this.planExpiry,
+    required this.lastPurchaseToken,
+    required this.originalTransactionId,
+    required this.appleTransactionId,
+    required this.productId,
+    required this.isFreeTrialUsed,
   });
 
-  // Factory method to create an AuthModel from JSON
   factory AuthData.fromJson(Map<String, dynamic> json) => _$AuthDataFromJson(json);
 
-  // Method to convert an AuthModel instance to JSON
   Map<String, dynamic> toJson() => _$AuthDataToJson(this);
+}
 
-  static String? _convertToEncrypted(String? value) {
-    // Write logic here to customize Json response here.
-    return value;
-  }
+RefreshTokenResponse deserializeRefreshTokenResponse(Map<String, dynamic> json) => RefreshTokenResponse.fromJson(json);
+
+Map<String, dynamic> serializeRefreshTokenResponse(AuthModel model) => model.toJson();
+
+@JsonSerializable()
+class RefreshTokenResponse extends ApiResponse {
+  const RefreshTokenResponse({
+    required super.version,
+    required super.statusCode,
+    required super.isSuccess,
+    required super.message,
+    required this.data,
+  });
+
+  final Map<String, dynamic> data;
+
+  factory RefreshTokenResponse.fromJson(Map<String, dynamic> json) => _$RefreshTokenResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RefreshTokenResponseToJson(this);
 }

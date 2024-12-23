@@ -1,9 +1,14 @@
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_new_structure/app/data/models/authModel/auth_model.dart';
 import 'package:flutter_new_structure/app/data/services/authService/auth_service.dart';
 import 'package:flutter_new_structure/app/routes/app_routes.dart';
+import 'package:flutter_new_structure/app/ui/pages/authentication/reset_password_page.dart';
+import 'package:flutter_new_structure/app/ui/pages/authentication/verify_code_page.dart';
+import 'package:flutter_new_structure/app/ui/pages/theme/theme_page.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
 import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
@@ -22,10 +27,10 @@ class AuthController extends GetxController {
   bool isDarkTheme1 = false;
 
   // Observable variables for user input
-  final emailController = TextEditingController();
+  final emailController = TextEditingController(text: kDebugMode ? 'mayur.kmphasis@gmail.com' : null);
   final forgotEmailController = TextEditingController();
   final registerEmailController = TextEditingController();
-  final passController = TextEditingController();
+  final passController = TextEditingController(text: kDebugMode ? 'User@123' : null);
   final registerPassController = TextEditingController();
   final resetPassController = TextEditingController();
   final confirmPassController = TextEditingController();
@@ -58,28 +63,28 @@ class AuthController extends GetxController {
       return;
     }
 
-    Future.delayed(
-      const Duration(seconds: 5),
-      () => getIt<AuthService>().login(
-        emailController.text,
-        passController.text.convertMd5,
-        deviceToken: '',
-        deviceType: switch (Platform.operatingSystem) {
-          'android' => 'Android',
-          'ios' => 'iOS',
-          _ => 'Other',
-        },
-      ),
-    ).handler(
+    getIt<AuthService>()
+        .login(
+      emailController.text,
+      passController.text,
+      deviceToken: 'asdasdas',
+      deviceType: switch (Platform.operatingSystem) {
+        'android' => 'Android',
+        'ios' => 'iOS',
+        _ => 'Other',
+      },
+    )
+        .handler(
       loginState,
+      isLoading: false,
       onSuccess: (value) {
-        if (value != null) {
-          authModel.value = value;
-          showSuccess(authModel.value!.ResponseMsg);
-          Get.offNamed(AppRoutes.theme);
-        }
+        debugger();
+        authModel.value = value;
+        showSuccess(authModel.value!.message);
+        ThemePage.offAllRoute();
       },
       onFailed: (value) {
+        debugger();
         // If the onFailed is called that means your ApiState has FailedState value
         showError(value.error.description);
       },
@@ -102,7 +107,7 @@ class AuthController extends GetxController {
         if (value.data['ResponseCode'] == 1) {
           showSuccess(value.data['ResponseMsg'].toString());
           verificationCode.clear();
-          Get.toNamed(AppRoutes.verifyCode);
+          VerifyCodePage.route();
         } else {
           showError(AppStrings.T.registerFailed);
         }
@@ -132,12 +137,12 @@ class AuthController extends GetxController {
         .handler(
       registerState,
       onSuccess: (value) {
-        if (value?.ResponseCode == 1) {
+        if (value.statusCode == 200) {
           authModel.value = value;
           showSuccess(AppStrings.T.registerSuccess);
-          Get.offAllNamed(AppRoutes.theme);
+          ThemePage.offAllRoute();
         } else {
-          showError(value?.ResponseMsg ?? AppStrings.T.registerFailed);
+          showError(value.message ?? AppStrings.T.registerFailed);
         }
       },
       onFailed: (value) {
@@ -158,7 +163,7 @@ class AuthController extends GetxController {
         if (value.data['ResponseCode'] == 1) {
           showSuccess(AppStrings.T.passwordResetEmailSent);
           verificationCode.clear();
-          Get.toNamed(AppRoutes.verifyCode);
+          VerifyCodePage.route();
         } else {
           showError(value.data['ResponseMsg'].toString());
         }
@@ -177,13 +182,12 @@ class AuthController extends GetxController {
     getIt<AuthService>().resetPassword(forgotEmailController.text, resetPassController.text.convertMd5).handler(
       resetPassState,
       onSuccess: (value) {
-        if (value.ResponseCode == 1) {
+        if (value.statusCode == 200) {
           showSuccess(AppStrings.T.passwordResetSuccess);
-          Get
-            ..closeAllSnackbars()
-            ..offAllNamed(AppRoutes.theme);
+          Get.closeAllSnackbars();
+          ThemePage.offAllRoute();
         } else {
-          showError(value.ResponseMsg);
+          showError(value.message);
         }
       },
       onFailed: (value) {
@@ -203,7 +207,7 @@ class AuthController extends GetxController {
       onSuccess: (value) {
         if (value.data['ResponseCode'] == 1) {
           showSuccess(AppStrings.T.codeVerificationSuccess);
-          Get.offNamed(AppRoutes.resetPassword);
+          ResetPasswordPage.route();
         } else {
           showError(value.data['ResponseMsg'].toString());
         }

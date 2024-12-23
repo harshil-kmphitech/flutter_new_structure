@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
+import 'package:flutter_new_structure/app/routes/app_routes.dart';
 import 'package:flutter_new_structure/app/ui/widgets/custom_textfields.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
@@ -9,6 +10,10 @@ import 'package:get/get.dart';
 
 class RegisterPage extends GetItHook<AuthController> {
   const RegisterPage({super.key});
+
+  static Future<T?>? route<T>() {
+    return Get.toNamed(AppRoutes.register);
+  }
 
   @override
   Widget build(BuildContext context) {

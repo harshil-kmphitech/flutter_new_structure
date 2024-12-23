@@ -8,4 +8,5 @@ final cacheOption = CacheOptions(
   hitCacheOnErrorExcept: [401, 403],
   maxStale: const Duration(days: 7),
   allowPostMethod: true,
+  policy: CachePolicy.refresh,
 );

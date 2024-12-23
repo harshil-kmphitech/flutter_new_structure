@@ -18,7 +18,7 @@ abstract class AuthService {
   factory AuthService(Dio dio) = _AuthService;
 
   @POST(EndPoints.userLogin)
-  Future<AuthModel?> login(
+  Future<AuthModel> login(
     @Field() String email,
     @Field() String pass, {
     @Field('device_type') required String deviceType,
@@ -26,7 +26,7 @@ abstract class AuthService {
   });
 
   @POST(EndPoints.userSignUp)
-  Future<AuthModel?> register({
+  Future<AuthModel> register({
     @Part() required String email,
     @Part() required String pass,
     @Part() required String otp,
@@ -37,7 +37,7 @@ abstract class AuthService {
   });
 
   @POST(EndPoints.userForgotPassword)
-  Future<HttpResponse<dynamic>> forgotPassword(@Part() String email);
+  Future<HttpResponse<dynamic>> forgotPassword(@Field() String email);
 
   @POST(EndPoints.userUpdatePassword)
   Future<AuthModel> resetPassword(
@@ -71,16 +71,4 @@ abstract class AuthService {
 
   /// There many more methods available for Server communication like PUT, DELETE, PATCH, HEAD etc...
   /// For upload Files with PART.
-}
-
-@RestApi(parser: Parser.FlutterCompute, baseUrl: AppConfig.baseUrl)
-@lazySingleton
-abstract class RefreshTokenService {
-  @factoryMethod
-  factory RefreshTokenService(Dio dio) = _RefreshTokenService;
-
-  @POST(EndPoints.refreshToken)
-  Future<HttpResponse<dynamic>> refreshToken(
-    @Field('user_id') String userId,
-  );
 }

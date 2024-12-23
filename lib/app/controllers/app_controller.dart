@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_new_structure/app/routes/app_routes.dart';
+import 'package:flutter_new_structure/app/ui/pages/authentication/login_page.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exporter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:injectable/injectable.dart';
@@ -16,7 +16,7 @@ class AppController {
       const Duration(seconds: 3),
       () async {
         if (await _completer.future) {
-          Get.offAllNamed(AppRoutes.login)?.ignore();
+          LoginPage.offAllRoute()?.ignore();
         }
       },
     );
