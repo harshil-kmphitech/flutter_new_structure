@@ -1,6 +1,6 @@
-import 'dart:developer';
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_new_structure/app/data/models/authModel/auth_model.dart';
@@ -58,16 +58,16 @@ class AuthController extends GetxController {
   }
 
   // Login method
-  void login(BuildContext context) {
+  Future<void> login(BuildContext context) async {
     if (!Form.of(context).validate()) {
       return;
     }
-
-    getIt<AuthService>()
+    loginState.value = LoadingState();
+    await getIt<AuthService>()
         .login(
       emailController.text,
       passController.text,
-      deviceToken: 'asdasdas',
+      deviceToken: await getIt<FirebaseMessaging>().getToken() ?? '',
       deviceType: switch (Platform.operatingSystem) {
         'android' => 'Android',
         'ios' => 'iOS',
@@ -78,14 +78,11 @@ class AuthController extends GetxController {
       loginState,
       isLoading: false,
       onSuccess: (value) {
-        debugger();
         authModel.value = value;
         showSuccess(authModel.value!.message);
         ThemePage.offAllRoute();
       },
       onFailed: (value) {
-        debugger();
-        // If the onFailed is called that means your ApiState has FailedState value
         showError(value.error.description);
       },
     );
@@ -142,7 +139,7 @@ class AuthController extends GetxController {
           showSuccess(AppStrings.T.registerSuccess);
           ThemePage.offAllRoute();
         } else {
-          showError(value.message ?? AppStrings.T.registerFailed);
+          showError(value.message);
         }
       },
       onFailed: (value) {

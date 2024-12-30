@@ -1,11 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
 import 'package:flutter_new_structure/app/utils/helpers/loading.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData, MultipartFile, Response;
 
 @immutable
 class UserFriendlyError {
@@ -18,48 +16,11 @@ class UserFriendlyError {
 extension DioExceptionX on DioException {
   /// context should pass for incase app works with Localization so the context is required
   UserFriendlyError toUserFriendlyError() {
-    switch (type) {
-      case DioExceptionType.connectionTimeout:
-        return UserFriendlyError(
-          AppStrings.T.connectionTimeout,
-          AppStrings.T.connectionTimeoutDesc,
-        );
-      case DioExceptionType.sendTimeout:
-        return UserFriendlyError(
-          AppStrings.T.sendTimeout,
-          AppStrings.T.sendTimeoutDesc,
-        );
-      case DioExceptionType.receiveTimeout:
-        return UserFriendlyError(
-          AppStrings.T.receiveTimeout,
-          AppStrings.T.receiveTimeoutDesc,
-        );
-      case DioExceptionType.badCertificate:
-        return UserFriendlyError(
-          AppStrings.T.badCertificate,
-          AppStrings.T.badCertificateDesc,
-        );
-      case DioExceptionType.badResponse:
-        return UserFriendlyError(
-          AppStrings.T.badResponse,
-          _statusCode(response?.statusCode ?? 0),
-        );
-      case DioExceptionType.cancel:
-        return UserFriendlyError(
-          AppStrings.T.cancel,
-          AppStrings.T.cancelDesc,
-        );
-      case DioExceptionType.connectionError:
-        return UserFriendlyError(
-          AppStrings.T.connectionError,
-          AppStrings.T.connectionErrorDesc,
-        );
-      case DioExceptionType.unknown:
-        return UserFriendlyError(
-          AppStrings.T.unknown,
-          AppStrings.T.unknownDesc,
-        );
-    }
+    return type.toUserFriendlyError(
+      badResponseDesc: _statusCode(
+        response?.statusCode,
+      ),
+    );
   }
 
   String _statusCode(int? statusCode) {
@@ -91,7 +52,9 @@ extension DioExceptionX on DioException {
 
 extension DioExceptionTypeX on DioExceptionType {
   /// context should pass for incase app works with Localization so the context is required
-  UserFriendlyError toUserFriendlyError() {
+  UserFriendlyError toUserFriendlyError({
+    String? badResponseDesc,
+  }) {
     switch (this) {
       case DioExceptionType.connectionTimeout:
         return UserFriendlyError(
@@ -116,7 +79,7 @@ extension DioExceptionTypeX on DioExceptionType {
       case DioExceptionType.badResponse:
         return UserFriendlyError(
           AppStrings.T.badResponse,
-          AppStrings.T.badResponseDesc,
+          badResponseDesc ?? AppStrings.T.badResponseDesc,
         );
       case DioExceptionType.cancel:
         return UserFriendlyError(
@@ -137,24 +100,29 @@ extension DioExceptionTypeX on DioExceptionType {
   }
 }
 
-extension ApiHandlingExtension<T> on Future<T> {
+typedef ApiSuccessCallback<T> = void Function(T value);
+
+typedef ApiFailedCallback<T> = void Function(FailedState<T> value);
+
+extension ApiHandlingX<T> on Future<T> {
   /// Must use handler it's a better way to handle request's response api calling
   /// Must use handler it's a better way to handle request's response api calling
   Future<void> handler(
     Rx<ApiState>? state, {
     bool isLoading = true,
-    ValueChanged<T>? onSuccess,
-    ValueChanged<FailedState>? onFailed,
+    ApiSuccessCallback<T>? onSuccess,
+    ApiFailedCallback<T>? onFailed,
   }) async {
     try {
       state?.value = LoadingState();
       if (isLoading) Loading.show();
+
       final response = await this;
-      debugger();
+
       state?.value = SuccessState<T>(response);
       onSuccess?.call(response);
     } on DioException catch (e) {
-      final failedState = FailedState(
+      final failedState = FailedState<T>(
         statusCode: e.response?.statusCode ?? 0,
         isRetirable: switch (e.type) {
           DioExceptionType.connectionError || DioExceptionType.connectionTimeout || DioExceptionType.sendTimeout || DioExceptionType.receiveTimeout => true,
@@ -162,27 +130,36 @@ extension ApiHandlingExtension<T> on Future<T> {
         },
         dioError: e,
       );
+
       state?.value = failedState;
-      onFailed?.call((state?.value ?? failedState) as FailedState);
+      onFailed?.call((state?.value ?? failedState) as FailedState<T>);
     } on Exception {
-      final failedState = FailedState(
+      final failedState = FailedState<T>(
         statusCode: 0,
         isRetirable: false,
         dioError: null,
       );
+
       state?.value = failedState;
-      onFailed?.call((state?.value ?? failedState) as FailedState);
+      onFailed?.call((state?.value ?? failedState) as FailedState<T>);
     } finally {
       if (isLoading) Loading.dismiss();
     }
   }
 }
 
-extension ApiStateHelper on Rx<ApiState> {
+extension RxApiStateX on Rx<ApiState> {
   bool get isInitial => value is InitialState;
   bool get isLoading => value is LoadingState;
   bool get isSuccess => value is SuccessState;
   bool get isFailed => value is FailedState;
+}
+
+extension ApiStateX on ApiState {
+  bool get isInitial => this is InitialState;
+  bool get isLoading => this is LoadingState;
+  bool get isSuccess => this is SuccessState;
+  bool get isFailed => this is FailedState;
 }
 
 sealed class ApiState {
@@ -198,7 +175,7 @@ class InitialState extends ApiState {}
 
 class LoadingState extends ApiState {}
 
-class FailedState extends ApiState {
+class FailedState<T> extends ApiState {
   bool isRetirable;
   UserFriendlyError get error =>
       dioError?.toUserFriendlyError() ??
@@ -206,6 +183,13 @@ class FailedState extends ApiState {
         AppStrings.T.apiError,
         AppStrings.T.apiErrorDescription,
       );
+
+  Response<T>? get response {
+    if (dioError?.response is Response<T>) {
+      return dioError!.response! as Response<T>;
+    }
+    return null;
+  }
 
   DioException? dioError;
 

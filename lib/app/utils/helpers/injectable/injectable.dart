@@ -37,7 +37,7 @@ void configuration({required Widget myApp}) {
       }
 
       getIt<Dio>().interceptors
-        ..add(TokenInterceptor(dio: getIt<Dio>()))
+        ..add(RefreshTokenInterceptor())
         ..add(DioCacheInterceptor(options: cacheOption))
         ..add(RetryInterceptor(dio: getIt<Dio>()));
 

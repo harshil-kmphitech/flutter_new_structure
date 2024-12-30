@@ -10,26 +10,24 @@ import 'package:flutter_new_structure/app/utils/themes/app_theme.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// TODO: Chnage app name.
+const _kAppName = 'APP_NAME';
+
 void main() {
   configuration(
     myApp: const MyApp(),
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'FLUTTER STRUCTURE',
+      title: _kAppName,
       getPages: AppPages.routes,
       initialRoute: AppRoutes.login,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -42,10 +40,5 @@ class _MyAppState extends State<MyApp> {
       darkTheme: AppTheme.darkTheme,
       builder: EasyLoading.init(),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 }

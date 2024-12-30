@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_new_structure/firebase_options.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,6 +62,6 @@ abstract class RegisterModule {
 
   @preResolve
   Future<FirebaseApp> initializeFireBase() => Firebase.initializeApp(
-      // options: DefaultFirebaseOptions.currentPlatform
+        options: DefaultFirebaseOptions.currentPlatform,
       );
 }

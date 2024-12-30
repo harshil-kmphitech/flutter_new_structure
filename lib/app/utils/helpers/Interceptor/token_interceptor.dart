@@ -1,117 +1,168 @@
 import 'package:dio/dio.dart';
-import 'package:dio_smart_retry/dio_smart_retry.dart';
+import 'package:flutter_new_structure/app/data/models/authModel/auth_model.dart';
 import 'package:flutter_new_structure/app/data/services/refreshToken/refresh_token_service.dart';
-import 'package:flutter_new_structure/app/ui/pages/authentication/login_page.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
+import 'package:flutter_new_structure/app/utils/helpers/exporter.dart' hide Response;
 import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
-import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
-import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TokenInterceptor implements Interceptor {
-  TokenInterceptor({required this.dio});
+const _kTokenExpireCode = 9;
 
-  final Dio dio;
+class QueueRequest<T> {
+  QueueRequest({
+    required this.response,
+    required this.handler,
+  });
 
-  static const _multipartRetryHelpLink = 'https://github.com/rodion-m/dio_smart_retry#retry-requests-with-multipartform-data';
+  final Response<T> response;
 
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    handler.next(err);
+  final ResponseInterceptorHandler handler;
+
+  void next() {
+    handler.next(response);
   }
+
+  Future<void> resolve() {
+    final requestOptions = response.requestOptions;
+    requestOptions.extra['new-Token'] = getIt<SharedPreferences>().getToken;
+    return getIt<Dio>().fetch(_recreateOptions(requestOptions)).handler(
+      null,
+      isLoading: false,
+      onSuccess: handler.resolve,
+      onFailed: (value) {
+        if (value.dioError != null) {
+          debugPrintStack(stackTrace: value.dioError?.stackTrace, label: value.dioError?.response?.data.toString());
+          handler.reject(value.dioError!);
+        } else {
+          handler.next(response);
+        }
+      },
+    );
+  }
+
+  static RequestOptions _recreateOptions(RequestOptions options) {
+    return RequestOptions(
+      headers: {
+        ...options.headers,
+      },
+      data: options.data,
+      baseUrl: options.baseUrl,
+      path: options.path,
+      cancelToken: options.cancelToken,
+      connectTimeout: options.connectTimeout,
+      sendTimeout: options.sendTimeout,
+      receiveTimeout: options.receiveTimeout,
+      receiveDataWhenStatusError: options.receiveDataWhenStatusError,
+      followRedirects: options.followRedirects,
+      maxRedirects: options.maxRedirects,
+      validateStatus: options.validateStatus,
+      onReceiveProgress: options.onReceiveProgress,
+      onSendProgress: options.onSendProgress,
+      contentType: options.contentType,
+      responseType: options.responseType,
+      extra: options.extra,
+      method: options.method,
+      queryParameters: options.queryParameters,
+    );
+  }
+}
+
+class RefreshTokenInterceptor extends Interceptor {
+  RefreshTokenInterceptor();
+
+  final List<QueueRequest<dynamic>> requestQueue = [];
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final token = getIt<SharedPreferences>().getToken;
-    if (token?.isNotEmpty ?? false) {
-      'Api token $token'.log;
+
+    if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
-      options.headers['content-type'] = 'application/json';
+    }
+    if (options.extra.containsKey('new-Token')) {
+      options.extra['new-Token'].toString().log;
     }
 
-    handler.next(options);
+    super.onRequest(options, handler);
   }
 
   @override
-  Future<void> onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) async {
-    if (response.data?['ResponseCode'] == 9) {
-      final pref = getIt<SharedPreferences>()..setToken = null;
-      final userId = pref.getUserId;
-
-      if (userId != null) {
-        getIt<RefreshTokenService>().refreshToken(userId).handler(
-          null,
-          isLoading: false,
-          onSuccess: (value) async {
-            if (value.data.containsKey('token')) {
-              pref.setToken = value.data['token'] as String;
-            } else {
-              handler.next(response);
-              return;
-            }
-
-            var requestOptions = response.requestOptions;
-            if (requestOptions.data is FormData) {
-              try {
-                requestOptions = _recreateOptions(response.requestOptions);
-              } on RetryNotSupportedException catch (e) {
-                return handler.reject(
-                  DioException(requestOptions: requestOptions, error: e),
-                );
-              }
-            }
-
-            await dio.fetch<void>(requestOptions).then(
-                  (value) => handler.resolve(value),
-                );
-          },
-          onFailed: (value) {
-            handler.next(response);
-            LoginPage.offAllRoute();
-          },
-        ).ignore();
-      } else {
-        handler.next(response);
-      }
+  void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) {
+    if (response.data?['ResponseCode'] == 6 || response.data?['responseCode'] == 6) {
+      _queueRequest(response, handler);
     } else {
-      handler.next(response);
+      super.onResponse(response, handler);
     }
   }
 
-  RequestOptions _recreateOptions(RequestOptions options) {
-    if (options.data is! FormData) {
-      throw ArgumentError(
-        'requestOptions.data is not FormData',
-        'requestOptions',
-      );
+  void _queueRequest(Response<dynamic> response, ResponseInterceptorHandler handler) {
+    requestQueue.add(
+      QueueRequest(
+        response: response,
+        handler: handler,
+      ),
+    );
+
+    if (refreshTokenState is InitialState) {
+      refreshToken();
     }
-    final formData = options.data as FormData;
-    final newFormData = FormData();
-    newFormData.fields.addAll(formData.fields);
-    for (final pair in formData.files) {
-      final file = pair.value;
-      if (file is MultipartFileRecreatable) {
-        newFormData.files.add(MapEntry(pair.key, file.recreate()));
-      } else {
-        throw RetryNotSupportedException(
-          'Use MultipartFileRecreatable class '
-          'instead of MultipartFile to make retry available. '
-          'See: $_multipartRetryHelpLink',
-        );
-      }
+  }
+
+  ApiState refreshTokenState = ApiState.initial();
+
+  Future<void> refreshToken() async {
+    final pref = getIt<SharedPreferences>()..setToken = null;
+    final userId = pref.getUserId;
+
+    if (userId != null) {
+      await getIt<RefreshTokenService>().refreshToken(userId).handler(
+            null,
+            isLoading: false,
+            onSuccess: _onRefreshSuccess,
+            onFailed: _rejectQueuedRequests,
+          );
+    } else {
+      requestQueue
+        ..forEach((element) => element.next())
+        ..clear();
     }
-    return options.copyWith(data: newFormData);
+  }
+
+  void _rejectQueuedRequests(FailedState<dynamic> value) {
+    for (final element in requestQueue) {
+      element.next();
+    }
+    requestQueue.clear();
+  }
+
+  void _onRefreshSuccess(RefreshTokenResponse value) {
+    final pref = getIt<SharedPreferences>();
+
+    if (value.data.containsKey('token')) {
+      pref.setToken = value.data['token'] as String;
+    } else {
+      requestQueue
+        ..forEach((element) => element.next())
+        ..clear();
+
+      return;
+    }
+    refreshTokenState = InitialState();
+
+    Future.wait(
+      requestQueue.map((e) => e.resolve()),
+    ).whenComplete(requestQueue.clear);
   }
 }
 
-class RetryNotSupportedException implements Exception {
-  RetryNotSupportedException([this.message]);
-
-  final String? message;
-
-  @override
-  String toString() {
-    if (message == null) return 'RetryNotSupportedException';
-    return 'RetryNotSupportedException: $message';
+extension on MultipartFile {
+  MultipartFile recreate() {
+    return MultipartFile.fromStream(
+      finalize,
+      length,
+      contentType: contentType,
+      filename: filename,
+      headers: headers,
+    );
   }
 }
