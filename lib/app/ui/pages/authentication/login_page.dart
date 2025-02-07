@@ -102,7 +102,7 @@ class LoginPage extends GetItHook<AuthController> {
   }
 
   @override
-  bool get canDisposeController => false;
+  bool get canDisposeController => true;
 
   @override
   void onInit() {}

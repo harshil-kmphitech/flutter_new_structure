@@ -12,11 +12,13 @@ class _SuffixIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// If you have to change the suffixIcon widget so you must have to be change you icon here.
-    return IconButton(
-      icon: Icon(
-        showing.value ? Icons.visibility : Icons.visibility_off,
+    return ExcludeFocus(
+      child: IconButton(
+        icon: Icon(
+          showing.value ? Icons.visibility : Icons.visibility_off,
+        ),
+        onPressed: showing.toggle,
       ),
-      onPressed: showing.toggle,
     );
   }
 }

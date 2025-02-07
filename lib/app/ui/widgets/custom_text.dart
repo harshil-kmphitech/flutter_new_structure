@@ -20,6 +20,16 @@ class CenterText extends Text {
   });
 }
 
+class SingleLineText extends Text {
+  const SingleLineText(
+    super.data, {
+    super.key,
+    required super.style,
+    super.textAlign = TextAlign.center,
+    super.maxLines = 1,
+  });
+}
+
 class AppRichText extends RichText {
   AppRichText({
     super.key,
