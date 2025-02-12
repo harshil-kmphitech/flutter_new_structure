@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_colors.dart';
 
+part 'app_styles.dart';
+
 // TextTheme textTheme = Get.theme.textTheme;
 // ColorScheme colorScheme = Get.theme.colorScheme;
 
@@ -9,6 +11,8 @@ class AppTheme {
 
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
+
+    extensions: [AppStyles()],
 
     colorScheme: ColorScheme(
       brightness: Brightness.light,
@@ -67,8 +71,7 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       elevation: 0,
       color: AppColors.primaryColor,
-      titleTextStyle: TextStyle(
-        fontFamily: 'Outfit',
+      titleTextStyle: Outfit(
         fontSize: 24,
         fontWeight: FontWeight.w600,
         color: AppColors.white,
@@ -107,17 +110,17 @@ class AppTheme {
         borderSide: const BorderSide(color: AppColors.red),
       ),
       contentPadding: const EdgeInsets.all(8),
-      errorStyle: const TextStyle(color: AppColors.red, fontSize: 12, fontWeight: FontWeight.w600),
+      errorStyle: const Outfit(color: AppColors.red, fontSize: 12, fontWeight: FontWeight.w600),
       hintStyle: WidgetStateTextStyle.resolveWith(
         (states) {
           if (states.contains(WidgetState.error)) {
-            return const TextStyle(
+            return const Outfit(
               color: AppColors.red,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             );
           }
-          return const TextStyle(
+          return const Outfit(
             color: AppColors.primaryColor,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -127,13 +130,13 @@ class AppTheme {
       labelStyle: WidgetStateTextStyle.resolveWith(
         (states) {
           if (states.contains(WidgetState.error)) {
-            return const TextStyle(
+            return const Outfit(
               color: AppColors.red,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             );
           }
-          return const TextStyle(
+          return const Outfit(
             color: AppColors.primaryColor,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -143,13 +146,13 @@ class AppTheme {
       floatingLabelStyle: WidgetStateTextStyle.resolveWith(
         (states) {
           if (states.contains(WidgetState.error)) {
-            return const TextStyle(
+            return const Outfit(
               color: AppColors.red,
               fontSize: 12,
               fontWeight: FontWeight.w600,
             );
           }
-          return const TextStyle(
+          return const Outfit(
             color: AppColors.primaryColor,
             fontSize: 12,
             fontWeight: FontWeight.w600,
@@ -171,21 +174,21 @@ class AppTheme {
     ),
     textTheme: TextTheme(
       /// Used for Headline Like AppBar And Other Titles which are largest in Ui.
-      headlineLarge: const TextStyle(color: AppColors.black, fontSize: 26, fontWeight: FontWeight.w600),
-      headlineMedium: const TextStyle(color: AppColors.black, fontSize: 22, fontWeight: FontWeight.w600),
-      headlineSmall: const TextStyle(color: AppColors.black, fontSize: 20, fontWeight: FontWeight.w600),
+      headlineLarge: const Outfit(color: AppColors.black, fontSize: 26, fontWeight: FontWeight.w600),
+      headlineMedium: const Outfit(color: AppColors.black, fontSize: 22, fontWeight: FontWeight.w600),
+      headlineSmall: const Outfit(color: AppColors.black, fontSize: 20, fontWeight: FontWeight.w600),
 
       ///  title styles:  are smaller than headline styles and should be used for shorter, medium-emphasis text.
 
       /// Used For Most Used Styles
-      bodyLarge: const TextStyle(color: AppColors.black, fontSize: 20, fontWeight: FontWeight.w500),
-      bodyMedium: const TextStyle(color: AppColors.black, fontSize: 18, fontWeight: FontWeight.w500),
-      bodySmall: const TextStyle(color: AppColors.black, fontSize: 16, fontWeight: FontWeight.w500),
+      bodyLarge: const Outfit(color: AppColors.black, fontSize: 20, fontWeight: FontWeight.w500),
+      bodyMedium: const Outfit(color: AppColors.black, fontSize: 18, fontWeight: FontWeight.w500),
+      bodySmall: const Outfit(color: AppColors.black, fontSize: 16, fontWeight: FontWeight.w500),
 
       ///USED for Description and Small Text.
-      labelLarge: TextStyle(color: AppColors.greyTextColor, fontSize: 18, fontWeight: FontWeight.w400),
-      labelMedium: TextStyle(color: AppColors.greyTextColor, fontSize: 16, fontWeight: FontWeight.w400),
-      labelSmall: TextStyle(color: AppColors.greyTextColor, fontSize: 14, fontWeight: FontWeight.w400),
+      labelLarge: Outfit(color: AppColors.greyTextColor, fontSize: 18, fontWeight: FontWeight.w400),
+      labelMedium: Outfit(color: AppColors.greyTextColor, fontSize: 16, fontWeight: FontWeight.w400),
+      labelSmall: Outfit(color: AppColors.greyTextColor, fontSize: 14, fontWeight: FontWeight.w400),
 
       //   Also U can add More TextStyle According Your Design
     ),
@@ -193,6 +196,7 @@ class AppTheme {
 
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
+    extensions: [AppStyles()],
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
 
@@ -248,8 +252,7 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       elevation: 0,
       color: AppColors.primaryColor,
-      titleTextStyle: TextStyle(
-        fontFamily: 'Outfit',
+      titleTextStyle: Outfit(
         fontSize: 24,
         fontWeight: FontWeight.w600,
         color: AppColors.white,
@@ -283,17 +286,17 @@ class AppTheme {
         borderSide: const BorderSide(color: AppColors.red),
       ),
       contentPadding: const EdgeInsets.all(8),
-      errorStyle: const TextStyle(color: AppColors.red, fontSize: 12, fontWeight: FontWeight.w600),
+      errorStyle: const Outfit(color: AppColors.red, fontSize: 12, fontWeight: FontWeight.w600),
       hintStyle: WidgetStateTextStyle.resolveWith(
         (states) {
           if (states.contains(WidgetState.error)) {
-            return const TextStyle(
+            return const Outfit(
               color: AppColors.red,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             );
           }
-          return const TextStyle(
+          return const Outfit(
             color: AppColors.primaryColor,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -303,13 +306,13 @@ class AppTheme {
       labelStyle: WidgetStateTextStyle.resolveWith(
         (states) {
           if (states.contains(WidgetState.error)) {
-            return const TextStyle(
+            return const Outfit(
               color: AppColors.red,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             );
           }
-          return const TextStyle(
+          return const Outfit(
             color: AppColors.primaryColor,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -319,13 +322,13 @@ class AppTheme {
       floatingLabelStyle: WidgetStateTextStyle.resolveWith(
         (states) {
           if (states.contains(WidgetState.error)) {
-            return const TextStyle(
+            return const Outfit(
               color: AppColors.red,
               fontSize: 12,
               fontWeight: FontWeight.w600,
             );
           }
-          return const TextStyle(
+          return const Outfit(
             color: AppColors.primaryColor,
             fontSize: 12,
             fontWeight: FontWeight.w600,
@@ -344,43 +347,6 @@ class AppTheme {
     dividerColor: AppColors.bgOneColor,
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.primaryColor,
-    ),
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(debugLabel: 'blackMountainView displayLarge', fontFamily: 'Roboto', color: Colors.black54, decoration: TextDecoration.none),
-      displayMedium: TextStyle(debugLabel: 'blackMountainView displayMedium', fontFamily: 'Roboto', color: Colors.black54, decoration: TextDecoration.none),
-      displaySmall: TextStyle(debugLabel: 'blackMountainView displaySmall', fontFamily: 'Roboto', color: Colors.black54, decoration: TextDecoration.none),
-      headlineLarge: TextStyle(debugLabel: 'blackMountainView headlineLarge', fontFamily: 'Roboto', color: Colors.black54, decoration: TextDecoration.none),
-      headlineMedium: TextStyle(debugLabel: 'blackMountainView headlineMedium', fontFamily: 'Roboto', color: Colors.black54, decoration: TextDecoration.none),
-      headlineSmall: TextStyle(debugLabel: 'blackMountainView headlineSmall', fontFamily: 'Roboto', color: Colors.black87, decoration: TextDecoration.none),
-      titleLarge: TextStyle(debugLabel: 'blackMountainView titleLarge', fontFamily: 'Roboto', color: Colors.black87, decoration: TextDecoration.none),
-      titleMedium: TextStyle(debugLabel: 'blackMountainView titleMedium', fontFamily: 'Roboto', color: Colors.black87, decoration: TextDecoration.none),
-      titleSmall: TextStyle(debugLabel: 'blackMountainView titleSmall', fontFamily: 'Roboto', color: Colors.black, decoration: TextDecoration.none),
-      bodyLarge: TextStyle(debugLabel: 'blackMountainView bodyLarge', fontFamily: 'Roboto', color: Colors.black87, decoration: TextDecoration.none),
-      bodyMedium: TextStyle(debugLabel: 'blackMountainView bodyMedium', fontFamily: 'Roboto', color: Colors.black87, decoration: TextDecoration.none),
-      bodySmall: TextStyle(debugLabel: 'blackMountainView bodySmall', fontFamily: 'Roboto', color: Colors.black54, decoration: TextDecoration.none),
-      labelLarge: TextStyle(debugLabel: 'blackMountainView labelLarge', fontFamily: 'Roboto', color: Colors.black87, decoration: TextDecoration.none),
-      labelMedium: TextStyle(debugLabel: 'blackMountainView labelMedium', fontFamily: 'Roboto', color: Colors.black, decoration: TextDecoration.none),
-      labelSmall: TextStyle(debugLabel: 'blackMountainView labelSmall', fontFamily: 'Roboto', color: Colors.black, decoration: TextDecoration.none),
-
-      /// Used for Headline Like AppBar And Other Titles which are largest in Ui.
-      // headlineLarge: const TextStyle(color: AppColors.white, fontSize: 26, fontWeight: FontWeight.w600),
-      // headlineMedium: const TextStyle(color: AppColors.white, fontSize: 22, fontWeight: FontWeight.w600),
-      // headlineSmall: const TextStyle(color: AppColors.white, fontSize: 20, fontWeight: FontWeight.w600),
-
-      // ///  title styles:  are smaller than headline styles and should be used for shorter, medium-emphasis text.
-      // // titleLarge: ,
-
-      // /// Used For Most Used Styles
-      // bodyLarge: const TextStyle(color: AppColors.white, fontSize: 20, fontWeight: FontWeight.w500),
-      // bodyMedium: const TextStyle(color: AppColors.white, fontSize: 18, fontWeight: FontWeight.w500),
-      // bodySmall: const TextStyle(color: AppColors.white, fontSize: 16, fontWeight: FontWeight.w500),
-
-      // ///USED for Description and Small Text.
-      // labelLarge: TextStyle(color: AppColors.bgOneColor, fontSize: 18, fontWeight: FontWeight.w400),
-      // labelMedium: TextStyle(color: AppColors.bgOneColor, fontSize: 16, fontWeight: FontWeight.w400),
-      // labelSmall: TextStyle(color: AppColors.bgOneColor, fontSize: 14, fontWeight: FontWeight.w400),
-
-      //   Also U can add More TextStyle According Your Design
     ),
   );
 }
