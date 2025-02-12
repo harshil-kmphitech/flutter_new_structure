@@ -1,13 +1,11 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_new_structure/app/utils/helpers/Interceptor/token_interceptor.dart';
-import 'package:flutter_new_structure/app/utils/helpers/cache/cache_options.dart';
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.config.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart' as i;
@@ -38,7 +36,6 @@ void configuration({required Widget myApp}) {
 
       getIt<Dio>().interceptors
         ..add(RefreshTokenInterceptor())
-        ..add(DioCacheInterceptor(options: cacheOption))
         ..add(RetryInterceptor(dio: getIt<Dio>()));
 
       runApp(myApp);
