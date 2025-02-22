@@ -104,13 +104,14 @@ class AuthController extends GetxController {
         if (value.data['ResponseCode'] == 1) {
           showSuccess(value.data['ResponseMsg'].toString());
           verificationCode.clear();
-          VerifyCodePage.route();
+          VerifyCodePage.route(title: 'Register');
         } else {
           showError(AppStrings.T.registerFailed);
         }
       },
       onFailed: (value) {
-        showError(AppStrings.T.registerFailed);
+        value.showToast();
+        // showError(AppStrings.T.registerFailed);
       },
     );
   }
@@ -160,7 +161,7 @@ class AuthController extends GetxController {
         if (value.data['ResponseCode'] == 1) {
           showSuccess(AppStrings.T.passwordResetEmailSent);
           verificationCode.clear();
-          VerifyCodePage.route();
+          VerifyCodePage.route(title: 'Forgot Password', isForRegister: true);
         } else {
           showError(value.data['ResponseMsg'].toString());
         }

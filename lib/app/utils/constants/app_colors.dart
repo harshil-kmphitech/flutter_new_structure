@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 //
-class AppColors {
+class KAppColors {
   static const Color transparent = Colors.transparent;
   static const Color red = Color(0xffFF7B7B);
   static const Color black = Color(0xff01070A);

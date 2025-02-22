@@ -15,7 +15,9 @@ class Outfit extends TextStyle {
 }
 
 class AppStyles extends ThemeExtension<AppStyles> {
-  AppStyles();
+  AppStyles({required this.s12w500});
+
+  final TextStyle s12w500;
 
   static AppStyles of(BuildContext context) {
     return Theme.of(context).extension<AppStyles>()!;

@@ -200,4 +200,13 @@ class FailedState<T> extends ApiState {
     required this.statusCode,
     required this.dioError,
   });
+
+  void showToast() {
+    Get.showSnackbar(
+      GetSnackBar(
+        title: error.title,
+        message: (dioError?.response?.data['message'] as String?) ?? error.description,
+      ),
+    );
+  }
 }

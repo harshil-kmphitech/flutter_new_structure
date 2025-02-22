@@ -9,11 +9,25 @@ import 'package:flutter_new_structure/app/utils/helpers/validations/validations.
 import 'package:get/get.dart';
 
 class VerifyCodePage extends GetItHook<AuthController> {
-  const VerifyCodePage({super.key});
+  const VerifyCodePage({
+    super.key,
+    required this.isForRegister,
+    required this.title,
+  });
 
-  static Future<T?>? route<T>() {
-    return Get.toNamed(AppRoutes.verifyCode);
+  static Future<T?>? route<T>({bool isForRegister = false, required String title}) {
+    return Get.toNamed(
+      AppRoutes.verifyCode,
+      arguments: {
+        'title': title,
+        'isForRegister': isForRegister,
+      },
+    );
   }
+
+  final String title;
+
+  final bool isForRegister;
 
   @override
   Widget build(BuildContext context) {

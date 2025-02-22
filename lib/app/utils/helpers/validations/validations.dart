@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
 import 'package:get/get.dart';
 
@@ -34,6 +36,11 @@ class AppValidations {
   static String? emailValidation(String? value) {
     if (value == null || value.isEmpty) return AppStrings.T.emptyEmail;
     if (!value.isEmail) return AppStrings.T.invalidEmail;
+    return null;
+  }
+
+  static String? imageValidation(File? param0) {
+    if (param0 == null) return 'adsasda';
     return null;
   }
 }

@@ -27,7 +27,13 @@ class AppPages {
     // Verification Code Page
     GetPage(
       name: AppRoutes.verifyCode,
-      page: () => const VerifyCodePage(),
+      page: () {
+        final arguments = Get.arguments as Map<String, dynamic>;
+        return VerifyCodePage(
+          isForRegister: arguments['isForRegister'] as bool,
+          title: arguments['title'] as String,
+        );
+      },
     ),
     // Reset Password Page
     GetPage(

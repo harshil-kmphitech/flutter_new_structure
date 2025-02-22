@@ -27,6 +27,17 @@ class RegisterPage extends GetItHook<AuthController> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
+              FormField(
+                builder: (field) {
+                  return Column(
+                    children: [
+                      const FlutterLogo(),
+                      if (field.hasError && field.errorText != null) Text(field.errorText!),
+                    ],
+                  );
+                },
+                validator: (_) => AppValidations.imageValidation(null),
+              ),
               TextInputField(
                 type: InputType.name,
                 controller: controller.nameController,
