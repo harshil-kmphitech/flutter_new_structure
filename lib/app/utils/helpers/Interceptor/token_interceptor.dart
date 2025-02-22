@@ -6,24 +6,22 @@ import 'package:flutter_new_structure/app/utils/helpers/exporter.dart' hide Resp
 import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const _kTokenExpireCode = 9;
-
 class QueueRequest<T> {
   QueueRequest({
-    required this.response,
+    required this.err,
     required this.handler,
   });
 
-  final Response<T> response;
+  final DioException err;
 
-  final ResponseInterceptorHandler handler;
+  final ErrorInterceptorHandler handler;
 
   void next() {
-    handler.next(response);
+    handler.next(err);
   }
 
   Future<void> resolve() {
-    final requestOptions = response.requestOptions;
+    final requestOptions = err.requestOptions;
     requestOptions.extra['new-Token'] = getIt<SharedPreferences>().getToken;
     return getIt<Dio>().fetch(_recreateOptions(requestOptions)).handler(
       null,
@@ -34,7 +32,7 @@ class QueueRequest<T> {
           debugPrintStack(stackTrace: value.dioError?.stackTrace, label: value.dioError?.response?.data.toString());
           handler.reject(value.dioError!);
         } else {
-          handler.next(response);
+          handler.next(err);
         }
       },
     );
@@ -79,6 +77,8 @@ class RefreshTokenInterceptor extends Interceptor {
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
     }
+    options.headers['lang'] = getIt<SharedPreferences>().getAppLocal ?? 'en';
+
     if (options.extra.containsKey('new-Token')) {
       options.extra['new-Token'].toString().log;
     }
@@ -87,18 +87,21 @@ class RefreshTokenInterceptor extends Interceptor {
   }
 
   @override
-  void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) {
-    if (response.data?['ResponseCode'] == 6 || response.data?['responseCode'] == 6) {
-      _queueRequest(response, handler);
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+    if (err.response?.statusCode == 401) {
+      Loading.dismiss();
+      // TODO: Write log out code here.
+    } else if (err.response?.statusCode == 633) {
+      _queueRequest(err, handler);
     } else {
-      super.onResponse(response, handler);
+      super.onError(err, handler);
     }
   }
 
-  void _queueRequest(Response<dynamic> response, ResponseInterceptorHandler handler) {
+  void _queueRequest(DioException err, ErrorInterceptorHandler handler) {
     requestQueue.add(
       QueueRequest(
-        response: response,
+        err: err,
         handler: handler,
       ),
     );
@@ -111,11 +114,9 @@ class RefreshTokenInterceptor extends Interceptor {
   ApiState refreshTokenState = ApiState.initial();
 
   Future<void> refreshToken() async {
-    final pref = getIt<SharedPreferences>()..setToken = null;
-    final userId = pref.getUserId;
-
-    if (userId != null) {
-      await getIt<RefreshTokenService>().refreshToken(userId).handler(
+    final data = getIt<SharedPreferences>().getUserId;
+    if (data != null) {
+      await getIt<RefreshTokenService>().refreshToken(data).handler(
             null,
             isLoading: false,
             onSuccess: _onRefreshSuccess,
@@ -152,17 +153,5 @@ class RefreshTokenInterceptor extends Interceptor {
     Future.wait(
       requestQueue.map((e) => e.resolve()),
     ).whenComplete(requestQueue.clear);
-  }
-}
-
-extension on MultipartFile {
-  MultipartFile recreate() {
-    return MultipartFile.fromStream(
-      finalize,
-      length,
-      contentType: contentType,
-      filename: filename,
-      headers: headers,
-    );
   }
 }
