@@ -91,7 +91,7 @@ class RefreshTokenInterceptor extends Interceptor {
     if (err.response?.statusCode == 401) {
       Loading.dismiss();
       // TODO: Write log out code here.
-    } else if (err.response?.statusCode == 633) {
+    } else if (err.response?.statusCode == 433) {
       _queueRequest(err, handler);
     } else {
       super.onError(err, handler);
