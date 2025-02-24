@@ -163,7 +163,7 @@ extension ApiStateX on ApiState {
 }
 
 sealed class ApiState {
-  static Rx<ApiState> initial() => InitialState().obs;
+  static Rx<ApiState> initial() => Rx(InitialState());
 }
 
 class SuccessState<T> extends ApiState {
