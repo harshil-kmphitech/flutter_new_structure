@@ -106,18 +106,18 @@ class RefreshTokenInterceptor extends Interceptor {
       ),
     );
 
-    if (refreshTokenState is InitialState) {
+    if (refreshTokenState.isInitial) {
       refreshToken();
     }
   }
 
-  ApiState refreshTokenState = ApiState.initial();
+  final refreshTokenState = ApiState.initial();
 
   Future<void> refreshToken() async {
     final data = getIt<SharedPreferences>().getUserId;
     if (data != null) {
       await getIt<RefreshTokenService>().refreshToken(data).handler(
-            null,
+            refreshTokenState,
             isLoading: false,
             onSuccess: _onRefreshSuccess,
             onFailed: _rejectQueuedRequests,
@@ -148,7 +148,7 @@ class RefreshTokenInterceptor extends Interceptor {
 
       return;
     }
-    refreshTokenState = InitialState();
+    refreshTokenState.value = InitialState();
 
     Future.wait(
       requestQueue.map((e) => e.resolve()),

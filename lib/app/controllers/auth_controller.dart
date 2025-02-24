@@ -38,11 +38,11 @@ class AuthController extends GetxController {
   final phoneNumberController = TextEditingController();
   final verificationCode = TextEditingController();
 
-  final loginState = ApiState.initial().obs;
-  final forgotState = ApiState.initial().obs;
-  final resetPassState = ApiState.initial().obs;
-  final registerState = ApiState.initial().obs;
-  final verificationState = ApiState.initial().obs;
+  final loginState = ApiState.initial();
+  final forgotState = ApiState.initial();
+  final resetPassState = ApiState.initial();
+  final registerState = ApiState.initial();
+  final verificationState = ApiState.initial();
 
   // State variables for loading and model
   Rxn<AuthModel> authModel = Rxn<AuthModel>();
