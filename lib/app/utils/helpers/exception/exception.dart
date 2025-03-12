@@ -83,8 +83,8 @@ extension DioExceptionTypeX on DioExceptionType {
         );
       case DioExceptionType.cancel:
         return UserFriendlyError(
-          AppStrings.T.cancel,
-          AppStrings.T.cancelDesc,
+          AppStrings.T.reqCancel,
+          AppStrings.T.reqCancelDesc,
         );
       case DioExceptionType.connectionError:
         return UserFriendlyError(
