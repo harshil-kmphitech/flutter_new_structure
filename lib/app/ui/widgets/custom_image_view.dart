@@ -1,272 +1,165 @@
 // ignore_for_file: must_be_immutable, deprecated_member_use
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ImageSize {
-  ImageSize({
-    this.alignment,
-    this.dimension,
+class CustomImageView extends StatelessWidget {
+  const CustomImageView({
+    super.key,
+    this.imagePath,
+    this.imageData,
     this.height,
     this.width,
+    this.color,
+    this.fit,
+    this.alignment,
+    this.onTap,
+    this.radius,
+    this.margin,
+    this.border,
   });
 
-  final Alignment? alignment;
-  final double? dimension;
+  ///[imagePath] is required parameter for showing image
+
+  final String? imagePath;
+  final Uint8List? imageData;
   final double? height;
   final double? width;
-
-  Widget _makeWidgetCompatible(Widget child) {
-    var temp = child;
-    if (alignment != null) {
-      temp = Align(
-        alignment: alignment!,
-        child: child,
-      );
-    }
-    if (dimension != null) {
-      return SizedBox.square(
-        dimension: dimension,
-        child: temp,
-      );
-    }
-
-    if (height != null && width != null) {
-      return SizedBox(
-        height: height,
-        width: width,
-        child: temp,
-      );
-    }
-
-    return temp;
-  }
-}
-
-extension DecorationX on Decoration {
-  Decoration apply(BorderRadius? borderRadius, Color? color, BoxShape? shape) {
-    if (this is BoxDecoration) {
-      final boxDecoration = this as BoxDecoration;
-      return boxDecoration.copyWith(
-        borderRadius: boxDecoration.borderRadius ?? borderRadius,
-        color: boxDecoration.color ?? color,
-        shape: shape ?? boxDecoration.shape,
-      );
-    }
-    return this;
-  }
-}
-
-class ImageView extends StatelessWidget {
-  ImageView(
-    this.imagePath, {
-    super.key,
-    this.borderRadius,
-    this.shape = BoxShape.rectangle,
-    this.color,
-    Color? backgroundColor,
-    Decoration? decoration,
-    this.alignment,
-    this.fit = BoxFit.cover,
-    this.inner,
-    this.outer,
-  }) : _decoration = decoration?.apply(borderRadius, backgroundColor, shape) ??
-            BoxDecoration(
-              shape: shape,
-              color: backgroundColor,
-              borderRadius: borderRadius,
-            );
-
-  final AlignmentGeometry? alignment;
-
-  final BoxFit fit;
-
-  final String imagePath;
-
-  final ImageSize? inner;
-  final ImageSize? outer;
-
-  final BorderRadius? borderRadius;
-
-  final BoxShape shape;
-
   final Color? color;
-
-  final Decoration? _decoration;
+  final BoxFit? fit;
+  final Alignment? alignment;
+  final VoidCallback? onTap;
+  final EdgeInsetsGeometry? margin;
+  final BorderRadius? radius;
+  final BoxBorder? border;
 
   @override
   Widget build(BuildContext context) {
-    final type = imagePath.imageType;
-    var widget = switch (type) {
-      ImageType.svg => _SvgIcon(imagePath, color: color, fit: fit),
-      ImageType.asset => ImageAsset(imagePath, color: color, fit: fit),
-      ImageType.network => NetworkImage(imagePath, color: color, fit: fit),
-      ImageType.file => ImageFile(imagePath, color: color, fit: fit),
-    };
+    if (alignment != null) {
+      return Align(
+        alignment: alignment!,
+        child: _buildWidget(),
+      );
+    }
 
-    if (_decoration != null) {
-      final decoration = _decoration;
+    return _buildWidget();
+  }
 
-      if ((_decoration is BoxDecoration) && _decoration.borderRadius != null) {
-        widget = _checkBoundaries(widget, _decoration.borderRadius);
-      } else {
-        widget = _checkBoundaries(widget, null);
+  Widget _buildWidget() {
+    var buildCircleImage = _buildCircleImage();
+    if (onTap != null) {
+      buildCircleImage = InkWell(
+        onTap: onTap,
+        child: buildCircleImage,
+      );
+    }
+    if (margin != null) {
+      buildCircleImage = Padding(
+        padding: margin ?? EdgeInsets.zero,
+        child: buildCircleImage,
+      );
+    }
+    return buildCircleImage;
+  }
+
+  Widget _buildCircleImage() {
+    if (radius != null) {
+      return ClipRRect(
+        borderRadius: radius ?? BorderRadius.zero,
+        child: _buildImageWithBorder(),
+      );
+    }
+    return _buildImageWithBorder();
+  }
+
+  Widget _buildImageWithBorder() {
+    if (border != null) {
+      return Container(
+        decoration: BoxDecoration(
+          border: border,
+          borderRadius: radius,
+        ),
+        child: _buildImageView(),
+      );
+    }
+    return _buildImageView();
+  }
+
+  Widget _buildImageView() {
+    if (imagePath != null) {
+      switch (imagePath!.imageType) {
+        case ImageType.svg:
+          return SizedBox(
+            height: height,
+            width: width,
+            child: SvgPicture.asset(
+              imagePath!,
+              height: height,
+              width: width,
+              fit: fit ?? BoxFit.contain,
+              color: color,
+            ),
+          );
+        case ImageType.file:
+          return Image.file(
+            File(imagePath!),
+            height: height,
+            width: width,
+            fit: fit ?? BoxFit.cover,
+            color: color,
+          );
+        case ImageType.network:
+          return CachedNetworkImage(
+            height: height,
+            width: width,
+            fit: fit,
+            imageUrl: imagePath!,
+            color: color,
+            filterQuality: FilterQuality.medium,
+            placeholder: (context, url) => SizedBox(
+              height: 30,
+              width: 30,
+              child: LinearProgressIndicator(
+                color: Colors.grey.shade200,
+                backgroundColor: Colors.grey.shade100,
+              ),
+            ),
+            errorWidget: (context, url, error) => Image.asset(
+              'assets/images/png/image_not_found.png',
+              height: height,
+              width: width,
+              fit: fit ?? BoxFit.cover,
+            ),
+          );
+        case ImageType.asset:
+          return Image.asset(
+            imagePath!,
+            height: height,
+            width: width,
+            fit: fit ?? BoxFit.cover,
+            color: color,
+          );
       }
-
-      widget = inner?._makeWidgetCompatible(widget) ?? widget;
-
-      widget = DecoratedBox(
-        decoration: decoration,
-        child: widget,
-      );
-    } else {
-      widget = inner?._makeWidgetCompatible(widget) ?? widget;
-      widget = _checkBoundaries(widget, borderRadius);
     }
-
-    return outer?._makeWidgetCompatible(widget) ?? widget;
+    return const SizedBox.shrink();
   }
-
-  Widget _checkBoundaries(Widget widget, BorderRadiusGeometry? borderRadius) {
-    if (shape == BoxShape.circle) {
-      return ClipOval(
-        child: widget,
-      );
-    } else if (borderRadius != null) {
-      ClipRRect(
-        borderRadius: borderRadius,
-        child: widget,
-      );
-    }
-    return widget;
-  }
-}
-
-class ImageFile extends Image {
-  ImageFile(
-    String assetName, {
-    super.key,
-    super.color,
-    super.fit,
-  }) : super(
-          image: FileImage(
-            File(assetName),
-          ),
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) {
-              return child;
-            }
-
-            double? progress;
-
-            if (loadingProgress.expectedTotalBytes != null) {
-              progress = loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!;
-              return AppProgressIndicator(
-                value: progress,
-              );
-            }
-
-            return const AppProgressIndicator();
-          },
-          errorBuilder: (context, error, stackTrace) {
-            return const Icon(Icons.error);
-          },
-        );
-}
-
-class NetworkImage extends CachedNetworkImage {
-  NetworkImage(
-    String imageUrl, {
-    super.key,
-    super.color,
-    super.fit,
-  }) : super(
-          imageUrl: imageUrl,
-          placeholder: (context, url) {
-            return const AppProgressIndicator();
-          },
-          errorWidget: (context, url, error) => const Icon(Icons.error),
-        );
-}
-
-class AppProgressIndicator extends CircularProgressIndicator {
-  const AppProgressIndicator({
-    super.key,
-    super.value,
-    super.strokeCap = StrokeCap.round,
-    super.strokeWidth = 2,
-  });
-}
-
-class ImageAsset extends Image {
-  ImageAsset(
-    String assetName, {
-    super.key,
-    super.color,
-    super.fit,
-  }) : super(
-          image: AssetImage(assetName),
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) {
-              return child;
-            }
-
-            double? progress;
-
-            if (loadingProgress.expectedTotalBytes != null) {
-              progress = loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!;
-              return AppProgressIndicator(
-                value: progress,
-              );
-            }
-
-            return const AppProgressIndicator();
-          },
-          errorBuilder: (context, error, stackTrace) {
-            return const Icon(Icons.error);
-          },
-        );
-}
-
-class _SvgIcon extends SvgPicture {
-  _SvgIcon(
-    String assetName, {
-    AssetBundle? bundle,
-    String? package,
-    SvgTheme? theme,
-    Color? color,
-    super.fit,
-  }) : super(
-          SvgAssetLoader(
-            assetName,
-            packageName: package,
-            assetBundle: bundle,
-            theme: theme,
-          ),
-          colorFilter: color == null
-              ? null
-              : ColorFilter.mode(
-                  color,
-                  BlendMode.srcOver,
-                ),
-        );
 }
 
 extension ImageTypeExtension on String {
   ImageType get imageType {
     if (startsWith('http') || startsWith('https')) {
       return ImageType.network;
-    }
-    if (endsWith('.svg')) {
+    } else if (endsWith('.svg')) {
       return ImageType.svg;
-    }
-    if (startsWith('asset')) {
+    } else if (startsWith('asset')) {
       return ImageType.asset;
+    } else {
+      return ImageType.file;
     }
-    return ImageType.file;
   }
 }
 
