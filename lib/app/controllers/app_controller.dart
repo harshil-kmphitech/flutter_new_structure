@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_new_structure/app/ui/pages/authentication/login_page.dart';
+import 'package:flutter_new_structure/app/ui/pages/social_login_page.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exporter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:injectable/injectable.dart';
@@ -16,7 +16,7 @@ class AppController {
       const Duration(seconds: 3),
       () async {
         if (await _completer.future) {
-          LoginPage.offAllRoute()?.ignore();
+          SocialLoginPage.offAllRoute()?.ignore();
         }
       },
     );
@@ -29,8 +29,12 @@ class AppController {
     final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
     final assets = manifest.listAssets();
 
-    final listOfPng = assets.where((element) => element.endsWith('.png')).map((e) => precacheImage(AssetImage(e), context, onError: _onError));
-    final listOfSvg = assets.where((element) => element.endsWith('.svg')).map(SvgAssetLoader.new);
+    final listOfPng = assets
+        .where((element) => element.endsWith('.png'))
+        .map((e) => precacheImage(AssetImage(e), context, onError: _onError));
+    final listOfSvg = assets
+        .where((element) => element.endsWith('.svg'))
+        .map(SvgAssetLoader.new);
 
     await Future.wait([
       ...listOfPng,

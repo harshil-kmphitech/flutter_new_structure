@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_new_structure/app/routes/app_pages.dart';
 import 'package:flutter_new_structure/app/routes/app_routes.dart';
 import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
@@ -24,12 +23,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FlutterNativeSplash.remove();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: _kAppName,
       getPages: AppPages.routes,
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.splash,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(getIt<SharedPreferences>().getAppLocal ?? 'en'),
@@ -37,7 +35,6 @@ class MyApp extends StatelessWidget {
       ///Default Theme
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
       builder: EasyLoading.init(),
     );
   }

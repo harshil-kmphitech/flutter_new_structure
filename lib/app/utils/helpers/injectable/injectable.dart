@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_new_structure/app/utils/helpers/Interceptor/token_interceptor.dart';
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.config.dart';
+import 'package:flutter_new_structure/app/utils/helpers/loading.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart' as i;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -19,8 +20,10 @@ void configuration({required Widget myApp}) {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       await getIt.init();
-      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode);
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+      await FirebaseCrashlytics.instance
+          .setCrashlyticsCollectionEnabled(!kDebugMode);
+      FlutterError.onError =
+          FirebaseCrashlytics.instance.recordFlutterFatalError;
       PlatformDispatcher.instance.onError = (error, stack) {
         FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
         return true;
@@ -34,16 +37,21 @@ void configuration({required Widget myApp}) {
             );
       }
 
+      Loading().configLoading();
+
       getIt<Dio>().interceptors
         ..add(RefreshTokenInterceptor())
         ..add(RetryInterceptor(dio: getIt<Dio>()));
 
       runApp(myApp);
     },
-    (error, stackTrace) => FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true),
+    (error, stackTrace) => FirebaseCrashlytics.instance
+        .recordError(error, stackTrace, fatal: true),
     zoneSpecification: ZoneSpecification(
-      handleUncaughtError: (Zone zone, ZoneDelegate delegate, Zone parent, Object error, StackTrace stackTrace) {
-        FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
+      handleUncaughtError: (Zone zone, ZoneDelegate delegate, Zone parent,
+          Object error, StackTrace stackTrace) {
+        FirebaseCrashlytics.instance
+            .recordError(error, stackTrace, fatal: true);
       },
     ),
   );

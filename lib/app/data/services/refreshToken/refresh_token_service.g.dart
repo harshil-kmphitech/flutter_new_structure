@@ -9,12 +9,8 @@ part of 'refresh_token_service.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations
 
 class _RefreshTokenService implements RefreshTokenService {
-  _RefreshTokenService(
-    this._dio, {
-    this.baseUrl,
-    this.errorLogger,
-  }) {
-    baseUrl ??= 'https://kmclientapp.co.in:3030/api';
+  _RefreshTokenService(this._dio, {this.baseUrl, this.errorLogger}) {
+    baseUrl ??= 'https://7hglmg7p-3030.inc1.devtunnels.ms/api';
   }
 
   final Dio _dio;
@@ -29,22 +25,16 @@ class _RefreshTokenService implements RefreshTokenService {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = {'user_id': userId};
-    final _options = _setStreamType<RefreshTokenResponse>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/auth/refreshToken',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
+    final _options = _setStreamType<RefreshTokenResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/auth/refreshToken',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late RefreshTokenResponse _value;
     try {
@@ -69,10 +59,7 @@ class _RefreshTokenService implements RefreshTokenService {
     return requestOptions;
   }
 
-  String _combineBaseUrls(
-    String dioBaseUrl,
-    String? baseUrl,
-  ) {
+  String _combineBaseUrls(String dioBaseUrl, String? baseUrl) {
     if (baseUrl == null || baseUrl.trim().isEmpty) {
       return dioBaseUrl;
     }

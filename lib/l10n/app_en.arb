@@ -1,39 +1,5 @@
 {
     "@@locale": "en",
-    "title": "Hello",
-    "description": "Hello World in description",
-    "emailLabel": "Email",
-    "passwordLabel": "Password",
-    "confirmPasswordLabel": "Confirm Password",
-    "nameLabel": "Name",
-    "phoneNumberLabel": "Phone Number",
-    "newPasswordLabel": "New Password",
-    "codeLabel": "Verification Code",
-    "login": "Login",
-    "register": "Register",
-    "sendResetLinkButton": "Send Reset Link",
-    "verifyCode": "Verify Code",
-    "resetPassword": "Reset Password",
-    "forgotPassword": "Forgot Password",
-    "registerRedirect": "Don't have an account? Register now",
-    "forgotPasswordRedirect": "Forgot your password?",
-    "loginSuccess": "Login successful",
-    "loginFailed": "Login failed. Please try again",
-    "registerSuccess": "Registration successful",
-    "registerFailed": "Registration failed. Please try again",
-    "passwordResetEmailSent": "Password reset email sent",
-    "passwordResetFailed": "Failed to send reset email",
-    "passwordResetSuccess": "Password reset successful",
-    "passwordMismatch": "Passwords do not match",
-    "codeVerificationSuccess": "Code verification successful",
-    "codeVerificationFailed": "Code verification failed",
-    "emptyEmail": "Please enter a email address",
-    "invalidEmail": "Please enter a valid email address",
-    "emptyPassword": "Please enter password",
-    "emptyName": "Name should not be empty",
-    "emptyPhoneNumber": "Please enter phone number",
-    "emptyConfirmPassword": "Please enter confirm password",
-    "emptyVerificationCode": "Please enter verification code",
     "apiError": "An error occurred. Please try again later",
     "apiErrorDescription": "Oops! Something went wrong. Please try again later.",
     "theme": "Theme Demo",
@@ -66,13 +32,5 @@
     "code405": "The method specified in the request is not allowed for the requested resource.",
     "code409": "The request could not be completed due to a conflict with the current state of the resource.",
     "code500": "The server encountered an unexpected condition which prevented it from fulfilling the request.",
-    "code503": "The server is currently unable to handle the request.",
-    "welcome": "Welcome {name}",
-    "@welcome": {
-        "placeholders": {
-            "name": {
-                "type": "String"
-            }
-        }
-    }
+    "code503": "The server is currently unable to handle the request."
 }

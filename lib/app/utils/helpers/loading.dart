@@ -8,7 +8,7 @@ class Loading {
   void configLoading() {
     EasyLoading.instance
       ..displayDuration = const Duration(milliseconds: 2000)
-      ..indicatorType = EasyLoadingIndicatorType.dualRing
+      ..indicatorType = EasyLoadingIndicatorType.pouringHourGlass
       ..contentPadding = const EdgeInsets.all(18)
       ..loadingStyle = EasyLoadingStyle.custom
       ..indicatorSize = 45.0

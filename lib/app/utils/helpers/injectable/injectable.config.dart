@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -8,8 +9,6 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:io' as _i497;
-
 import 'package:dio/dio.dart' as _i361;
 import 'package:firebase_core/firebase_core.dart' as _i982;
 import 'package:flutter_new_structure/app/controllers/app_controller.dart'
@@ -18,8 +17,6 @@ import 'package:flutter_new_structure/app/controllers/auth_controller.dart'
     as _i289;
 import 'package:flutter_new_structure/app/data/services/authService/auth_service.dart'
     as _i388;
-import 'package:flutter_new_structure/app/data/services/common/socket_service.dart'
-    as _i525;
 import 'package:flutter_new_structure/app/data/services/refreshToken/refresh_token_service.dart'
     as _i298;
 import 'package:flutter_new_structure/app/utils/helpers/injectable%20properties/injectable_properties.dart'
@@ -49,30 +46,15 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i361.Dio>(() => registerModule.dio());
+    gh.lazySingleton<_i129.AppController>(() => _i129.AppController());
     gh.lazySingleton<_i289.AuthController>(
       () => _i289.AuthController(),
       dispose: (i) => i.dispose(),
     );
-    gh.lazySingleton<_i525.SocketService>(() => _i525.SocketService());
-    gh.lazySingleton<_i129.AppController>(() => _i129.AppController());
-    gh.lazySingleton<_i388.AuthService>(
-        () => _i388.AuthService(gh<_i361.Dio>()));
     gh.lazySingleton<_i298.RefreshTokenService>(
         () => _i298.RefreshTokenService(gh<_i361.Dio>()));
-    await gh.factoryAsync<_i497.Directory>(
-      () => registerModule.temporaryDirectory(),
-      instanceName: 'temporary',
-      preResolve: true,
-    );
-    await gh.factoryAsync<_i497.Directory>(
-      () => registerModule.documentDirectory(),
-      instanceName: 'document',
-      preResolve: true,
-    );
-    gh.lazySingleton<_i854.AppDirectory>(() => _i854.AppDirectory(
-          temporaryDirectory: gh<_i497.Directory>(instanceName: 'temporary'),
-          documentDirectory: gh<_i497.Directory>(instanceName: 'document'),
-        ));
+    gh.lazySingleton<_i388.AuthService>(
+        () => _i388.AuthService(gh<_i361.Dio>()));
     return this;
   }
 }

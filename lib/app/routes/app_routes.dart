@@ -1,8 +1,4 @@
 class AppRoutes {
-  static const String login = '/login';
-  static const String register = '/register';
-  static const String forgotPassword = '/forgot-password';
-  static const String verifyCode = '/verify-code';
-  static const String resetPassword = '/reset-password';
-  static const String theme = '/theme';
+  static const String splash = '/Splash';
+  static const String socialLogin = '/Social-Login';
 }
