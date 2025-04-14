@@ -24,7 +24,7 @@ class QueueRequest<T> {
   Future<void> resolve() {
     final requestOptions = err.requestOptions;
     requestOptions.extra['new-Token'] = getIt<SharedPreferences>().getToken;
-    return getIt<Dio>().fetch(_recreateOptions(requestOptions)).handler(
+    return getIt<Dio>().fetch(_recreate(requestOptions)).handler(
       null,
       isLoading: false,
       onSuccess: handler.resolve,
@@ -41,29 +41,24 @@ class QueueRequest<T> {
     );
   }
 
-  static RequestOptions _recreateOptions(RequestOptions options) {
-    return RequestOptions(
-      headers: {
-        ...options.headers,
-      },
-      data: options.data,
-      baseUrl: options.baseUrl,
-      path: options.path,
-      cancelToken: options.cancelToken,
-      connectTimeout: options.connectTimeout,
-      sendTimeout: options.sendTimeout,
-      receiveTimeout: options.receiveTimeout,
-      receiveDataWhenStatusError: options.receiveDataWhenStatusError,
-      followRedirects: options.followRedirects,
-      maxRedirects: options.maxRedirects,
-      validateStatus: options.validateStatus,
-      onReceiveProgress: options.onReceiveProgress,
-      onSendProgress: options.onSendProgress,
-      contentType: options.contentType,
-      responseType: options.responseType,
-      extra: options.extra,
-      method: options.method,
-      queryParameters: options.queryParameters,
+  RequestOptions _recreate(RequestOptions requestOptions) {
+    FormData? data;
+    if (requestOptions.data is FormData) {
+      data = requestOptions.data as FormData;
+      data = FormData()
+        ..fields.addAll(data.fields)
+        ..files.addAll(
+          data.files.map(
+            (e) => MapEntry(
+              e.key,
+              e.value.clone(),
+            ),
+          ),
+        );
+    }
+
+    return requestOptions.copyWith(
+      data: data ?? requestOptions.data,
     );
   }
 }
