@@ -125,7 +125,11 @@ extension ApiHandlingX<T> on Future<T> {
       final failedState = FailedState<T>(
         statusCode: e.response?.statusCode ?? 0,
         isRetirable: switch (e.type) {
-          DioExceptionType.connectionError || DioExceptionType.connectionTimeout || DioExceptionType.sendTimeout || DioExceptionType.receiveTimeout => true,
+          DioExceptionType.connectionError ||
+          DioExceptionType.connectionTimeout ||
+          DioExceptionType.sendTimeout ||
+          DioExceptionType.receiveTimeout =>
+            true,
           _ => false,
         },
         dioError: e,
@@ -205,7 +209,18 @@ class FailedState<T> extends ApiState {
     Get.showSnackbar(
       GetSnackBar(
         title: error.title,
-        message: (dioError?.response?.data['message'] as String?) ?? error.description,
+        message: (dioError?.response?.data['message'] as String?) ??
+            error.description,
+        icon: const Icon(
+          Icons.error_outline,
+          color: Colors.redAccent,
+        ),
+        borderColor: Colors.redAccent,
+        borderRadius: 10,
+        padding: const EdgeInsets.all(12),
+        duration: const Duration(seconds: 2),
+        snackPosition: SnackPosition.TOP,
+        margin: const EdgeInsets.symmetric(horizontal: 16),
       ),
     );
   }

@@ -1,10 +1,8 @@
-import 'package:flutter_new_structure/app/data/services/authService/auth_service.dart';
+import 'package:flutter_new_structure/app/controllers/auth_controller.dart';
 import 'package:flutter_new_structure/app/routes/app_routes.dart';
-import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exporter.dart';
 import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class SocialLoginPage extends StatelessWidget {
   const SocialLoginPage({super.key});
@@ -15,6 +13,8 @@ class SocialLoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = getIt<AuthController>();
+
     return Scaffold(
       body: SafeArea(
         minimum: const EdgeInsets.all(16),
@@ -47,7 +47,7 @@ class SocialLoginPage extends StatelessWidget {
             ),
             MaterialButton(
               color: Colors.white,
-              onPressed: _onGoogle,
+              onPressed: controller.onContinueWithGoogle,
               child: Row(
                 spacing: 8,
                 children: [
@@ -70,7 +70,7 @@ class SocialLoginPage extends StatelessWidget {
             ),
             MaterialButton(
               color: Colors.black,
-              onPressed: _onApple,
+              onPressed: controller.onContinueWithApple,
               child: Row(
                 spacing: 8,
                 children: [
@@ -98,56 +98,6 @@ class SocialLoginPage extends StatelessWidget {
   }
 
   void _onFacebook() {}
-
-  Future<void> _onGoogle() async {
-    final googleSignIn = GoogleSignIn(
-      scopes: ['email', 'profile'],
-    );
-
-    Loading.show();
-    GoogleSignInAccount? authData;
-    try {
-      await googleSignIn.signOut();
-      authData = await googleSignIn.signInSilently();
-      authData ??= await googleSignIn.signIn();
-    } catch (e) {
-      e.log;
-      Loading.dismiss();
-    }
-
-    if (authData == null) {
-      Loading.dismiss();
-      return;
-    }
-
-    authData;
-
-    await getIt<AuthService>()
-        .isRegister(
-      email: authData.email,
-      name: authData.displayName ?? '',
-      // deviceToken: 'No found',
-      // deviceType: switch (Platform.operatingSystem) {
-      //   'ios' => 'iOS',
-      //   'android' => 'android',
-      //   _ => 'Other',
-      // },
-      isSocialType: 'google',
-      // googleId: authData.id,
-    )
-        .handler(
-      null,
-      onSuccess: (value) {
-        googleSignIn.signOut();
-        value.showToast();
-      },
-      onFailed: (value) {
-        value.showToast();
-      },
-    );
-  }
-
-  void _onApple() {}
 }
 
 class AppIcons {
