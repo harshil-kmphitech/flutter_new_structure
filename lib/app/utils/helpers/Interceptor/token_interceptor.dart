@@ -2,7 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_new_structure/app/data/models/authModel/auth_model.dart';
 import 'package:flutter_new_structure/app/data/services/refreshToken/refresh_token_service.dart';
 import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
-import 'package:flutter_new_structure/app/utils/helpers/exporter.dart' hide Response;
+import 'package:flutter_new_structure/app/utils/helpers/exporter.dart'
+    hide Response;
 import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,7 +30,9 @@ class QueueRequest<T> {
       onSuccess: handler.resolve,
       onFailed: (value) {
         if (value.dioError != null) {
-          debugPrintStack(stackTrace: value.dioError?.stackTrace, label: value.dioError?.response?.data.toString());
+          debugPrintStack(
+              stackTrace: value.dioError?.stackTrace,
+              label: value.dioError?.response?.data.toString());
           handler.reject(value.dioError!);
         } else {
           handler.next(err);
@@ -87,7 +90,8 @@ class RefreshTokenInterceptor extends Interceptor {
   }
 
   @override
-  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+  Future<void> onError(
+      DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
       Loading.dismiss();
       // TODO: Write log out code here.

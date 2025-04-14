@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' hide HttpResponse;
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -14,10 +14,9 @@ import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart
 import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 import 'package:get/get.dart';
-import 'package:injectable/injectable.dart' as i;
+import 'package:injectable/injectable.dart';
 
-@i.lazySingleton
-@i.injectable
+@lazySingleton
 class AuthController extends GetxController {
   AuthController() {
     onInit();
@@ -27,10 +26,12 @@ class AuthController extends GetxController {
   bool isDarkTheme1 = false;
 
   // Observable variables for user input
-  final emailController = TextEditingController(text: kDebugMode ? 'mayur.kmphasis@gmail.com' : null);
+  final emailController = TextEditingController(
+      text: kDebugMode ? 'mayur.kmphasis@gmail.com' : null);
   final forgotEmailController = TextEditingController();
   final registerEmailController = TextEditingController();
-  final passController = TextEditingController(text: kDebugMode ? 'User@123' : null);
+  final passController =
+      TextEditingController(text: kDebugMode ? 'User@123' : null);
   final registerPassController = TextEditingController();
   final resetPassController = TextEditingController();
   final confirmPassController = TextEditingController();
@@ -177,7 +178,10 @@ class AuthController extends GetxController {
     if (!Form.of(context).validate()) {
       return;
     }
-    getIt<AuthService>().resetPassword(forgotEmailController.text, resetPassController.text.convertMd5).handler(
+    getIt<AuthService>()
+        .resetPassword(
+            forgotEmailController.text, resetPassController.text.convertMd5)
+        .handler(
       resetPassState,
       onSuccess: (value) {
         if (value.statusCode == 200) {
@@ -200,7 +204,9 @@ class AuthController extends GetxController {
     if (Get.previousRoute == AppRoutes.register) {
       return register(context);
     }
-    getIt<AuthService>().verifyCode(forgotEmailController.text, verificationCode.text).handler(
+    getIt<AuthService>()
+        .verifyCode(forgotEmailController.text, verificationCode.text)
+        .handler(
       verificationState,
       onSuccess: (value) {
         if (value.data['ResponseCode'] == 1) {
@@ -217,7 +223,7 @@ class AuthController extends GetxController {
   }
 
   @override
-  @i.disposeMethod
+  @disposeMethod
   void dispose() {
     super.dispose();
     emailController.dispose();

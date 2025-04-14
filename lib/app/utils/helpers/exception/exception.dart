@@ -108,7 +108,7 @@ extension ApiHandlingX<T> on Future<T> {
   /// Must use handler it's a better way to handle request's response api calling
   /// Must use handler it's a better way to handle request's response api calling
   Future<void> handler(
-    Rx<ApiState>? state, {
+    Rx<ApiState<dynamic>>? state, {
     bool isLoading = true,
     ApiSuccessCallback<T>? onSuccess,
     ApiFailedCallback<T>? onFailed,
@@ -125,7 +125,11 @@ extension ApiHandlingX<T> on Future<T> {
       final failedState = FailedState<T>(
         statusCode: e.response?.statusCode ?? 0,
         isRetirable: switch (e.type) {
-          DioExceptionType.connectionError || DioExceptionType.connectionTimeout || DioExceptionType.sendTimeout || DioExceptionType.receiveTimeout => true,
+          DioExceptionType.connectionError ||
+          DioExceptionType.connectionTimeout ||
+          DioExceptionType.sendTimeout ||
+          DioExceptionType.receiveTimeout =>
+            true,
           _ => false,
         },
         dioError: e,
@@ -148,34 +152,34 @@ extension ApiHandlingX<T> on Future<T> {
   }
 }
 
-extension RxApiStateX on Rx<ApiState> {
-  bool get isInitial => value is InitialState;
-  bool get isLoading => value is LoadingState;
-  bool get isSuccess => value is SuccessState;
-  bool get isFailed => value is FailedState;
+extension RxApiStateX<T> on Rx<ApiState<T>> {
+  bool get isInitial => value is InitialState<T>;
+  bool get isLoading => value is LoadingState<T>;
+  bool get isSuccess => value is SuccessState<T>;
+  bool get isFailed => value is FailedState<T>;
 }
 
-extension ApiStateX on ApiState {
-  bool get isInitial => this is InitialState;
-  bool get isLoading => this is LoadingState;
-  bool get isSuccess => this is SuccessState;
-  bool get isFailed => this is FailedState;
+extension ApiStateX<T> on ApiState<T> {
+  bool get isInitial => this is InitialState<T>;
+  bool get isLoading => this is LoadingState<T>;
+  bool get isSuccess => this is SuccessState<T>;
+  bool get isFailed => this is FailedState<T>;
 }
 
-sealed class ApiState {
-  static Rx<ApiState> initial() => Rx(InitialState());
+sealed class ApiState<T> {
+  static Rx<ApiState<T>> initial<T>() => Rx(InitialState<T>());
 }
 
-class SuccessState<T> extends ApiState {
+class SuccessState<T> extends ApiState<T> {
   T value;
   SuccessState(this.value);
 }
 
-class InitialState extends ApiState {}
+class InitialState<T> extends ApiState<T> {}
 
-class LoadingState extends ApiState {}
+class LoadingState<T> extends ApiState<T> {}
 
-class FailedState<T> extends ApiState {
+class FailedState<T> extends ApiState<T> {
   bool isRetirable;
   UserFriendlyError get error =>
       dioError?.toUserFriendlyError() ??
@@ -205,7 +209,8 @@ class FailedState<T> extends ApiState {
     Get.showSnackbar(
       GetSnackBar(
         title: error.title,
-        message: (dioError?.response?.data['message'] as String?) ?? error.description,
+        message: (dioError?.response?.data['message'] as String?) ??
+            error.description,
       ),
     );
   }
