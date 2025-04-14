@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_new_structure/app/ui/pages/social_login_page.dart';
-import 'package:flutter_new_structure/app/utils/helpers/exporter.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:injectable/injectable.dart';
 
@@ -16,7 +16,7 @@ class AppController {
       const Duration(seconds: 3),
       () async {
         if (await _completer.future) {
-          SocialLoginPage.offAllRoute()?.ignore();
+          _routeTo();
         }
       },
     );
@@ -52,5 +52,9 @@ class AppController {
     if (kDebugMode) {
       exception.logWithName('precacheImageError');
     }
+  }
+
+  void _routeTo() {
+    // TODO: Add navigation after spalsh here
   }
 }

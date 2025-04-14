@@ -13,15 +13,4 @@ part 'auth_service.g.dart';
 abstract class AuthService {
   @factoryMethod
   factory AuthService(Dio dio) = _AuthService;
-
-  @POST('/auth/isRegister')
-  Future<BaseResponse> isRegister({
-    @Field() required String email,
-    @Field() required String name,
-    // @Field('device_token') required String deviceToken,
-    // @Field('device_type') required String deviceType,
-    // @Field('is_google') num isGoogle = 0,
-    @Field('is_social_type') required String isSocialType,
-    // @Field('google_id') required String googleId,
-  });
 }

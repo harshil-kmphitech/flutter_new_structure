@@ -10,9 +10,9 @@ abstract class GetItHook<T extends GetxController> extends StatefulWidget {
 
   void _onInit() => onInit();
 
-  void onInit();
+  void onInit() {}
 
-  bool get canDisposeController;
+  bool get autoDispose;
 
   Widget build(BuildContext context);
 
@@ -20,10 +20,10 @@ abstract class GetItHook<T extends GetxController> extends StatefulWidget {
 
   final T? _controller;
 
-  void onDispose();
+  void onDispose() {}
 
   void _unRegister() {
-    if (canDisposeController && getIt.isRegistered<T>()) {
+    if (autoDispose && getIt.isRegistered<T>()) {
       getIt.resetLazySingleton<T>();
     }
   }

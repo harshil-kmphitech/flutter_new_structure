@@ -58,8 +58,8 @@ extension DioExceptionTypeX on DioExceptionType {
     switch (this) {
       case DioExceptionType.connectionTimeout:
         return UserFriendlyError(
-          AppStrings.T.connectionTimeout,
-          AppStrings.T.connectionTimeoutDesc,
+          AppStrings.T.sendTimeout,
+          AppStrings.T.sendTimeoutDesc,
         );
       case DioExceptionType.sendTimeout:
         return UserFriendlyError(

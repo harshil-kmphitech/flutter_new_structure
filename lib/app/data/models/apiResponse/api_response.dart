@@ -1,4 +1,5 @@
-import 'package:flutter_new_structure/app/utils/helpers/exporter.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'api_response.g.dart';

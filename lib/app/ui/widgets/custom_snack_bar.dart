@@ -1,4 +1,5 @@
-import 'package:flutter_new_structure/app/utils/helpers/exporter.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 
 class AppSnackBar extends GetSnackBar {
   const AppSnackBar({
@@ -18,4 +19,3 @@ class AppSnackBar extends GetSnackBar {
           margin: const EdgeInsets.symmetric(horizontal: 16),
         );
 }
-

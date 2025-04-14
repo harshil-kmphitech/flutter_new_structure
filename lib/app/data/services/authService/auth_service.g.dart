@@ -19,41 +19,6 @@ class _AuthService implements AuthService {
 
   final ParseErrorLogger? errorLogger;
 
-  @override
-  Future<BaseResponse> isRegister({
-    required String email,
-    required String name,
-    required String isSocialType,
-  }) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = {
-      'email': email,
-      'name': name,
-      'is_social_type': isSocialType,
-    };
-    final _options = _setStreamType<BaseResponse>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/auth/isRegister',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late BaseResponse _value;
-    try {
-      _value = await compute(deserializeBaseResponse, _result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

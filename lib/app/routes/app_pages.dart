@@ -1,5 +1,4 @@
 import 'package:flutter_new_structure/app/routes/app_routes.dart';
-import 'package:flutter_new_structure/app/ui/pages/social_login_page.dart';
 import 'package:flutter_new_structure/app/ui/pages/splash_page.dart';
 import 'package:get/get.dart';
 
@@ -9,9 +8,5 @@ class AppPages {
       name: AppRoutes.splash,
       page: () => const SplashPage(),
     ),
-    GetPage(
-      name: AppRoutes.socialLogin,
-      page: () => const SocialLoginPage(),
-    )
   ];
 }

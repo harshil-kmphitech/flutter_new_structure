@@ -15,7 +15,7 @@ class Loading {
       ..lineWidth = 2
       ..radius = 20
       ..progressColor = Colors.white
-      ..backgroundColor = KAppColors.primaryColor
+      ..backgroundColor = Colors.red
       ..indicatorColor = Colors.white
       ..textColor = Colors.white
       ..maskType = EasyLoadingMaskType.black

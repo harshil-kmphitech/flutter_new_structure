@@ -14,10 +14,9 @@ class Outfit extends TextStyle {
   }) : super(fontFamily: _kOutfitFontFamily);
 }
 
+@immutable
 class AppStyles extends ThemeExtension<AppStyles> {
-  AppStyles({required this.s12w500});
-
-  final TextStyle s12w500;
+  const AppStyles();
 
   static AppStyles of(BuildContext context) {
     return Theme.of(context).extension<AppStyles>()!;
@@ -29,7 +28,8 @@ class AppStyles extends ThemeExtension<AppStyles> {
   }
 
   @override
-  ThemeExtension<AppStyles> lerp(covariant ThemeExtension<AppStyles>? other, double t) {
+  ThemeExtension<AppStyles> lerp(
+      covariant ThemeExtension<AppStyles>? other, double t) {
     if (other is! AppStyles) {
       return this;
     }

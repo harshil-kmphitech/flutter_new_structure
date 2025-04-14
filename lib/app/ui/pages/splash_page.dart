@@ -1,5 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_new_structure/app/controllers/app_controller.dart';
-import 'package:flutter_new_structure/app/utils/helpers/exporter.dart';
+import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

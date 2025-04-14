@@ -16,34 +16,14 @@ final getIt = GetIt.instance;
 
 @i.injectableInit
 void configuration({required Widget myApp}) {
+  if (kDebugMode) {
+    _init(myApp);
+    return;
+  }
+
   runZonedGuarded(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
-      await getIt.init();
-      await FirebaseCrashlytics.instance
-          .setCrashlyticsCollectionEnabled(!kDebugMode);
-      FlutterError.onError =
-          FirebaseCrashlytics.instance.recordFlutterFatalError;
-      PlatformDispatcher.instance.onError = (error, stack) {
-        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-        return true;
-      };
-
-      if (kDebugMode) {
-        getIt<Dio>().interceptors.add(
-              PrettyDioLogger(
-                requestBody: true,
-              ),
-            );
-      }
-
-      Loading().configLoading();
-
-      getIt<Dio>().interceptors
-        ..add(RefreshTokenInterceptor())
-        ..add(RetryInterceptor(dio: getIt<Dio>()));
-
-      runApp(myApp);
+    () {
+      _init(myApp);
     },
     (error, stackTrace) => FirebaseCrashlytics.instance
         .recordError(error, stackTrace, fatal: true),
@@ -55,4 +35,32 @@ void configuration({required Widget myApp}) {
       },
     ),
   );
+}
+
+Future<void> _init(Widget myApp) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await getIt.init();
+  await FirebaseCrashlytics.instance
+      .setCrashlyticsCollectionEnabled(!kDebugMode);
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+
+  if (kDebugMode) {
+    getIt<Dio>().interceptors.add(
+          PrettyDioLogger(
+            requestBody: true,
+          ),
+        );
+  }
+
+  Loading().configLoading();
+
+  getIt<Dio>().interceptors
+    ..add(RefreshTokenInterceptor())
+    ..add(RetryInterceptor(dio: getIt<Dio>()));
+
+  runApp(myApp);
 }
