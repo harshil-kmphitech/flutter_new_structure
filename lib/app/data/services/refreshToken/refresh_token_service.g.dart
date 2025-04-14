@@ -10,7 +10,7 @@ part of 'refresh_token_service.dart';
 
 class _RefreshTokenService implements RefreshTokenService {
   _RefreshTokenService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'https://7hglmg7p-3030.inc1.devtunnels.ms/api';
+    baseUrl ??= 'https://yourapi.com';
   }
 
   final Dio _dio;
@@ -29,7 +29,7 @@ class _RefreshTokenService implements RefreshTokenService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/auth/refreshToken',
+            '/refreshToken',
             queryParameters: queryParameters,
             data: _data,
           )

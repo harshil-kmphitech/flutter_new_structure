@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_new_structure/app/utils/constants/app_colors.dart';
 
 class Loading {
   static bool isBackButton = true;

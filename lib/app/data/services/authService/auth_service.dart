@@ -1,6 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_structure/app/data/models/apiResponse/api_response.dart';
 import 'package:flutter_new_structure/app/global/app_config.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
