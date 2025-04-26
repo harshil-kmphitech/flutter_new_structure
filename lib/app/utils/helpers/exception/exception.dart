@@ -1,16 +1,15 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_new_structure/app/ui/widgets/custom_snack_bar.dart';
 import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
 import 'package:flutter_new_structure/app/utils/helpers/loading.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile, Response;
 
 @immutable
 class UserFriendlyError {
+  const UserFriendlyError(this.title, this.description);
   final String title;
   final String description;
-
-  const UserFriendlyError(this.title, this.description);
 }
 
 extension DioExceptionX on DioException {
@@ -152,34 +151,45 @@ extension ApiHandlingX<T> on Future<T> {
   }
 }
 
-extension RxApiStateX on Rx<ApiState> {
-  bool get isInitial => value is InitialState;
-  bool get isLoading => value is LoadingState;
-  bool get isSuccess => value is SuccessState;
-  bool get isFailed => value is FailedState;
+extension RxApiStateX<T> on Rx<ApiState<T>> {
+  bool get isInitial => value is InitialState<T>;
+  bool get isLoading => value is LoadingState<T>;
+  bool get isSuccess => value is SuccessState<T>;
+  bool get isFailed => value is FailedState<T>;
+
+  SuccessState<T> get successState => value as SuccessState<T>;
+  FailedState<T> get failedState => value as FailedState<T>;
 }
 
-extension ApiStateX on ApiState {
-  bool get isInitial => this is InitialState;
-  bool get isLoading => this is LoadingState;
-  bool get isSuccess => this is SuccessState;
-  bool get isFailed => this is FailedState;
+extension ApiStateX<T> on ApiState<T> {
+  bool get isInitial => this is InitialState<T>;
+  bool get isLoading => this is LoadingState<T>;
+  bool get isSuccess => this is SuccessState<T>;
+  bool get isFailed => this is FailedState<T>;
+
+  SuccessState<T> get successState => this as SuccessState<T>;
+  FailedState<T> get failedState => this as FailedState<T>;
 }
 
-sealed class ApiState {
-  static Rx<ApiState> initial() => Rx(InitialState());
+sealed class ApiState<T> {
+  static Rx<ApiState<T>> initial<T>() => InitialState<T>().obs;
 }
 
-class SuccessState<T> extends ApiState {
-  T value;
+class SuccessState<T> extends ApiState<T> {
   SuccessState(this.value);
+  T value;
 }
 
-class InitialState extends ApiState {}
+class InitialState<T> extends ApiState<T> {}
 
-class LoadingState extends ApiState {}
+class LoadingState<T> extends ApiState<T> {}
 
-class FailedState<T> extends ApiState {
+class FailedState<T> extends ApiState<T> {
+  FailedState({
+    required this.isRetirable,
+    required this.statusCode,
+    required this.dioError,
+  });
   bool isRetirable;
   UserFriendlyError get error =>
       dioError?.toUserFriendlyError() ??
@@ -199,28 +209,12 @@ class FailedState<T> extends ApiState {
 
   int statusCode;
 
-  FailedState({
-    required this.isRetirable,
-    required this.statusCode,
-    required this.dioError,
-  });
-
   void showToast() {
     Get.showSnackbar(
-      GetSnackBar(
+      AppSnackBar.error(
         title: error.title,
         message: (dioError?.response?.data['message'] as String?) ??
             error.description,
-        icon: const Icon(
-          Icons.error_outline,
-          color: Colors.redAccent,
-        ),
-        borderColor: Colors.redAccent,
-        borderRadius: 10,
-        padding: const EdgeInsets.all(12),
-        duration: const Duration(seconds: 2),
-        snackPosition: SnackPosition.TOP,
-        margin: const EdgeInsets.symmetric(horizontal: 16),
       ),
     );
   }

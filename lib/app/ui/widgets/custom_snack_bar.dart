@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 
 class AppSnackBar extends GetSnackBar {
-  const AppSnackBar({
+  const AppSnackBar.error({
     super.key,
     super.title,
     super.message,
