@@ -139,9 +139,13 @@ class RefreshTokenInterceptor extends Interceptor {
 
   void _onRefreshSuccess(RefreshTokenResponse value) {
     final pref = getIt<SharedPreferences>();
+    refreshTokenState.value = InitialState();
 
     if (value.data.containsKey('token')) {
       pref.setToken = value.data['token'] as String;
+      Future.wait(
+        requestQueue.map((e) => e.resolve()),
+      ).whenComplete(requestQueue.clear);
     } else {
       requestQueue
         ..forEach((element) => element.next())
@@ -149,10 +153,5 @@ class RefreshTokenInterceptor extends Interceptor {
 
       return;
     }
-    refreshTokenState.value = InitialState();
-
-    Future.wait(
-      requestQueue.map((e) => e.resolve()),
-    ).whenComplete(requestQueue.clear);
   }
 }
