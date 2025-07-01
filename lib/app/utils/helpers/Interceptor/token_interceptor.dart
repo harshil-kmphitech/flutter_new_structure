@@ -112,7 +112,7 @@ class RefreshTokenInterceptor extends Interceptor {
     }
   }
 
-  final refreshTokenState = ApiState.initial();
+  final refreshTokenState = ApiState.initial<RefreshTokenResponse>();
 
   Future<void> refreshToken() async {
     final data = getIt<SharedPreferences>().getUserId;

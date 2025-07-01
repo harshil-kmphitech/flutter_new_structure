@@ -9,7 +9,7 @@ import 'package:flutter_new_structure/app/utils/themes/app_theme.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// TODO: Chnage app name.
+// TODO: Change app name.
 const _kAppName = 'APP_NAME';
 
 void main() {

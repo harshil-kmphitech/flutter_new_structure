@@ -107,7 +107,7 @@ extension ApiHandlingX<T> on Future<T> {
   /// Must use handler it's a better way to handle request's response api calling
   /// Must use handler it's a better way to handle request's response api calling
   Future<void> handler(
-    Rx<ApiState>? state, {
+    Rx<ApiState<T>>? state, {
     bool isLoading = true,
     ApiSuccessCallback<T>? onSuccess,
     ApiFailedCallback<T>? onFailed,
