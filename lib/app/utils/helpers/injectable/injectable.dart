@@ -7,8 +7,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_new_structure/app/utils/helpers/Interceptor/token_interceptor.dart';
 import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.config.dart';
 import 'package:flutter_new_structure/app/utils/helpers/loading.dart';
+import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart' as i;
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final getIt = GetIt.instance;
 
@@ -50,7 +52,12 @@ Future<void> _init(Widget myApp) async {
 
   getIt<Dio>().interceptors.addAll([
     RefreshTokenInterceptor(),
-    if (kDebugMode) RetryInterceptor(dio: getIt<Dio>())
+    if (kDebugMode)
+      PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        logPrint: (object) => object.log,
+      )
   ]);
 
   runApp(myApp);
