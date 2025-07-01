@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.co
 import 'package:flutter_new_structure/app/utils/helpers/loading.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart' as i;
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final getIt = GetIt.instance;
 
@@ -48,19 +46,12 @@ Future<void> _init(Widget myApp) async {
     return true;
   };
 
-  if (kDebugMode) {
-    getIt<Dio>().interceptors.add(
-          PrettyDioLogger(
-            requestBody: true,
-          ),
-        );
-  }
-
   Loading().configLoading();
 
-  getIt<Dio>().interceptors
-    ..add(RefreshTokenInterceptor())
-    ..add(RetryInterceptor(dio: getIt<Dio>()));
+  getIt<Dio>().interceptors.addAll([
+    RefreshTokenInterceptor(),
+    if (kDebugMode) RetryInterceptor(dio: getIt<Dio>())
+  ]);
 
   runApp(myApp);
 }
