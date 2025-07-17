@@ -114,7 +114,7 @@ class ImageView extends StatelessWidget {
     if (shape == BoxShape.circle) {
       return ClipOval(child: widget);
     } else if (borderRadius != null) {
-      ClipRRect(borderRadius: borderRadius, child: widget);
+      return ClipRRect(borderRadius: borderRadius, child: widget);
     }
     return widget;
   }
