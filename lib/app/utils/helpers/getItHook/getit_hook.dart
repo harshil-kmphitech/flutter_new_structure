@@ -46,3 +46,21 @@ class _GetItHookState<T extends GetxController> extends State<GetItHook> {
     widget._unRegister();
   }
 }
+
+abstract class GetItHookState<T extends GetxController, S extends StatefulWidget> extends State<S> {
+  T get controller => getIt<T>();
+
+  void _unRegister() {
+    if (autoDispose && getIt.isRegistered<T>()) {
+      getIt.resetLazySingleton<T>();
+    }
+  }
+
+  @override
+  void dispose() {
+    _unRegister();
+    super.dispose();
+  }
+
+  bool get autoDispose;
+}
