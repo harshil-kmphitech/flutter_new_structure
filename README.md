@@ -1,16 +1,56 @@
 # flutter_new_structure
 
-A new Flutter project.
+## Dependency Installation
 
-## Getting Started
+To install all required dependencies at once, run the following command in your project directory:
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub add cached_network_image collection crypto dio firebase_core firebase_crashlytics flutter_easyloading flutter_svg gap get get_it injectable json_annotation path_provider pretty_dio_logger retrofit shared_preferences
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Dev Dependency Installation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+To install all required dev dependencies, run:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter pub add --dev retrofit_generator build_runner json_serializable injectable_generator flutter_gen_runner
+```
+
+## Additional Dependencies
+
+You can add the following dependencies directly using the command line:
+
+```bash
+flutter pub add flutter_localizations --sdk=flutter
+flutter pub add intl
+```
+
+Alternatively, add them manually to your `pubspec.yaml` under `dependencies`:
+
+```yaml
+flutter_localizations:
+    sdk: flutter
+intl: any
+```
+## Final Step: Run `flutter pub get`
+
+After adding all dependencies to your `pubspec.yaml`, run the following command to fetch and install them:
+
+```bash
+flutter pub get
+```
+## Enabling Code Generation
+
+To enable code generation in your project, add the following section to your `pubspec.yaml` file:
+
+```yaml
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+  generate: true # do it
+```
+
+This ensures that code generation tools are activated and ready to use.
