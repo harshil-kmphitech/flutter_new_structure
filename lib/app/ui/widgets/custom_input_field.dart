@@ -3,9 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class _SuffixIcon extends StatelessWidget {
-  const _SuffixIcon({
-    required this.showing,
-  });
+  const _SuffixIcon({required this.showing});
 
   final RxBool showing;
 
@@ -14,9 +12,7 @@ class _SuffixIcon extends StatelessWidget {
     /// If you have to change the suffixIcon widget so you must have to be change you icon here.
     return ExcludeFocus(
       child: IconButton(
-        icon: Icon(
-          showing.value ? Icons.visibility : Icons.visibility_off,
-        ),
+        icon: Icon(showing.value ? Icons.visibility : Icons.visibility_off),
         onPressed: showing.toggle,
       ),
     );
@@ -44,70 +40,78 @@ class TextInputField extends TextFormField {
     Widget? suffixIcon,
     Widget? prefixIcon,
     List<TextInputFormatter>? inputFormatters,
-  })  : assert(
-            type != InputType.multiline ||
-                textInputAction == TextInputAction.newline,
-            'Make textInputAction = TextInputAction.newline'),
-        assert(
-          (type != InputType.password &&
-                  type != InputType.newPassword &&
-                  type != InputType.confirmPassword) ||
-              obscureText != null,
-          'Make sure your providing obscureText and Wrap Obx on TextInputField',
-        ),
-        super(
-          keyboardType: keyboardType ??
-              switch (type) {
-                InputType.name => TextInputType.name,
-                InputType.text => TextInputType.text,
-                InputType.email => TextInputType.emailAddress,
-                InputType.password => TextInputType.visiblePassword,
-                InputType.confirmPassword => TextInputType.visiblePassword,
-                InputType.newPassword => TextInputType.visiblePassword,
-                InputType.phoneNumber => TextInputType.phone,
-                InputType.digits => TextInputType.number,
-                InputType.decimalDigits =>
-                  const TextInputType.numberWithOptions(decimal: true),
-                InputType.multiline => TextInputType.multiline,
-              },
-          autofillHints: [
-            if (autoFillHints != null) ...autoFillHints,
-            switch (type) {
-              InputType.name => AutofillHints.name,
-              InputType.email => AutofillHints.email,
-              InputType.password => AutofillHints.password,
-              InputType.confirmPassword => AutofillHints.password,
-              InputType.newPassword => AutofillHints.newPassword,
-              InputType.phoneNumber => AutofillHints.telephoneNumber,
-              _ => '',
-            },
-          ],
-          inputFormatters: [
-            if (inputFormatters != null) ...inputFormatters,
-            if (type == InputType.digits)
-              FilteringTextInputFormatter.digitsOnly,
-            if (type == InputType.decimalDigits)
-              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-          ],
-          obscureText: obscureText?.value ?? false,
-          decoration: InputDecoration(
-            labelText: hintLabel,
-            // hintText: hintLabel,
-            prefixIcon: prefixIcon,
-            suffixIcon: suffixIcon ??
-                (obscureText == null
-                    ? null
-                    : Builder(
-                        builder: (context) {
-                          if (type
-                              case InputType.email || InputType.password) {}
-                          return _SuffixIcon(
-                            showing: obscureText,
-                          );
-                        },
-                      )),
-          ),
-        );
+  }) : assert(
+         type != InputType.multiline ||
+             textInputAction == TextInputAction.newline,
+         'Make textInputAction = TextInputAction.newline',
+       ),
+       assert(
+         (type != InputType.password &&
+                 type != InputType.newPassword &&
+                 type != InputType.confirmPassword) ||
+             obscureText != null,
+         'Make sure your providing obscureText and Wrap Obx on TextInputField',
+       ),
+       super(
+         keyboardType:
+             keyboardType ??
+             switch (type) {
+               InputType.name => TextInputType.name,
+               InputType.text => TextInputType.text,
+               InputType.email => TextInputType.emailAddress,
+               InputType.password => TextInputType.visiblePassword,
+               InputType.confirmPassword => TextInputType.visiblePassword,
+               InputType.newPassword => TextInputType.visiblePassword,
+               InputType.phoneNumber => TextInputType.phone,
+               InputType.digits => TextInputType.number,
+               InputType.decimalDigits => const TextInputType.numberWithOptions(
+                 decimal: true,
+               ),
+               InputType.multiline => TextInputType.multiline,
+             },
+         textCapitalization: switch (type) {
+           InputType.name ||
+           InputType.newPassword ||
+           InputType.password ||
+           InputType.confirmPassword => TextCapitalization.words,
+           InputType.multiline => TextCapitalization.sentences,
+           _ => TextCapitalization.none,
+         },
+         autofillHints: [
+           if (autoFillHints != null) ...autoFillHints,
+           switch (type) {
+             InputType.name => AutofillHints.name,
+             InputType.email => AutofillHints.email,
+             InputType.password => AutofillHints.password,
+             InputType.confirmPassword => AutofillHints.password,
+             InputType.newPassword => AutofillHints.newPassword,
+             InputType.phoneNumber => AutofillHints.telephoneNumber,
+             _ => '',
+           },
+         ],
+         inputFormatters: [
+           if (inputFormatters != null) ...inputFormatters,
+           if (type == InputType.digits) FilteringTextInputFormatter.digitsOnly,
+           if (type == InputType.decimalDigits)
+             FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+         ],
+         obscureText: obscureText?.value ?? false,
+         decoration: InputDecoration(
+           labelText: hintLabel,
+           // hintText: hintLabel,
+           prefixIcon: prefixIcon,
+           suffixIcon:
+               suffixIcon ??
+               (obscureText == null
+                   ? null
+                   : Builder(
+                       builder: (context) {
+                         if (type case InputType.email || InputType.password) {}
+                         return _SuffixIcon(showing: obscureText);
+                       },
+                     )),
+         ),
+       );
 }
 
 enum InputType {
