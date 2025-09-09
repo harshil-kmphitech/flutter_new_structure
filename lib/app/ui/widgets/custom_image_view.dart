@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ImageSize {
-  ImageSize({this.alignment, this.dimension, this.height, this.width});
+  const ImageSize({this.alignment, this.dimension, this.height, this.width});
 
   final Alignment? alignment;
   final double? dimension;
@@ -28,39 +28,21 @@ class ImageSize {
   }
 }
 
-extension DecorationX on Decoration {
-  Decoration apply(BorderRadius? borderRadius, Color? color, BoxShape? shape) {
-    if (this is BoxDecoration) {
-      final boxDecoration = this as BoxDecoration;
-      return boxDecoration.copyWith(
-        borderRadius: boxDecoration.borderRadius ?? borderRadius,
-        color: boxDecoration.color ?? color,
-        shape: shape ?? boxDecoration.shape,
-      );
-    }
-    return this;
-  }
-}
+typedef LoaderBuilder = Widget Function(double progress);
 
 class ImageView extends StatelessWidget {
-  ImageView(
+  const ImageView(
     this.imagePath, {
     super.key,
-    this.borderRadius,
-    this.shape = BoxShape.rectangle,
     this.color,
     this.errorWidget,
-    Color? backgroundColor,
-    Decoration? decoration,
+    this.decoration,
     this.alignment,
     this.fit = BoxFit.cover,
     this.inner,
     this.outer,
-  }) : _decoration = decoration?.apply(borderRadius, backgroundColor, shape) ??
-            BoxDecoration(
-                shape: shape,
-                color: backgroundColor,
-                borderRadius: borderRadius);
+    this.loaderBuilder,
+  });
 
   final AlignmentGeometry? alignment;
 
@@ -71,92 +53,105 @@ class ImageView extends StatelessWidget {
   final ImageSize? inner;
   final ImageSize? outer;
 
-  final BorderRadius? borderRadius;
-
-  final BoxShape shape;
   final Widget? errorWidget;
 
   final Color? color;
 
-  final Decoration _decoration;
+  final Decoration? decoration;
+
+  final LoaderBuilder? loaderBuilder;
 
   @override
   Widget build(BuildContext context) {
     final type = imagePath.imageType;
     var widget = switch (type) {
       ImageType.svg => _SvgIcon(imagePath, color: color, fit: fit),
-      ImageType.asset =>
-        ImageAsset(imagePath, color: color, fit: fit, errorWidget: errorWidget),
+      ImageType.asset => ImageAsset(
+        imagePath,
+        color: color,
+        fit: fit,
+        errorWidget: errorWidget,
+        loaderBuilder: loaderBuilder,
+      ),
       ImageType.network => NetworkImage(
-          imagePath,
-          color: color,
-          fit: fit,
-          errorWidget: errorWidget,
-        ),
-      ImageType.file =>
-        ImageFile(imagePath, color: color, fit: fit, errorWidget: errorWidget),
+        imagePath,
+        color: color,
+        fit: fit,
+        errorWidget: errorWidget,
+        loaderBuilder: loaderBuilder,
+      ),
+      ImageType.file => ImageFile(imagePath, color: color, fit: fit, errorWidget: errorWidget),
     };
 
     widget = inner?._makeWidgetCompatible(widget) ?? widget;
 
     widget = outer?._makeWidgetCompatible(widget) ?? widget;
 
-    if ((_decoration is BoxDecoration) && _decoration.borderRadius != null) {
-      widget = _checkBoundaries(widget, _decoration.borderRadius);
-    } else {
-      widget = _checkBoundaries(widget, null);
+    widget = _checkBoundaries(widget, decoration);
+
+    if (decoration == null) {
+      return widget;
     }
 
-    return DecoratedBox(decoration: _decoration, child: widget);
+    return DecoratedBox(decoration: decoration!, child: widget);
   }
 
-  Widget _checkBoundaries(Widget widget, BorderRadiusGeometry? borderRadius) {
-    if (shape == BoxShape.circle) {
-      return ClipOval(child: widget);
-    } else if (borderRadius != null) {
-      return ClipRRect(borderRadius: borderRadius, child: widget);
+  Widget _checkBoundaries(Widget widget, Decoration? decoration) {
+    if (decoration is BoxDecoration) {
+      if (decoration.shape == BoxShape.circle) {
+        return ClipOval(child: widget);
+      } else if (decoration.borderRadius != null) {
+        return ClipRRect(borderRadius: decoration.borderRadius!, child: widget);
+      }
     }
+
     return widget;
   }
 }
 
 class ImageFile extends Image {
-  ImageFile(String assetName,
-      {super.key, super.color, super.fit, Widget? errorWidget})
-      : super(
-          image: FileImage(File(assetName)),
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) {
-              return child;
-            }
+  ImageFile(String assetName, {super.key, super.color, super.fit, Widget? errorWidget})
+    : super(
+        image: FileImage(File(assetName)),
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) {
+            return child;
+          }
 
-            double? progress;
+          double? progress;
 
-            if (loadingProgress.expectedTotalBytes != null) {
-              progress = loadingProgress.cumulativeBytesLoaded /
-                  loadingProgress.expectedTotalBytes!;
-              return AppProgressIndicator(value: progress);
-            }
+          if (loadingProgress.expectedTotalBytes != null) {
+            progress = loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!;
+            return AppProgressIndicator(value: progress);
+          }
 
-            return const AppProgressIndicator();
-          },
-          errorBuilder: (context, error, stackTrace) {
-            return errorWidget ?? const Icon(Icons.error);
-          },
-        );
+          return const AppProgressIndicator();
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return errorWidget ?? const Icon(Icons.error);
+        },
+      );
 }
 
 class NetworkImage extends CachedNetworkImage {
-  NetworkImage(String imageUrl,
-      {super.key, super.color, super.fit, Widget? errorWidget})
-      : super(
-          imageUrl: imageUrl,
-          placeholder: (context, url) {
-            return const AppProgressIndicator();
-          },
-          errorWidget: (context, url, error) =>
-              errorWidget ?? const Icon(Icons.error),
-        );
+  NetworkImage(
+    String imageUrl, {
+    super.key,
+    super.color,
+    super.fit,
+    Widget? errorWidget,
+    LoaderBuilder? loaderBuilder,
+  }) : super(
+         imageUrl: imageUrl,
+         progressIndicatorBuilder: (context, url, progress) {
+           return loaderBuilder?.call(
+                 (progress.downloaded / (progress.totalSize ?? 0)).clamp(0, 1),
+               ) ??
+               const Center(child: AppProgressIndicator());
+         },
+
+         errorWidget: (context, url, error) => errorWidget ?? const Icon(Icons.error),
+       );
 }
 
 class AppProgressIndicator extends CircularProgressIndicator {
@@ -165,33 +160,38 @@ class AppProgressIndicator extends CircularProgressIndicator {
     super.value,
     super.strokeCap = StrokeCap.round,
     super.strokeWidth = 2,
+    super.color,
   });
 }
 
 class ImageAsset extends Image {
-  ImageAsset(String assetName,
-      {super.key, super.color, super.fit, Widget? errorWidget})
-      : super(
-          image: AssetImage(assetName),
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) {
-              return child;
-            }
+  ImageAsset(
+    String assetName, {
+    super.key,
+    super.color,
+    super.fit,
+    Widget? errorWidget,
+    LoaderBuilder? loaderBuilder,
+  }) : super(
+         image: AssetImage(assetName),
+         loadingBuilder: (context, child, loadingProgress) {
+           if (loadingProgress == null) {
+             return child;
+           }
 
-            double? progress;
+           double? progress;
 
-            if (loadingProgress.expectedTotalBytes != null) {
-              progress = loadingProgress.cumulativeBytesLoaded /
-                  loadingProgress.expectedTotalBytes!;
-              return AppProgressIndicator(value: progress);
-            }
+           if (loadingProgress.expectedTotalBytes != null) {
+             progress = loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!;
+             return loaderBuilder?.call(progress) ?? AppProgressIndicator(value: progress);
+           }
 
-            return const AppProgressIndicator();
-          },
-          errorBuilder: (context, error, stackTrace) {
-            return errorWidget ?? const Icon(Icons.error);
-          },
-        );
+           return const AppProgressIndicator();
+         },
+         errorBuilder: (context, error, stackTrace) {
+           return errorWidget ?? const Icon(Icons.error);
+         },
+       );
 }
 
 class _SvgIcon extends SvgPicture {
@@ -203,16 +203,14 @@ class _SvgIcon extends SvgPicture {
     Color? color,
     super.fit,
   }) : super(
-          SvgAssetLoader(assetName,
-              packageName: package, assetBundle: bundle, theme: theme),
-          colorFilter:
-              color == null ? null : ColorFilter.mode(color, BlendMode.srcIn),
-        );
+         SvgAssetLoader(assetName, packageName: package, assetBundle: bundle, theme: theme),
+         colorFilter: color == null ? null : ColorFilter.mode(color, BlendMode.srcIn),
+       );
 }
 
 extension ImageTypeExtension on String {
   ImageType get imageType {
-    if (startsWith('http') || startsWith('https')) {
+    if (startsWith('http')) {
       return ImageType.network;
     }
     if (endsWith('.svg')) {
