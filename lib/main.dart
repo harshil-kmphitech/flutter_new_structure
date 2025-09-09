@@ -33,7 +33,17 @@ class MyApp extends StatelessWidget {
       ///Default Theme
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
-      builder: EasyLoading.init(),
+      builder: EasyLoading.init(
+        builder: (context, child) {
+          return TextFieldStyleProvider(
+            key: TextFieldStyleProvider.styleKey,
+            style: WidgetStateTextStyle.resolveWith((states) {
+              return AppStyles.of(context).defaultTextStyle;
+            }),
+            child: child!,
+          );
+        },
+      ),
     );
   }
 }

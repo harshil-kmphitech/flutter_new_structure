@@ -16,7 +16,9 @@ class Outfit extends TextStyle {
 
 @immutable
 class AppStyles extends ThemeExtension<AppStyles> {
-  const AppStyles();
+  const AppStyles({this.defaultTextStyle = const Outfit()});
+
+  final TextStyle defaultTextStyle;
 
   static AppStyles of(BuildContext context) {
     return Theme.of(context).extension<AppStyles>()!;
@@ -28,8 +30,7 @@ class AppStyles extends ThemeExtension<AppStyles> {
   }
 
   @override
-  ThemeExtension<AppStyles> lerp(
-      covariant ThemeExtension<AppStyles>? other, double t) {
+  ThemeExtension<AppStyles> lerp(covariant ThemeExtension<AppStyles>? other, double t) {
     if (other is! AppStyles) {
       return this;
     }

@@ -1,16 +1,12 @@
 import 'dart:async';
 
-import 'package:app/app/utils/helpers/Interceptor/token_interceptor.dart';
 import 'package:app/app/utils/helpers/injectable/injectable.config.dart';
 import 'package:app/app/utils/helpers/loading.dart';
-import 'package:app/app/utils/helpers/logger.dart';
-import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart' as i;
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final getIt = GetIt.instance;
 
@@ -46,12 +42,6 @@ Future<void> _init(Widget myApp) async {
   };
 
   Loading().configLoading();
-
-  getIt<Dio>().interceptors.addAll([
-    RefreshTokenInterceptor(),
-    if (kDebugMode)
-      PrettyDioLogger(requestHeader: true, requestBody: true, logPrint: (object) => object.log),
-  ]);
 
   runApp(myApp);
 }

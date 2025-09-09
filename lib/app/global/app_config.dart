@@ -1,7 +1,7 @@
 class AppConfig {
   AppConfig._();
   static const String baseUrl = 'https://yourapi.com';
-  static const sendTime = Duration(minutes: 1);
-  static const receiveTime = Duration(minutes: 1);
-  static const connectTime = Duration(seconds: 20);
+  static const sendTimeout = Duration(minutes: 1);
+  static const receiveTimeout = Duration(minutes: 1);
+  static const connectTimeout = Duration(seconds: 20);
 }

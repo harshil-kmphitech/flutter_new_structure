@@ -26,11 +26,7 @@ class AppTheme {
 
   static BottomSheetThemeData get _bottomSheetTheme {
     return const BottomSheetThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
     );
   }
 
@@ -45,15 +41,31 @@ class AppTheme {
   }
 
   static AppBarTheme get _appBarTheme {
-    return const AppBarTheme(
-      titleTextStyle: Outfit(
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
-      ),
-    );
+    return const AppBarTheme(titleTextStyle: Outfit(fontSize: 24, fontWeight: FontWeight.w600));
   }
 
   static ButtonThemeData get _buttonTheme {
     return const ButtonThemeData();
+  }
+}
+
+class TextFieldStyleProvider extends InheritedWidget {
+  const TextFieldStyleProvider({super.key, required this.style, required super.child});
+
+  final TextStyle style;
+
+  static final styleKey = GlobalKey();
+
+  static TextStyle? get styleOf {
+    return styleKey.currentContext
+        ?.dependOnInheritedWidgetOfExactType<TextFieldStyleProvider>()
+        ?.style;
+  }
+
+  @override
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
+    if (oldWidget is! TextFieldStyleProvider) return false;
+
+    return style != oldWidget.style;
   }
 }

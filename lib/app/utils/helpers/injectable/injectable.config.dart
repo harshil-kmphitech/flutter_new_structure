@@ -8,14 +8,14 @@
 // ignore_for_file: type=lint
 // coverage:ignore-file
 
-import 'package:app/app/controllers/app_controller.dart' as _i129;
-import 'package:app/app/controllers/auth_controller.dart' as _i289;
-import 'package:app/app/data/services/authService/auth_service.dart' as _i388;
-import 'package:app/app/data/services/refreshToken/refresh_token_service.dart'
-    as _i298;
-import 'package:app/app/utils/helpers/injectable%20properties/injectable_properties.dart'
-    as _i854;
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:app/app/controllers/app_controller.dart' as _i145;
+import 'package:app/app/controllers/auth_controller.dart' as _i85;
+import 'package:app/app/data/services/authService/auth_service.dart' as _i950;
+import 'package:app/app/data/services/refreshToken/refresh_token_service.dart'
+    as _i334;
+import 'package:app/app/utils/helpers/injectable%20properties/injectable_properties.dart'
+    as _i1019;
 import 'package:dio/dio.dart' as _i361;
 import 'package:firebase_core/firebase_core.dart' as _i982;
 import 'package:get_it/get_it.dart' as _i174;
@@ -38,20 +38,29 @@ extension GetItInjectableX on _i174.GetIt {
       () => registerModule.initializeFireBase(),
       preResolve: true,
     );
-    gh.singleton<_i361.Dio>(() => registerModule.dio());
-    gh.lazySingleton<_i129.AppController>(() => _i129.AppController());
-    gh.lazySingleton<_i289.AuthController>(
-      () => _i289.AuthController(),
+    gh.lazySingleton<_i145.AppController>(() => _i145.AppController());
+    gh.lazySingleton<_i85.AuthController>(
+      () => _i85.AuthController(),
       dispose: (i) => i.dispose(),
     );
-    gh.lazySingleton<_i298.RefreshTokenService>(
-      () => _i298.RefreshTokenService(gh<_i361.Dio>()),
+    await gh.factoryAsync<String>(
+      () => registerModule.getCurrentVersionCode(),
+      instanceName: 'versioncode',
+      preResolve: true,
     );
-    gh.lazySingleton<_i388.AuthService>(
-      () => _i388.AuthService(gh<_i361.Dio>()),
+    gh.singleton<_i361.Dio>(
+      () => registerModule.dio(
+        versionCode: gh<String>(instanceName: 'versioncode'),
+      ),
+    );
+    gh.lazySingleton<_i334.RefreshTokenService>(
+      () => _i334.RefreshTokenService.new(gh<_i361.Dio>()),
+    );
+    gh.lazySingleton<_i950.AuthService>(
+      () => _i950.AuthService.new(gh<_i361.Dio>()),
     );
     return this;
   }
 }
 
-class _$RegisterModule extends _i854.RegisterModule {}
+class _$RegisterModule extends _i1019.RegisterModule {}

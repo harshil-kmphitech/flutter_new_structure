@@ -7,11 +7,11 @@ part of 'api_response.dart';
 // **************************************************************************
 
 BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) => BaseResponse(
-      data: json['data'],
-      isSuccess: json['isSuccess'] as bool,
-      statusCode: (json['statusCode'] as num).toInt(),
-      message: json['message'] as String,
-    );
+  data: json['data'],
+  isSuccess: json['isSuccess'] as bool,
+  statusCode: (json['statusCode'] as num).toInt(),
+  message: json['message'] as String,
+);
 
 Map<String, dynamic> _$BaseResponseToJson(BaseResponse instance) =>
     <String, dynamic>{
