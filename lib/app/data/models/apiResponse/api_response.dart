@@ -1,15 +1,11 @@
+import 'package:app/app/data/models/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'api_response.g.dart';
 
 abstract class ApiResponse {
-  const ApiResponse({
-    required this.isSuccess,
-    required this.statusCode,
-    required this.message,
-  });
+  const ApiResponse({required this.isSuccess, required this.statusCode, required this.message});
 
   final int statusCode;
   final bool isSuccess;
@@ -22,19 +18,15 @@ abstract class ApiResponse {
         borderRadius: 10,
         padding: const EdgeInsets.all(12),
         duration: const Duration(seconds: 2),
-        margin: const EdgeInsets.only(
-          left: 16,
-          right: 16,
-        ),
+        margin: const EdgeInsets.only(left: 16, right: 16),
       ),
     );
   }
 }
 
-BaseResponse deserializeBaseResponse(Map<String, dynamic> json) =>
-    BaseResponse.fromJson(json);
+BaseResponse deserializeBaseResponse(Map<String, dynamic> json) => BaseResponse.fromJson(json);
 
-@JsonSerializable()
+@AppJson()
 class BaseResponse extends ApiResponse {
   BaseResponse({
     required this.data,
@@ -43,8 +35,7 @@ class BaseResponse extends ApiResponse {
     required super.message,
   });
 
-  factory BaseResponse.fromJson(Map<String, dynamic> json) =>
-      _$BaseResponseFromJson(json);
+  factory BaseResponse.fromJson(Map<String, dynamic> json) => _$BaseResponseFromJson(json);
 
   final dynamic data;
 
