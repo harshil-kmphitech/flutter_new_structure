@@ -1,7 +1,7 @@
+import 'package:app/app/data/models/refreshToken/refresh_token_model.dart';
+import 'package:app/app/global/app_config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_new_structure/app/data/models/refreshToken/refresh_token_model.dart';
-import 'package:flutter_new_structure/app/global/app_config.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
@@ -16,7 +16,5 @@ abstract class RefreshTokenService {
   factory RefreshTokenService(Dio dio) = _RefreshTokenService;
 
   @POST('/refreshToken')
-  Future<RefreshTokenResponse> refreshToken(
-    @Field('user_id') String userId,
-  );
+  Future<RefreshTokenResponse> refreshToken(@Field('user_id') String userId);
 }

@@ -1,11 +1,11 @@
+import 'package:app/app/routes/app_pages.dart';
+import 'package:app/app/routes/app_routes.dart';
+import 'package:app/app/utils/helpers/extensions/extensions.dart';
+import 'package:app/app/utils/helpers/injectable/injectable.dart';
+import 'package:app/app/utils/themes/app_theme.dart';
+import 'package:app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_new_structure/app/routes/app_pages.dart';
-import 'package:flutter_new_structure/app/routes/app_routes.dart';
-import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
-import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
-import 'package:flutter_new_structure/app/utils/themes/app_theme.dart';
-import 'package:flutter_new_structure/l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

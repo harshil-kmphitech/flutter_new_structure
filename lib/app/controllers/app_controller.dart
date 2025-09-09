@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:app/app/utils/helpers/logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:injectable/injectable.dart';
 
@@ -12,17 +12,12 @@ class AppController {
   final _completer = Completer<bool>();
 
   Future<void> onSplash(BuildContext context) async {
-    Future.delayed(
-      const Duration(seconds: 3),
-      () async {
-        if (await _completer.future) {
-          _routeTo();
-        }
-      },
-    );
-    await _preCacheAssets(context).then(
-      (value) => _completer.complete(true),
-    );
+    Future.delayed(const Duration(seconds: 3), () async {
+      if (await _completer.future) {
+        _routeTo();
+      }
+    });
+    await _preCacheAssets(context).then((value) => _completer.complete(true));
   }
 
   Future<void> _preCacheAssets(BuildContext context) async {
@@ -32,14 +27,9 @@ class AppController {
     final listOfPng = assets
         .where((element) => element.endsWith('.png'))
         .map((e) => precacheImage(AssetImage(e), context, onError: _onError));
-    final listOfSvg = assets
-        .where((element) => element.endsWith('.svg'))
-        .map(SvgAssetLoader.new);
+    final listOfSvg = assets.where((element) => element.endsWith('.svg')).map(SvgAssetLoader.new);
 
-    await Future.wait([
-      ...listOfPng,
-      ...listOfSvg.map((e) => e.loadBytes(context)),
-    ]);
+    await Future.wait([...listOfPng, ...listOfSvg.map((e) => e.loadBytes(context))]);
 
     if (context.mounted) {
       for (final e in listOfSvg) {

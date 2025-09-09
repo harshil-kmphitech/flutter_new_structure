@@ -1,19 +1,17 @@
+import 'package:app/app/data/models/refreshToken/refresh_token_model.dart';
+import 'package:app/app/data/services/refreshToken/refresh_token_service.dart';
+import 'package:app/app/utils/helpers/exception/exception.dart';
+import 'package:app/app/utils/helpers/extensions/extensions.dart';
+import 'package:app/app/utils/helpers/injectable/injectable.dart';
+import 'package:app/app/utils/helpers/loading.dart';
+import 'package:app/app/utils/helpers/logger.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart' show debugPrintStack;
-import 'package:flutter_new_structure/app/data/models/refreshToken/refresh_token_model.dart';
-import 'package:flutter_new_structure/app/data/services/refreshToken/refresh_token_service.dart';
-import 'package:flutter_new_structure/app/utils/helpers/exception/exception.dart';
-import 'package:flutter_new_structure/app/utils/helpers/extensions/extensions.dart';
-import 'package:flutter_new_structure/app/utils/helpers/injectable/injectable.dart';
-import 'package:flutter_new_structure/app/utils/helpers/loading.dart';
-import 'package:flutter_new_structure/app/utils/helpers/logger.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart' hide FormData;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class QueueRequest<T> {
-  QueueRequest({
-    required this.err,
-    required this.handler,
-  });
+  QueueRequest({required this.err, required this.handler});
 
   final DioException err;
 
@@ -26,21 +24,24 @@ class QueueRequest<T> {
   Future<void> resolve() {
     final requestOptions = err.requestOptions;
     requestOptions.extra['new-Token'] = getIt<SharedPreferences>().getToken;
-    return getIt<Dio>().fetch(_recreate(requestOptions)).handler(
-      null,
-      isLoading: false,
-      onSuccess: handler.resolve,
-      onFailed: (value) {
-        if (value.dioError != null) {
-          debugPrintStack(
-              stackTrace: value.dioError?.stackTrace,
-              label: value.dioError?.response?.data.toString());
-          handler.reject(value.dioError!);
-        } else {
-          handler.next(err);
-        }
-      },
-    );
+    return getIt<Dio>()
+        .fetch(_recreate(requestOptions))
+        .handler(
+          null,
+          isLoading: false,
+          onSuccess: handler.resolve,
+          onFailed: (value) {
+            if (value.dioError != null) {
+              debugPrintStack(
+                stackTrace: value.dioError?.stackTrace,
+                label: value.dioError?.response?.data.toString(),
+              );
+              handler.reject(value.dioError!);
+            } else {
+              handler.next(err);
+            }
+          },
+        );
   }
 
   RequestOptions _recreate(RequestOptions requestOptions) {
@@ -49,19 +50,10 @@ class QueueRequest<T> {
       data = requestOptions.data as FormData;
       data = FormData()
         ..fields.addAll(data.fields)
-        ..files.addAll(
-          data.files.map(
-            (e) => MapEntry(
-              e.key,
-              e.value.clone(),
-            ),
-          ),
-        );
+        ..files.addAll(data.files.map((e) => MapEntry(e.key, e.value.clone())));
     }
 
-    return requestOptions.copyWith(
-      data: data ?? requestOptions.data,
-    );
+    return requestOptions.copyWith(data: data ?? requestOptions.data);
   }
 }
 
@@ -87,37 +79,38 @@ class RefreshTokenInterceptor extends Interceptor {
   }
 
   @override
-  Future<void> onError(
-      DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401) {
-      Loading.dismiss();
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+    switch (err.response?.statusCode) {
+      case 401 || 410:
+        Loading.dismiss();
       // TODO: Write log out code here.
-    } else if (err.response?.statusCode == 433) {
-      _queueRequest(err, handler);
-    } else {
-      super.onError(err, handler);
+      case 433:
+        _queueRequest(err, handler);
+      case 426:
+        _updateDialog();
+      case 503:
+      // TODO: Show App is under maintenance (screen | dialog | sheet).
+      default:
+        super.onError(err, handler);
     }
   }
 
   void _queueRequest(DioException err, ErrorInterceptorHandler handler) {
-    requestQueue.add(
-      QueueRequest(
-        err: err,
-        handler: handler,
-      ),
-    );
+    requestQueue.add(QueueRequest(err: err, handler: handler));
 
     if (refreshTokenState.isInitial) {
       refreshToken();
     }
   }
 
-  final refreshTokenState = ApiState.initial<RefreshTokenResponse>();
+  final refreshTokenState = RxApiState<RefreshTokenResponse>();
 
   Future<void> refreshToken() async {
     final data = getIt<SharedPreferences>().getUserId;
     if (data != null) {
-      await getIt<RefreshTokenService>().refreshToken(data).handler(
+      await getIt<RefreshTokenService>()
+          .refreshToken(data)
+          .handler(
             refreshTokenState,
             isLoading: false,
             onSuccess: _onRefreshSuccess,
@@ -139,13 +132,11 @@ class RefreshTokenInterceptor extends Interceptor {
 
   void _onRefreshSuccess(RefreshTokenResponse value) {
     final pref = getIt<SharedPreferences>();
-    refreshTokenState.value = InitialState();
+    refreshTokenState.value = const InitialState();
 
     if (value.data.containsKey('token')) {
       pref.setToken = value.data['token'] as String;
-      Future.wait(
-        requestQueue.map((e) => e.resolve()),
-      ).whenComplete(requestQueue.clear);
+      Future.wait(requestQueue.map((e) => e.resolve())).whenComplete(requestQueue.clear);
     } else {
       requestQueue
         ..forEach((element) => element.next())
@@ -153,5 +144,25 @@ class RefreshTokenInterceptor extends Interceptor {
 
       return;
     }
+  }
+
+  void _updateDialog() {
+    Loading.dismiss();
+    Get.bottomSheet(
+      const UpdateAppSheet(),
+      isDismissible: false,
+      enableDrag: false,
+      isScrollControlled: true,
+    ).ignore();
+  }
+}
+
+class UpdateAppSheet extends StatelessWidget {
+  const UpdateAppSheet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: Design the Force Update App Sheet.
+    return const PopScope(canPop: false, child: SizedBox());
   }
 }

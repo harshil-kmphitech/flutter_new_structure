@@ -1,11 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
-import 'package:flutter_new_structure/app/data/models/apiResponse/api_response.dart';
+import 'package:app/app/data/models/apiResponse/api_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'refresh_token_model.g.dart';
 
-RefreshTokenResponse deserializeRefreshTokenResponse(
-        Map<String, dynamic> json) =>
+RefreshTokenResponse deserializeRefreshTokenResponse(Map<String, dynamic> json) =>
     RefreshTokenResponse.fromJson(json);
 
 @JsonSerializable()

@@ -1,4 +1,4 @@
-import 'package:flutter_new_structure/l10n/app_localizations.dart';
+import 'package:app/l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 class AppStrings {

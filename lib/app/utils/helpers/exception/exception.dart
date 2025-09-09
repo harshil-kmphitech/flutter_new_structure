@@ -1,9 +1,12 @@
+import 'package:app/app/ui/widgets/custom_snack_bar.dart';
+import 'package:app/app/utils/constants/app_strings.dart';
+import 'package:app/app/utils/helpers/loading.dart';
+import 'package:app/app/utils/helpers/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_new_structure/app/ui/widgets/custom_snack_bar.dart';
-import 'package:flutter_new_structure/app/utils/constants/app_strings.dart';
-import 'package:flutter_new_structure/app/utils/helpers/loading.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile, Response;
+
+part 'rx_api_state_x.dart';
 
 @immutable
 class UserFriendlyError {
@@ -15,11 +18,7 @@ class UserFriendlyError {
 extension DioExceptionX on DioException {
   /// context should pass for incase app works with Localization so the context is required
   UserFriendlyError toUserFriendlyError() {
-    return type.toUserFriendlyError(
-      badResponseDesc: _statusCode(
-        response?.statusCode,
-      ),
-    );
+    return type.toUserFriendlyError(badResponseDesc: _statusCode(response?.statusCode));
   }
 
   String _statusCode(int? statusCode) {
@@ -51,50 +50,27 @@ extension DioExceptionX on DioException {
 
 extension DioExceptionTypeX on DioExceptionType {
   /// context should pass for incase app works with Localization so the context is required
-  UserFriendlyError toUserFriendlyError({
-    String? badResponseDesc,
-  }) {
+  UserFriendlyError toUserFriendlyError({String? badResponseDesc}) {
     switch (this) {
       case DioExceptionType.connectionTimeout:
-        return UserFriendlyError(
-          AppStrings.T.sendTimeout,
-          AppStrings.T.sendTimeoutDesc,
-        );
+        return UserFriendlyError(AppStrings.T.sendTimeout, AppStrings.T.sendTimeoutDesc);
       case DioExceptionType.sendTimeout:
-        return UserFriendlyError(
-          AppStrings.T.sendTimeout,
-          AppStrings.T.sendTimeoutDesc,
-        );
+        return UserFriendlyError(AppStrings.T.sendTimeout, AppStrings.T.sendTimeoutDesc);
       case DioExceptionType.receiveTimeout:
-        return UserFriendlyError(
-          AppStrings.T.receiveTimeout,
-          AppStrings.T.receiveTimeoutDesc,
-        );
+        return UserFriendlyError(AppStrings.T.receiveTimeout, AppStrings.T.receiveTimeoutDesc);
       case DioExceptionType.badCertificate:
-        return UserFriendlyError(
-          AppStrings.T.badCertificate,
-          AppStrings.T.badCertificateDesc,
-        );
+        return UserFriendlyError(AppStrings.T.badCertificate, AppStrings.T.badCertificateDesc);
       case DioExceptionType.badResponse:
         return UserFriendlyError(
           AppStrings.T.badResponse,
           badResponseDesc ?? AppStrings.T.badResponseDesc,
         );
       case DioExceptionType.cancel:
-        return UserFriendlyError(
-          AppStrings.T.reqCancel,
-          AppStrings.T.reqCancelDesc,
-        );
+        return UserFriendlyError(AppStrings.T.reqCancel, AppStrings.T.reqCancelDesc);
       case DioExceptionType.connectionError:
-        return UserFriendlyError(
-          AppStrings.T.connectionError,
-          AppStrings.T.connectionErrorDesc,
-        );
+        return UserFriendlyError(AppStrings.T.connectionError, AppStrings.T.connectionErrorDesc);
       case DioExceptionType.unknown:
-        return UserFriendlyError(
-          AppStrings.T.unknown,
-          AppStrings.T.unknownDesc,
-        );
+        return UserFriendlyError(AppStrings.T.unknown, AppStrings.T.unknownDesc);
     }
   }
 }
@@ -109,6 +85,7 @@ extension ApiHandlingX<T> on Future<T> {
   Future<void> handler(
     Rx<ApiState<T>>? state, {
     bool isLoading = true,
+    bool includeResponseInSuccessState = false,
     ApiSuccessCallback<T>? onSuccess,
     ApiFailedCallback<T>? onFailed,
   }) async {
@@ -118,7 +95,7 @@ extension ApiHandlingX<T> on Future<T> {
 
       final response = await this;
 
-      state?.value = SuccessState<T>(response);
+      state?.value = SuccessState<T>(includeResponseInSuccessState ? response : null);
       onSuccess?.call(response);
     } on DioException catch (e) {
       final failedState = FailedState<T>(
@@ -127,8 +104,7 @@ extension ApiHandlingX<T> on Future<T> {
           DioExceptionType.connectionError ||
           DioExceptionType.connectionTimeout ||
           DioExceptionType.sendTimeout ||
-          DioExceptionType.receiveTimeout =>
-            true,
+          DioExceptionType.receiveTimeout => true,
           _ => false,
         },
         dioError: e,
@@ -136,86 +112,14 @@ extension ApiHandlingX<T> on Future<T> {
 
       state?.value = failedState;
       onFailed?.call((state?.value ?? failedState) as FailedState<T>);
-    } on Exception {
-      final failedState = FailedState<T>(
-        statusCode: 0,
-        isRetirable: false,
-        dioError: null,
-      );
+    } catch (e) {
+      e.log;
+      final failedState = FailedState<T>(statusCode: 0, isRetirable: false, dioError: null);
 
       state?.value = failedState;
       onFailed?.call((state?.value ?? failedState) as FailedState<T>);
     } finally {
       if (isLoading) Loading.dismiss();
     }
-  }
-}
-
-extension RxApiStateX<T> on Rx<ApiState<T>> {
-  bool get isInitial => value is InitialState<T>;
-  bool get isLoading => value is LoadingState<T>;
-  bool get isSuccess => value is SuccessState<T>;
-  bool get isFailed => value is FailedState<T>;
-
-  SuccessState<T> get successState => value as SuccessState<T>;
-  FailedState<T> get failedState => value as FailedState<T>;
-}
-
-extension ApiStateX<T> on ApiState<T> {
-  bool get isInitial => this is InitialState<T>;
-  bool get isLoading => this is LoadingState<T>;
-  bool get isSuccess => this is SuccessState<T>;
-  bool get isFailed => this is FailedState<T>;
-
-  SuccessState<T> get successState => this as SuccessState<T>;
-  FailedState<T> get failedState => this as FailedState<T>;
-}
-
-sealed class ApiState<T> {
-  static Rx<ApiState<T>> initial<T>() => InitialState<T>().obs;
-}
-
-class SuccessState<T> extends ApiState<T> {
-  SuccessState(this.value);
-  T value;
-}
-
-class InitialState<T> extends ApiState<T> {}
-
-class LoadingState<T> extends ApiState<T> {}
-
-class FailedState<T> extends ApiState<T> {
-  FailedState({
-    required this.isRetirable,
-    required this.statusCode,
-    required this.dioError,
-  });
-  bool isRetirable;
-  UserFriendlyError get error =>
-      dioError?.toUserFriendlyError() ??
-      UserFriendlyError(
-        AppStrings.T.apiError,
-        AppStrings.T.apiErrorDescription,
-      );
-
-  Response<T>? get response {
-    if (dioError?.response is Response<T>) {
-      return dioError!.response! as Response<T>;
-    }
-    return null;
-  }
-
-  DioException? dioError;
-
-  int statusCode;
-
-  void showToast() {
-    Get.showSnackbar(
-      AppSnackBar.error(
-        title: error.title,
-        message: (dioError?.response?.data['message'] as String?) ??
-            error.description,
-      ),
-    );
   }
 }

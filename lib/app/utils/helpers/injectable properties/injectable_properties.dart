@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:app/firebase_options.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_new_structure/firebase_options.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,26 +10,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class RegisterModule {
   @singleton
   Dio dio() => Dio(
-        BaseOptions(
-          sendTimeout: const Duration(minutes: 1),
-          receiveTimeout: const Duration(minutes: 1),
-          connectTimeout: const Duration(seconds: 20),
-          headers: {
-            'versioncode': '1',
-            'devicetype': switch (Platform.operatingSystem) {
-              'android' => 'Android',
-              'ios' => 'iOS',
-              _ => 'Other',
-            },
-          },
-        ),
-      );
+    BaseOptions(
+      sendTimeout: const Duration(minutes: 1),
+      receiveTimeout: const Duration(minutes: 1),
+      connectTimeout: const Duration(seconds: 20),
+      headers: {
+        'versioncode': '1',
+        'devicetype': switch (Platform.operatingSystem) {
+          'android' => 'Android',
+          'ios' => 'iOS',
+          _ => 'Other',
+        },
+      },
+    ),
+  );
 
   @preResolve
   Future<SharedPreferences> pref() => SharedPreferences.getInstance();
 
   @preResolve
-  Future<FirebaseApp> initializeFireBase() => Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
+  Future<FirebaseApp> initializeFireBase() =>
+      Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
