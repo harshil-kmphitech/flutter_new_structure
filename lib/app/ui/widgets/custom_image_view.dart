@@ -84,10 +84,10 @@ class ImageView extends StatelessWidget {
     };
 
     widget = inner?._makeWidgetCompatible(widget) ?? widget;
+    
+    widget = _checkBoundaries(widget, decoration);
 
     widget = outer?._makeWidgetCompatible(widget) ?? widget;
-
-    widget = _checkBoundaries(widget, decoration);
 
     if (decoration == null) {
       return widget;
