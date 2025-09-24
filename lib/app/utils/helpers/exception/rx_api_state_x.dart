@@ -43,12 +43,7 @@ class FailedState<T> extends ApiState<T> {
       dioError?.toUserFriendlyError() ??
       UserFriendlyError(AppStrings.T.apiError, AppStrings.T.apiErrorDescription);
 
-  Response<T>? get response {
-    if (dioError?.response is Response<T>) {
-      return dioError!.response! as Response<T>;
-    }
-    return null;
-  }
+  Response<dynamic>? get response => dioError?.response;
 
   final DioException? dioError;
 
