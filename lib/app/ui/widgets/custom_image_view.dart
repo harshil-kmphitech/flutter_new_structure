@@ -5,12 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ImageSize {
-  const ImageSize({this.alignment, this.dimension, this.height, this.width});
+  const ImageSize({
+    this.alignment,
+    this.dimension,
+    this.height,
+    this.width,
+    this.shouldClip = false,
+  });
 
   final Alignment? alignment;
   final double? dimension;
   final double? height;
   final double? width;
+  final bool shouldClip;
 
   Widget _makeWidgetCompatible(Widget child) {
     var temp = child;
@@ -73,7 +80,7 @@ class ImageView extends StatelessWidget {
         errorWidget: errorWidget,
         loaderBuilder: loaderBuilder,
       ),
-      ImageType.network => NetworkImage(
+      ImageType.network => ImageNetwork(
         imagePath,
         color: color,
         fit: fit,
@@ -84,10 +91,15 @@ class ImageView extends StatelessWidget {
     };
 
     widget = inner?._makeWidgetCompatible(widget) ?? widget;
-    
-    widget = _checkBoundaries(widget, decoration);
 
+    if (inner?.shouldClip ?? false) {
+      widget = _checkBoundaries(widget, decoration);
+    }
     widget = outer?._makeWidgetCompatible(widget) ?? widget;
+
+    if (outer?.shouldClip ?? false) {
+      widget = _checkBoundaries(widget, decoration);
+    }
 
     if (decoration == null) {
       return widget;
@@ -133,8 +145,8 @@ class ImageFile extends Image {
       );
 }
 
-class NetworkImage extends CachedNetworkImage {
-  NetworkImage(
+class ImageNetwork extends CachedNetworkImage {
+  ImageNetwork(
     String imageUrl, {
     super.key,
     super.color,
