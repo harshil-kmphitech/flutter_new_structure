@@ -5,21 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ImageSize {
-  const ImageSize({
-    this.alignment,
-    this.dimension,
-    this.height,
-    this.width,
-    this.shouldClip = false,
-  });
+  const ImageSize({this.alignment, this.dimension, this.height, this.width});
 
   final Alignment? alignment;
   final double? dimension;
   final double? height;
   final double? width;
-  final bool shouldClip;
 
-  Widget _makeWidgetCompatible(Widget child) {
+  Widget? _makeWidgetCompatible(Widget? child) {
     var temp = child;
     if (alignment != null) {
       temp = Align(alignment: alignment!, child: child);
@@ -55,7 +48,7 @@ class ImageView extends StatelessWidget {
 
   final BoxFit fit;
 
-  final String imagePath;
+  final String? imagePath;
 
   final ImageSize? inner;
   final ImageSize? outer;
@@ -70,45 +63,47 @@ class ImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final type = imagePath.imageType;
-    var widget = switch (type) {
-      ImageType.svg => _SvgIcon(imagePath, color: color, fit: fit),
-      ImageType.asset => ImageAsset(
-        imagePath,
-        color: color,
-        fit: fit,
-        errorWidget: errorWidget,
-        loaderBuilder: loaderBuilder,
-      ),
-      ImageType.network => ImageNetwork(
-        imagePath,
-        color: color,
-        fit: fit,
-        errorWidget: errorWidget,
-        loaderBuilder: loaderBuilder,
-      ),
-      ImageType.file => ImageFile(imagePath, color: color, fit: fit, errorWidget: errorWidget),
-    };
+    final type = imagePath?.imageType;
+    var widget = type == null
+        ? null
+        : switch (type) {
+            ImageType.svg => _SvgIcon(imagePath!, color: color, fit: fit),
+            ImageType.asset => ImageAsset(
+              imagePath!,
+              color: color,
+              fit: fit,
+              errorWidget: errorWidget,
+              loaderBuilder: loaderBuilder,
+            ),
+            ImageType.network => NetworkImage(
+              imagePath!,
+              color: color,
+              fit: fit,
+              errorWidget: errorWidget,
+              loaderBuilder: loaderBuilder,
+            ),
+            ImageType.file => ImageFile(
+              imagePath!,
+              color: color,
+              fit: fit,
+              errorWidget: errorWidget,
+            ),
+          };
 
     widget = inner?._makeWidgetCompatible(widget) ?? widget;
 
-    if (inner?.shouldClip ?? false) {
-      widget = _checkBoundaries(widget, decoration);
-    }
     widget = outer?._makeWidgetCompatible(widget) ?? widget;
 
-    if (outer?.shouldClip ?? false) {
-      widget = _checkBoundaries(widget, decoration);
-    }
+    widget = _checkBoundaries(widget, decoration);
 
     if (decoration == null) {
-      return widget;
+      return widget ?? const SizedBox();
     }
 
     return DecoratedBox(decoration: decoration!, child: widget);
   }
 
-  Widget _checkBoundaries(Widget widget, Decoration? decoration) {
+  Widget? _checkBoundaries(Widget? widget, Decoration? decoration) {
     if (decoration is BoxDecoration) {
       if (decoration.shape == BoxShape.circle) {
         return ClipOval(child: widget);
@@ -145,8 +140,8 @@ class ImageFile extends Image {
       );
 }
 
-class ImageNetwork extends CachedNetworkImage {
-  ImageNetwork(
+class NetworkImage extends CachedNetworkImage {
+  NetworkImage(
     String imageUrl, {
     super.key,
     super.color,
