@@ -75,7 +75,7 @@ class ImageView extends StatelessWidget {
               errorWidget: errorWidget,
               loaderBuilder: loaderBuilder,
             ),
-            ImageType.network => NetworkImage(
+            ImageType.network => ImageNetwork(
               imagePath!,
               color: color,
               fit: fit,
@@ -140,8 +140,8 @@ class ImageFile extends Image {
       );
 }
 
-class NetworkImage extends CachedNetworkImage {
-  NetworkImage(
+class ImageNetwork extends CachedNetworkImage {
+  ImageNetwork(
     String imageUrl, {
     super.key,
     super.color,
