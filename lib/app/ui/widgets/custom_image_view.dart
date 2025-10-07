@@ -5,12 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ImageSize {
-  const ImageSize({this.alignment, this.dimension, this.height, this.width});
+  const ImageSize({
+    this.alignment,
+    this.dimension,
+    this.height,
+    this.width,
+    this.shouldClip = false,
+  });
 
   final Alignment? alignment;
   final double? dimension;
   final double? height;
   final double? width;
+  final bool shouldClip;
 
   Widget? _makeWidgetCompatible(Widget? child) {
     var temp = child;
@@ -92,7 +99,14 @@ class ImageView extends StatelessWidget {
 
     widget = inner?._makeWidgetCompatible(widget) ?? widget;
 
+    if (inner?.shouldClip ?? false) {
+      widget = _checkBoundaries(widget, decoration);
+    }
     widget = outer?._makeWidgetCompatible(widget) ?? widget;
+
+    if (outer?.shouldClip ?? false) {
+      widget = _checkBoundaries(widget, decoration);
+    }
 
     widget = _checkBoundaries(widget, decoration);
 
@@ -104,12 +118,20 @@ class ImageView extends StatelessWidget {
   }
 
   Widget? _checkBoundaries(Widget? widget, Decoration? decoration) {
-    if (decoration is BoxDecoration) {
-      if (decoration.shape == BoxShape.circle) {
-        return ClipOval(child: widget);
-      } else if (decoration.borderRadius != null) {
-        return ClipRRect(borderRadius: decoration.borderRadius!, child: widget);
-      }
+    switch (decoration) {
+      case final BoxDecoration _:
+        if (decoration.shape == BoxShape.circle) {
+          return ClipOval(child: widget);
+        } else if (decoration.borderRadius != null) {
+          return ClipRRect(borderRadius: decoration.borderRadius!, child: widget);
+        }
+      case final ShapeDecoration _:
+        return ClipPath(
+          clipper: ShapeBorderClipper(shape: decoration.shape),
+          child: widget,
+        );
+
+      default:
     }
 
     return widget;

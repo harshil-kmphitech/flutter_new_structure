@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
+part 'app_button_theme.dart';
 part 'app_colors.dart';
+part 'app_icon_button_theme.dart';
 part 'app_styles.dart';
-
-// TextTheme textTheme = Get.theme.textTheme;
-// ColorScheme colorScheme = Get.theme.colorScheme;
 
 class AppTheme {
   AppTheme._();
