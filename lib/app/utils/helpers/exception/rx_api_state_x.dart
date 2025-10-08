@@ -7,6 +7,9 @@ class RxApiState<T> extends Rx<ApiState<T>> {
   bool get isLoading => value is LoadingState<T>;
   bool get isSuccess => value is SuccessState<T>;
   bool get isFailed => value is FailedState<T>;
+
+  FailedState<T> get failedState => value as FailedState<T>;
+  SuccessState<T> get successState => value as SuccessState<T>;
 }
 
 @immutable
