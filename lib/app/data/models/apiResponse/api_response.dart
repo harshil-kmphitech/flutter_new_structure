@@ -1,5 +1,5 @@
 import 'package:app/app/data/models/core/core.dart';
-import 'package:flutter/material.dart';
+import 'package:app/app/utils/constants/app_edge_insets.dart';
 import 'package:get/get.dart';
 
 part 'api_response.g.dart';
@@ -12,13 +12,17 @@ abstract class ApiResponse {
   final String message;
 
   void showToast([String? message]) {
+    showToastStatic(message ?? this.message);
+  }
+
+  static void showToastStatic([String? message]) {
     Get.showSnackbar(
       GetSnackBar(
-        message: message ?? this.message,
+        message: message,
         borderRadius: 10,
-        padding: const EdgeInsets.all(12),
+        padding: const AppEdgeInsets.all12(),
         duration: const Duration(seconds: 2),
-        margin: const EdgeInsets.only(left: 16, right: 16),
+        margin: const AppEdgeInsets.h16(),
       ),
     );
   }
