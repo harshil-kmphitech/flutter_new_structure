@@ -98,7 +98,7 @@ class RefreshTokenInterceptor extends Interceptor {
   void _queueRequest(DioException err, ErrorInterceptorHandler handler) {
     requestQueue.add(QueueRequest(err: err, handler: handler));
 
-    if (refreshTokenState.isInitial) {
+    if (!refreshTokenState.isLoading) {
       refreshToken();
     }
   }
