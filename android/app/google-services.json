@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "823642880461-4o14oka8njs3fqd825i3nlc4hglvesnl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.app",
+            "certificate_hash": "d51afe49392b456011b8545aa6c5e6a75cf96886"
+          }
+        },
+        {
+          "client_id": "823642880461-jn8vc4oool5rp4ib1n96buopl5elk4q0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.app",
+            "certificate_hash": "2c2596f44bc7f59980963fe81bdcc634c458d53a"
+          }
+        },
+        {
           "client_id": "823642880461-l2059kl7j7mb68dtanaei2k4ft040sql.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -39,10 +55,10 @@
               "client_type": 3
             },
             {
-              "client_id": "823642880461-7ul1fcjdhe5l9tlmji6opfaut06f23p1.apps.googleusercontent.com",
+              "client_id": "823642880461-5vnqu7oir5dp7e518k818q354t40u74c.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.app"
+                "bundle_id": "com.example.socialLoginDemo"
               }
             }
           ]
