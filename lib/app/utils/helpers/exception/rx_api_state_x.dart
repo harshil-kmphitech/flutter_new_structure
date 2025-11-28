@@ -1,7 +1,11 @@
 part of 'exception.dart';
 
 class RxApiState<T> extends Rx<ApiState<T>> {
-  RxApiState([super.initial = const InitialState()]);
+  RxApiState({this.cancelToken, ApiState<T>? initialState})
+    : super(initialState ?? const InitialState());
+
+  CancelToken? cancelToken;
+  Completer<void>? _completer;
 
   bool get isInitial => value is InitialState<T>;
   bool get isLoading => value is LoadingState<T>;
@@ -10,6 +14,37 @@ class RxApiState<T> extends Rx<ApiState<T>> {
 
   FailedState<T> get failedState => value as FailedState<T>;
   SuccessState<T> get successState => value as SuccessState<T>;
+
+  Future<void> cancelIfLoading() {
+    if (isInitial || cancelToken == null || !isLoading || cancelToken!.isCancelled) {
+      return Future.value();
+    }
+
+    _completer = Completer<void>();
+    cancelToken?.cancel();
+    if (cancelToken != null) {
+      cancelToken = CancelToken();
+    }
+    return _completer!.future.whenComplete(() => _completer = null);
+  }
+
+  @override
+  set value(ApiState<T> val) {
+    if (_completer != null && val is FailedState<T>) {
+      _completer?.complete();
+    }
+    super.value = val;
+  }
+
+  @override
+  void close() {
+    if (cancelToken != null) {
+      if (isLoading && !cancelToken!.isCancelled) {
+        cancelToken?.cancel();
+      }
+    }
+    super.close();
+  }
 }
 
 @immutable
