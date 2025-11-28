@@ -32,7 +32,7 @@ abstract class RegisterModule {
           ),
         )
         ..interceptors.addAll([
-          RefreshTokenInterceptor(),
+          AppDioInterceptor(),
           if (kDebugMode)
             PrettyDioLogger(
               requestHeader: true,

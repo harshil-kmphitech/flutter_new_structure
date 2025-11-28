@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app/app/ui/widgets/custom_snack_bar.dart';
 import 'package:app/app/utils/constants/app_strings.dart';
 import 'package:app/app/utils/helpers/loading.dart';
