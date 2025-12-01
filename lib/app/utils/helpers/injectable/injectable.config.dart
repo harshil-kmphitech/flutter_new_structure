@@ -14,7 +14,7 @@ import 'package:app/app/controllers/auth_controller.dart' as _i85;
 import 'package:app/app/data/services/authService/auth_service.dart' as _i950;
 import 'package:app/app/data/services/refreshToken/refresh_token_service.dart'
     as _i334;
-import 'package:app/app/utils/helpers/injectable%20properties/injectable_properties.dart'
+import 'package:app/app/utils/helpers/injectableProperties/injectable_properties.dart'
     as _i1019;
 import 'package:dio/dio.dart' as _i361;
 import 'package:firebase_core/firebase_core.dart' as _i982;
