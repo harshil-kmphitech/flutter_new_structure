@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:app/app/global/app_config.dart';
-import 'package:app/app/utils/helpers/Interceptor/token_interceptor.dart';
+import 'package:app/app/utils/helpers/Interceptor/dio_interceptor.dart';
 import 'package:app/app/utils/helpers/logger.dart';
 import 'package:app/firebase_options.dart';
 import 'package:dio/dio.dart';

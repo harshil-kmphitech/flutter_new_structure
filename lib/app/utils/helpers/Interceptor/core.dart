@@ -1,4 +1,4 @@
-part of 'token_interceptor.dart';
+part of 'dio_interceptor.dart';
 
 class QueueRequest<T> {
   QueueRequest({required this.err, required this.handler});
