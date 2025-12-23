@@ -66,7 +66,8 @@ abstract class _CoreInterceptor extends Interceptor with _CoreInterceptorImpl {
   Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
     switch (err.response?.statusCode) {
       case 401 || 410:
-        _onUnauthorized();
+        await _onUnauthorized();
+        super.onError(err, handler);
       case 426:
         _updateDialog();
       case 433:
@@ -81,7 +82,7 @@ abstract class _CoreInterceptor extends Interceptor with _CoreInterceptorImpl {
   void _queueRequest(DioException err, ErrorInterceptorHandler handler) {
     requestQueue.add(QueueRequest(err: err, handler: handler));
 
-    if (refreshTokenState.isInitial) {
+    if (!refreshTokenState.isLoading) {
       refreshToken();
     }
   }
@@ -106,17 +107,12 @@ abstract class _CoreInterceptor extends Interceptor with _CoreInterceptorImpl {
   Future<RefreshTokenResponse>? refreshApiCall();
 
   Future<void> _rejectQueuedRequests(FailedState<dynamic> value) async {
-    refreshTokenState.value = const InitialState();
-
-    for (final element in requestQueue) {
-      element.next();
-    }
-    requestQueue.clear();
+    requestQueue
+      ..forEach((element) => element.next())
+      ..clear();
   }
 
   Future<void> _onRefreshSuccess(RefreshTokenResponse value) async {
-    refreshTokenState.value = const InitialState();
-
     if (lookForTokenInResponse(value)) {
       await saveNewRefreshedToken(value);
       Future.wait(requestQueue.map((e) => e.resolve())).whenComplete(requestQueue.clear).ignore();
@@ -133,12 +129,12 @@ mixin _CoreInterceptorImpl on Interceptor {
 
   String get _langProvider => getIt<SharedPreferences>().getAppLocal ?? 'en';
 
-  void _onUnauthorized() {
+  Future<void> _onUnauthorized() {
     Loading.dismiss();
-    onUnauthorized();
+    return onUnauthorized();
   }
 
-  void onUnauthorized();
+  Future<void> onUnauthorized();
 
   void _updateDialog() {
     Loading.dismiss();
