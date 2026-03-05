@@ -1,15 +1,15 @@
 import 'dart:io';
 
 import 'package:app/app/global/app_config.dart';
+import 'package:app/app/utils/helpers/Interceptor/curl_interceptor.dart';
 import 'package:app/app/utils/helpers/Interceptor/dio_interceptor.dart';
-import 'package:app/app/utils/helpers/logger.dart';
+import 'package:app/app/utils/helpers/Interceptor/response_interceptor.dart';
 import 'package:app/firebase_options.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @module
@@ -33,12 +33,10 @@ abstract class RegisterModule {
         )
         ..interceptors.addAll([
           AppDioInterceptor(),
-          if (kDebugMode)
-            PrettyDioLogger(
-              requestHeader: true,
-              requestBody: true,
-              logPrint: (object) => object.log,
-            ),
+          if (kDebugMode) ...[
+            CurlInterceptor(printToConsole: false),
+            ResponseLogInterceptor(printToConsole: false),
+          ],
         ]);
 
   @preResolve
