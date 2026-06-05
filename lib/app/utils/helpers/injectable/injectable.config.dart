@@ -15,7 +15,7 @@ import 'package:app/app/data/services/authService/auth_service.dart' as _i950;
 import 'package:app/app/data/services/refreshToken/refresh_token_service.dart'
     as _i334;
 import 'package:app/app/utils/helpers/injectableProperties/injectable_properties.dart'
-    as _i1019;
+    as _i898;
 import 'package:dio/dio.dart' as _i361;
 import 'package:firebase_core/firebase_core.dart' as _i982;
 import 'package:get_it/get_it.dart' as _i174;
@@ -63,4 +63,4 @@ extension GetItInjectableX on _i174.GetIt {
   }
 }
 
-class _$RegisterModule extends _i1019.RegisterModule {}
+class _$RegisterModule extends _i898.RegisterModule {}

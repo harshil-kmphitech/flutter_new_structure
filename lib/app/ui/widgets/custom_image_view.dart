@@ -5,13 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ImageSize {
-  const ImageSize({
-    this.alignment,
-    this.dimension,
-    this.height,
-    this.width,
-    this.shouldClip = false,
-  });
+  const ImageSize({this.alignment, this.dimension, this.height, this.width, this.shouldClip = false});
 
   final Alignment? alignment;
   final double? dimension;
@@ -75,7 +69,7 @@ class ImageView extends StatelessWidget {
         ? null
         : switch (type) {
             ImageType.svg => _SvgIcon(imagePath!, color: color, fit: fit),
-            ImageType.networkSvg => NetworkSvgImage(imagePath!, color: color, fit: fit, errorWidget: errorWidget, loaderBuilder: loaderBuilder),
+            ImageType.networkSvg => NetworkSvgImage(imagePath!, color: color, fit: fit, errorWidget: errorWidget),
             ImageType.asset => ImageAsset(
               imagePath!,
               color: color,
@@ -90,12 +84,7 @@ class ImageView extends StatelessWidget {
               errorWidget: errorWidget,
               loaderBuilder: loaderBuilder,
             ),
-            ImageType.file => ImageFile(
-              imagePath!,
-              color: color,
-              fit: fit,
-              errorWidget: errorWidget,
-            ),
+            ImageType.file => ImageFile(imagePath!, color: color, fit: fit, errorWidget: errorWidget),
           };
 
     widget = inner?._makeWidgetCompatible(widget) ?? widget;
@@ -164,24 +153,16 @@ class ImageFile extends Image {
 }
 
 class ImageNetwork extends CachedNetworkImage {
-  ImageNetwork(
-    String imageUrl, {
-    super.key,
-    super.color,
-    super.fit,
-    Widget? errorWidget,
-    LoaderBuilder? loaderBuilder,
-  }) : super(
-         imageUrl: imageUrl,
-         progressIndicatorBuilder: (context, url, progress) {
-           return loaderBuilder?.call(
-                 (progress.downloaded / (progress.totalSize ?? 0)).clamp(0, 1),
-               ) ??
-               const Center(child: AppProgressIndicator());
-         },
+  ImageNetwork(String imageUrl, {super.key, super.color, super.fit, Widget? errorWidget, LoaderBuilder? loaderBuilder})
+    : super(
+        imageUrl: imageUrl,
+        progressIndicatorBuilder: (context, url, progress) {
+          return loaderBuilder?.call((progress.downloaded / (progress.totalSize ?? 0)).clamp(0, 1)) ??
+              const Center(child: AppProgressIndicator());
+        },
 
-         errorWidget: (context, url, error) => errorWidget ?? const Icon(Icons.error),
-       );
+        errorWidget: (context, url, error) => errorWidget ?? const Icon(Icons.error),
+      );
 }
 
 class NetworkSvgImage extends SvgPicture {
@@ -195,65 +176,48 @@ class NetworkSvgImage extends SvgPicture {
 }
 
 class AppProgressIndicator extends CircularProgressIndicator {
-  const AppProgressIndicator({
-    super.key,
-    super.value,
-    super.strokeCap = StrokeCap.round,
-    super.strokeWidth = 2,
-    super.color,
-  });
+  const AppProgressIndicator({super.key, super.value, super.strokeCap = StrokeCap.round, super.strokeWidth = 2, super.color});
 }
 
 class ImageAsset extends Image {
-  ImageAsset(
-    String assetName, {
-    super.key,
-    super.color,
-    super.fit,
-    Widget? errorWidget,
-    LoaderBuilder? loaderBuilder,
-  }) : super(
-         image: AssetImage(assetName),
-         loadingBuilder: (context, child, loadingProgress) {
-           if (loadingProgress == null) {
-             return child;
-           }
+  ImageAsset(String assetName, {super.key, super.color, super.fit, Widget? errorWidget, LoaderBuilder? loaderBuilder})
+    : super(
+        image: AssetImage(assetName),
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) {
+            return child;
+          }
 
-           double? progress;
+          double? progress;
 
-           if (loadingProgress.expectedTotalBytes != null) {
-             progress = loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!;
-             return loaderBuilder?.call(progress) ?? AppProgressIndicator(value: progress);
-           }
+          if (loadingProgress.expectedTotalBytes != null) {
+            progress = loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!;
+            return loaderBuilder?.call(progress) ?? AppProgressIndicator(value: progress);
+          }
 
-           return const AppProgressIndicator();
-         },
-         errorBuilder: (context, error, stackTrace) {
-           return errorWidget ?? const Icon(Icons.error);
-         },
-       );
+          return const AppProgressIndicator();
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return errorWidget ?? const Icon(Icons.error);
+        },
+      );
 }
 
 class _SvgIcon extends SvgPicture {
-  _SvgIcon(
-    String assetName, {
-    AssetBundle? bundle,
-    String? package,
-    SvgTheme? theme,
-    Color? color,
-    super.fit,
-  }) : super(
-         SvgAssetLoader(assetName, packageName: package, assetBundle: bundle, theme: theme),
-         colorFilter: color == null ? null : ColorFilter.mode(color, BlendMode.srcIn),
-       );
+  _SvgIcon(String assetName, {AssetBundle? bundle, String? package, SvgTheme? theme, Color? color, super.fit})
+    : super(
+        SvgAssetLoader(assetName, packageName: package, assetBundle: bundle, theme: theme),
+        colorFilter: color == null ? null : ColorFilter.mode(color, BlendMode.srcIn),
+      );
 }
 
 extension ImageTypeExtension on String {
   ImageType get imageType {
-    if (startsWith('http') && endsWith('.svg')) {
-      return ImageType.networkSvg;
-    }
     if (startsWith('http')) {
+      if (endsWith('.svg')) {
+        return ImageType.networkSvg;
+      }
+
       return ImageType.network;
     }
     if (endsWith('.svg')) {
@@ -266,4 +230,4 @@ extension ImageTypeExtension on String {
   }
 }
 
-enum ImageType { svg, asset, network, file , networkSvg }
+enum ImageType { svg, asset, network, file, networkSvg }
