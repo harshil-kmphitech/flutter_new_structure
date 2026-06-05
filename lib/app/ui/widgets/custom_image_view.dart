@@ -75,6 +75,7 @@ class ImageView extends StatelessWidget {
         ? null
         : switch (type) {
             ImageType.svg => _SvgIcon(imagePath!, color: color, fit: fit),
+            ImageType.networkSvg => NetworkSvgImage(imagePath!, color: color, fit: fit, errorWidget: errorWidget, loaderBuilder: loaderBuilder),
             ImageType.asset => ImageAsset(
               imagePath!,
               color: color,
@@ -183,6 +184,16 @@ class ImageNetwork extends CachedNetworkImage {
        );
 }
 
+class NetworkSvgImage extends SvgPicture {
+  NetworkSvgImage(String imageUrl, {super.key, Color? color, super.fit = BoxFit.contain, Widget? errorWidget})
+    : super(
+        SvgNetworkLoader(imageUrl),
+        colorFilter: color == null ? null : ColorFilter.mode(color, BlendMode.srcIn),
+        placeholderBuilder: (context) => const Center(child: AppProgressIndicator()),
+        errorBuilder: (context, error, stackTrace) => errorWidget ?? const Icon(Icons.error),
+      );
+}
+
 class AppProgressIndicator extends CircularProgressIndicator {
   const AppProgressIndicator({
     super.key,
@@ -239,6 +250,9 @@ class _SvgIcon extends SvgPicture {
 
 extension ImageTypeExtension on String {
   ImageType get imageType {
+    if (startsWith('http') && endsWith('.svg')) {
+      return ImageType.networkSvg;
+    }
     if (startsWith('http')) {
       return ImageType.network;
     }
@@ -252,4 +266,4 @@ extension ImageTypeExtension on String {
   }
 }
 
-enum ImageType { svg, asset, network, file }
+enum ImageType { svg, asset, network, file , networkSvg }
