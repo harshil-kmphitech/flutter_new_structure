@@ -88,7 +88,7 @@ class FailedState<T> extends ApiState<T> {
   final int statusCode;
 
   String get message =>
-      customMessage ?? (dioError?.response?.data['message'] as String?) ?? error.description;
+      customMessage ?? (dioError?.response?.data?['message'] as String?) ?? error.description;
 
   void showToast() {
     if (dioError?.type == DioExceptionType.cancel) {
