@@ -49,6 +49,10 @@ class QueueRequest<T> {
 abstract class _CoreInterceptor extends Interceptor with _CoreInterceptorImpl {
   final List<QueueRequest<dynamic>> requestQueue = [];
 
+  static bool _isLoggedOut = false;
+  static bool _isUpdateDialogShown = false;
+  static bool _isMaintenanceModeShown = false;
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (_tokenProvider case final String token) {
@@ -66,14 +70,25 @@ abstract class _CoreInterceptor extends Interceptor with _CoreInterceptorImpl {
   Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
     switch (err.response?.statusCode) {
       case 401 || 410:
-        await _onUnauthorized();
+        if (!_isLoggedOut) {
+          _isLoggedOut = true;
+          await _onUnauthorized();
+        }
         super.onError(err, handler);
       case 426:
-        _updateDialog();
+        if (!_isUpdateDialogShown) {
+          _isUpdateDialogShown = true;
+          _updateDialog();
+        }
+        _ignoreError(err, handler);
       case 433:
         _queueRequest(err, handler);
       case 503:
-        _showMaintenanceMode();
+        if (!_isMaintenanceModeShown) {
+          _isMaintenanceModeShown = true;
+          _showMaintenanceMode();
+        }
+        _ignoreError(err, handler);
       default:
         super.onError(err, handler);
     }
@@ -121,6 +136,10 @@ abstract class _CoreInterceptor extends Interceptor with _CoreInterceptorImpl {
         ..forEach((element) => element.next())
         ..clear();
     }
+  }
+
+  void _ignoreError(DioException err, ErrorInterceptorHandler handler) {
+    super.onError(IgnoreDioException(requestOptions: err.requestOptions), handler);
   }
 }
 

@@ -13,6 +13,13 @@ part 'core.dart';
 class AppDioInterceptor extends _CoreInterceptor {
   AppDioInterceptor();
 
+  /// TODO: You must call this in the application's starting point while the user is logged in.
+  static void resetAllFlags() {
+    _CoreInterceptor._isLoggedOut = false;
+    _CoreInterceptor._isUpdateDialogShown = false;
+    _CoreInterceptor._isMaintenanceModeShown = false;
+  }
+
   @override
   // TODO: Write token provider code here.
   String? get _tokenProvider => null;
