@@ -1,9 +1,13 @@
 import 'dart:developer' as dev;
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 extension LoggerExtension<T> on T {
   T get log {
+    if (!kDebugMode) {
+      return this;
+    }
     if (this case (final Object e, final StackTrace stackTrace)) {
       dev.log(e.toString(), stackTrace: stackTrace);
     } else if (this case final StackOverflowError e) {
@@ -21,6 +25,9 @@ extension LoggerExtension<T> on T {
   }
 
   T logWithName(String name) {
+    if (!kDebugMode) {
+      return this;
+    }
     dev.log(toString(), name: name);
     return this;
   }

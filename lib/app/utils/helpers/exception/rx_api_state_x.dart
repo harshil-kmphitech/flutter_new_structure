@@ -88,10 +88,12 @@ class FailedState<T> extends ApiState<T> {
   final int statusCode;
 
   String get message =>
-      customMessage ?? (dioError?.response?.data['message'] as String?) ?? error.description;
+      customMessage ?? (dioError?.response?.data?['message'] as String?) ?? error.description;
 
   void showToast() {
-    if (dioError?.type == DioExceptionType.cancel) {
+    // Log current stacktrace for debugging purposes
+
+    if (dioError is IgnoreDioException || dioError?.type == DioExceptionType.cancel) {
       return;
     }
     failedToast(title: error.title, message: message);
@@ -100,4 +102,10 @@ class FailedState<T> extends ApiState<T> {
   static void failedToast({String? title, required String message}) {
     Get.showSnackbar(AppSnackBar.error(title: title, message: message));
   }
+}
+
+/// A utility class to check if a [DioException] should be ignored, such as
+/// for canceled requests or connection aborts.
+class IgnoreDioException extends DioException {
+  IgnoreDioException({required super.requestOptions});
 }
