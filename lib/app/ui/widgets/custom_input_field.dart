@@ -80,7 +80,7 @@ class TextInputField extends TextFormField {
            _ => TextCapitalization.none,
          },
          autofillHints: [
-           if (autoFillHints != null) ...autoFillHints,
+           ...?autoFillHints,
            switch (type) {
              InputType.name => AutofillHints.name,
              InputType.email => AutofillHints.email,
@@ -92,7 +92,7 @@ class TextInputField extends TextFormField {
            },
          ],
          inputFormatters: [
-           if (inputFormatters != null) ...inputFormatters,
+           ...?inputFormatters,
            if (type == InputType.digits) FilteringTextInputFormatter.digitsOnly,
            if (type == InputType.decimalDigits)
              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
